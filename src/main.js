@@ -6,9 +6,6 @@ import config from './config'
 
 import $ from 'jquery'
 
-import 'vue-awesome/icons'
-import Icon from 'vue-awesome/components/Icon'
-
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 import 'swiper/dist/css/swiper.css'
 import VueScrollTo from 'vue-scrollto'
@@ -48,7 +45,6 @@ Vue.use(VueMq, {
     xl: Infinity
   }
 })
-Vue.component('icon', Icon)
 
 Vue.config.productionTip = false
 
