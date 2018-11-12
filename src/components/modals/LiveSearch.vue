@@ -5,20 +5,14 @@
         <div class="modal-container modal-search" v-on-clickaway="closeModal">
           <div class="modal-search--header">
             <div class="input-wrap">
-              <input
-                class="input-default"
-                @keydown="inputKeyDownListener($event)"
-                @input="searchQueryInput"
-                :ref="'searchInput'"
-                type="text"
-              />
-              <div
-                class="input-wrap--icon"
-                @click="redirectToSearchResult"
-                :class="{
-                  'input-wrap--icon-active': searchQuery.length && resultCounter
-                }"
-              >
+              <input class="input-default"
+                     @keydown="inputKeyDownListener($event)"
+                     @input="searchQueryInput"
+                     :ref="'searchInput'"
+                     type="text"/>
+              <div class="input-wrap--icon"
+                   @click="redirectToSearchResult"
+                   :class="{'input-wrap--icon-active': searchQuery.length && resultCounter}">
                 <svg-search></svg-search>
               </div>
               <div class="input-wrap--close" @click="closeModal">
@@ -49,24 +43,13 @@
             <div v-show="resultCounter">
               <!-- Products Results starts here -->
               <div class="modal-search--body__product">
-                <ais-index
-                  :search-store="searchProducts"
-                  :index-name="'products'"
-                  :query="searchQuery"
-                >
+                <ais-index :search-store="searchProducts"
+                           :index-name="'products'"
+                           :query="searchQuery">
                   <ais-results :results-per-page="5">
-                    <div
-                      class="modal-search--body__product--stats"
-                      slot="header"
-                    >
+                    <div class="modal-search--body__product--stats" slot="header">
                       <ais-stats>
-                        <template
-                          slot-scope="{
-                            totalResults,
-                            processingTime,
-                            query
-                          }"
-                        >
+                        <template slot-scope="{ totalResults, processingTime, query }">
                           <span class="title">Products</span>
                           <span class="total">({{ totalResults }})</span>
                           <router-link
@@ -74,12 +57,8 @@
                               name: 'searchResult',
                               query: { q: searchQuery, entity: 'products' }
                             }"
-                            class="link"
-                            tag="a"
-                          >
-                            <span class="link-quaternary"
-                              >See All Products</span
-                            >
+                            class="link">
+                            <span class="link-quaternary">See All Products</span>
                             <svg-see-all></svg-see-all>
                           </router-link>
                         </template>
@@ -92,16 +71,12 @@
                           name: 'product-page',
                           params: { slug: result.slug }
                         }"
-                        class="modal-search--body__product--result"
-                        tag="a"
-                      >
+                        class="modal-search--body__product--result">
                         <div class="flex-item">
                           <div class="image-wrap">
-                            <app-image
-                              itemprop="image"
-                              :imagePath="componentProductImage(result.image)"
-                              @emitErrorImage="errorImage"
-                            >
+                            <app-image itemprop="image"
+                                       :imagePath="componentProductImage(result.image)"
+                                       @emitErrorImage="errorImage">
                             </app-image>
                           </div>
                           <div class="info">
@@ -109,16 +84,12 @@
                             <div class="item">
                               <div v-if="result.part_number" class="item mpn">
                                 <span class="label">mpn:</span>
-                                <span class="value">{{
-                                  result.part_number
-                                }}</span>
+                                <span class="value">{{ result.part_number }}</span>
                               </div>
 
                               <div class="item dealer-value">
                                 <span class="label">Dealer:</span>
-                                <span class="value">{{
-                                  result.dealer_name
-                                }}</span>
+                                <span class="value">{{ result.dealer_name }}</span>
                               </div>
                             </div>
                           </div>
@@ -127,62 +98,45 @@
                           <div class="price" v-if="result.price">
                             $ {{ toDollarDecimal(result.price) }}
                           </div>
+                          <div class="price price--blurred" v-if="!result.price">
+                            Unavailable
+                          </div>
                         </div>
                       </router-link>
                     </template>
                   </ais-results>
                 </ais-index>
 
-                <router-link
-                  v-show="searchProducts._results.length"
-                  class="responsive-link"
-                  :to="{
-                    name: 'searchResult',
-                    query: { q: searchQuery, entity: 'products' }
-                  }"
-                  tag="a"
-                >
+                <router-link v-show="searchProducts._results.length"
+                             class="responsive-link"
+                             :to="{
+                               name: 'searchResult',
+                               query: { q: searchQuery, entity: 'products' }
+                             }">
                   <span class="link-quaternary">See All Products</span>
                   <svg-see-all></svg-see-all>
                 </router-link>
               </div>
               <!-- Products Results ends here -->
               <!-- Categories Results ends here -->
-              <div
-                class="modal-search--body__categories"
-                :class="{ 'no-indent': !this.searchCategories._results.length }"
-              >
-                <ais-index
-                  :index-name="'categories'"
-                  :search-store="searchCategories"
-                  :query="searchQuery"
-                >
+              <div class="modal-search--body__categories"
+                   :class="{ 'no-indent': !this.searchCategories._results.length }">
+                <ais-index :index-name="'categories'"
+                           :search-store="searchCategories"
+                           :query="searchQuery">
                   <ais-results :results-per-page="6">
-                    <div
-                      class="modal-search--body__categories--stats"
-                      slot="header"
-                    >
+                    <div class="modal-search--body__categories--stats"
+                         slot="header">
                       <ais-stats>
-                        <template
-                          slot-scope="{
-                            totalResults,
-                            processingTime,
-                            query
-                          }"
-                        >
+                        <template slot-scope="{ totalResults, processingTime, query }">
                           <span class="title">Categories</span>
                           <span class="total">({{ totalResults }})</span>
-                          <router-link
-                            class="link"
-                            :to="{
-                              name: 'searchResult',
-                              query: { q: searchQuery, entity: 'categories' }
-                            }"
-                            tag="a"
-                          >
-                            <span class="link-quaternary"
-                              >See All Categories</span
-                            >
+                          <router-link class="link"
+                                       :to="{
+                                         name: 'searchResult',
+                                         query: { q: searchQuery, entity: 'categories' }
+                                       }">
+                            <span class="link-quaternary">See All Categories</span>
                             <svg-see-all></svg-see-all>
                           </router-link>
                         </template>
@@ -190,16 +144,12 @@
                     </div>
 
                     <template slot-scope="{ result }">
-                      <router-link
-                        :to="{ name: 'catalog', params: { slug: result.slug } }"
-                        class="modal-search--body__categories--result"
-                      >
+                      <router-link :to="{ name: 'catalog', params: { slug: result.slug } }"
+                                   class="modal-search--body__categories--result">
                         <div class="item-wrap">
-                          <app-image
-                            itemprop="image"
-                            :imagePath="componentCategoryImage(result.image)"
-                            @emitErrorImage="errorImage"
-                          >
+                          <app-image itemprop="image"
+                                     :imagePath="componentCategoryImage(result.image)"
+                                     @emitErrorImage="errorImage">
                           </app-image>
                         </div>
                         <div class="name">
@@ -215,37 +165,22 @@
                   :to="{
                     name: 'searchResult',
                     query: { q: searchQuery, entity: 'categories' }
-                  }"
-                  tag="a"
-                >
+                  }">
                   <span class="link-quaternary">See All Categories</span>
                   <svg-see-all></svg-see-all>
                 </router-link>
               </div>
               <!-- Categories Results ends here -->
               <!-- Dealers Results starts here -->
-              <div
-                class="modal-search--body__dealers"
-                :class="{ 'no-indent': !this.searchDealers._results.length }"
-              >
-                <ais-index
-                  :index-name="'dealers'"
-                  :search-store="searchDealers"
-                  :query="searchQuery"
-                >
+              <div class="modal-search--body__dealers"
+                   :class="{ 'no-indent': !this.searchDealers._results.length }">
+                <ais-index :index-name="'dealers'"
+                           :search-store="searchDealers"
+                           :query="searchQuery">
                   <ais-results :results-per-page="6">
-                    <div
-                      class="modal-search--body__dealers--stats"
-                      slot="header"
-                    >
+                    <div class="modal-search--body__dealers--stats" slot="header">
                       <ais-stats>
-                        <template
-                          slot-scope="{
-                            totalResults,
-                            processingTime,
-                            query
-                          }"
-                        >
+                        <template slot-scope="{ totalResults, processingTime, query }">
                           <span class="title">Dealers</span>
                           <span class="total">({{ totalResults }})</span>
                           <router-link
@@ -253,9 +188,7 @@
                             :to="{
                               name: 'searchResult',
                               query: { q: searchQuery, entity: 'dealers' }
-                            }"
-                            tag="a"
-                          >
+                            }">
                             <span class="link-quaternary">See All Dealers</span>
                             <svg-see-all></svg-see-all>
                           </router-link>
@@ -264,17 +197,12 @@
                     </div>
 
                     <template slot-scope="{ result }">
-                      <router-link
-                        :to="{ name: 'dealer', params: { slug: result.slug } }"
-                        class="modal-search--body__dealers--result"
-                        tag="a"
-                      >
+                      <router-link :to="{ name: 'dealer', params: { slug: result.slug } }"
+                                   class="modal-search--body__dealers--result">
                         <div class="image-wrap">
-                          <app-image
-                            itemprop="image"
-                            :imagePath="componentDealerImage(result.image)"
-                            @emitErrorImage="errorImage"
-                          >
+                          <app-image itemprop="image"
+                                     :imagePath="componentDealerImage(result.image)"
+                                     @emitErrorImage="errorImage">
                           </app-image>
                         </div>
                       </router-link>
@@ -287,37 +215,28 @@
                   :to="{
                     name: 'searchResult',
                     query: { q: searchQuery, entity: 'dealers' }
-                  }"
-                  tag="a"
-                >
+                  }">
                   <span class="link-quaternary">See All Dealers</span>
                   <svg-see-all></svg-see-all>
                 </router-link>
               </div>
               <!-- Dealers Results ends here -->
               <!-- Vehicles Results starts here -->
-              <div
-                class="modal-search--body__vehicles"
-                :class="{ 'no-indent': !this.searchVehicles._results.length }"
-              >
+              <div class="modal-search--body__vehicles"
+                   :class="{ 'no-indent': !this.searchVehicles._results.length }">
                 <ais-index
                   :index-name="'vehicles'"
                   :search-store="searchVehicles"
-                  :query="searchQuery"
-                >
+                  :query="searchQuery">
                   <ais-results :results-per-page="10">
-                    <div
-                      class="modal-search--body__vehicles--stats"
-                      slot="header"
-                    >
+                    <div class="modal-search--body__vehicles--stats" slot="header">
                       <ais-stats>
                         <template
                           slot-scope="{
                             totalResults,
                             processingTime,
                             query
-                          }"
-                        >
+                          }">
                           <span class="title">Vehicles</span>
                           <span class="total">({{ totalResults }})</span>
                           <router-link
@@ -325,12 +244,8 @@
                             :to="{
                               name: 'searchResult',
                               query: { q: searchQuery, entity: 'vehicles' }
-                            }"
-                            tag="a"
-                          >
-                            <span class="link-quaternary"
-                              >See All Vehicles</span
-                            >
+                            }">
+                            <span class="link-quaternary">See All Vehicles</span>
                             <svg-see-all></svg-see-all>
                           </router-link>
                         </template>
@@ -344,13 +259,8 @@
                           params: { slug: result.slug }
                         }"
                         class="modal-search--body__vehicles--result"
-                        @click="setVehicleSearchModel(result)"
-                        tag="a"
-                      >
-                        <span class="link-tertiary"
-                          >{{ result.year }} {{ result.vehicle_brand_name }}
-                          {{ result.name }}</span
-                        >
+                        @click="setVehicleSearchModel(result)">
+                        <span class="link-tertiary">{{ result.year }} {{ result.vehicle_brand_name }}{{ result.name }}</span>
                       </router-link>
                     </template>
                   </ais-results>
@@ -361,9 +271,7 @@
                   :to="{
                     name: 'searchResult',
                     query: { q: searchQuery, entity: 'vehicles' }
-                  }"
-                  tag="a"
-                >
+                  }">
                   <span class="link-quaternary">See All Vehicles</span>
                   <svg-see-all></svg-see-all>
                 </router-link>
@@ -384,7 +292,6 @@
 
 <script>
 import _ from 'lodash'
-import { EventBus } from '../../event-bus'
 import { AlgoliaApi } from '@/mixins/AlgoliaApi'
 import config from '../../config'
 import { createFromAlgoliaCredentials } from 'vue-instantsearch'
@@ -416,17 +323,6 @@ export default {
         config.algoliaApiId,
         config.algoliaApiKey
       )
-    }
-  },
-  watch: {
-    $route (to, from) {
-      this.scrollingModalOpen(false)
-      this.closeModal()
-      if (to.name === 'searchResult' && from.name === 'searchResult') {
-        EventBus.$emit('changeQueryFromSearchModal', true)
-      } else if (to.name === 'catalog') {
-        EventBus.$emit('changeQueryFromSearchModal', true)
-      }
     }
   },
   mixins: [clickaway, utils, AlgoliaApi, imageSource, EnterListener],
@@ -477,21 +373,17 @@ export default {
       )
     },
     componentCategoryImage (images, onError) {
-      let sizeProperty = 'tiny'
-
       return this.serverImageSource(
         images,
-        sizeProperty,
+        'tiny',
         onError,
         this.SERVER_IMAGE_CATEGORY
       )
     },
     componentDealerImage (images, onError) {
-      let sizeProperty = 'tiny'
-
       return this.serverImageSource(
         images,
-        sizeProperty,
+        'tiny',
         onError,
         this.SERVER_IMAGE_DEALER
       )
@@ -790,6 +682,9 @@ export default {
           color: $main-color;
           font-size: 16px;
           font-weight: 500;
+          &--blurred {
+            color: $grey;
+          }
         }
       }
       .modal-search--body__product--result
