@@ -63,19 +63,15 @@
                 <span>Look at the map</span>
               </button>
             </div>
-            <div class="locations__warehouse-schedule">
-              <span v-if="!getBusinessHours(house.business_hours)">
-                {{ house.business_hours }}
-              </span>
-              <span v-else>
-                <span class="label">{{
-                  getBusinessHours(house.business_hours).days
-                }}</span>
-                <span class="value">{{
-                  getBusinessHours(house.business_hours).hours
-                }}</span>
-              </span>
-            </div>
+            <!--<div class="locations__warehouse-schedule">-->
+              <!--<span v-if="!getBusinessHours(house.business_hours)">-->
+                <!--{{ house.business_hours }}-->
+              <!--</span>-->
+              <!--<span v-else>-->
+                <!--<span class="label">{{ getBusinessHours(house.business_hours).days }}</span>-->
+                <!--<span class="value">{{ getBusinessHours(house.business_hours).hours }}</span>-->
+              <!--</span>-->
+            <!--</div>-->
             <div class="locations__warehouse-description">
               {{ house.description }}
             </div>
@@ -196,16 +192,16 @@ export default {
       })
     },
 
-    getBusinessHours (hours) {
-      const splitHours = hours.split(':')
-
-      return splitHours.length < 2
-        ? false
-        : {
-            days: `${splitHours[0]}: `,
-            hours: splitHours[1]
-          }
-    },
+    // getBusinessHours (hours) {
+    //   const splitHours = hours.split(':')
+    //
+    //   return splitHours.length < 2
+    //     ? false
+    //     : {
+    //         days: `${splitHours[0]}: `,
+    //         hours: splitHours[1]
+    //       }
+    // },
     groupWarehousesByState (warehouses) {
       warehouses = _.groupBy(warehouses, 'state')
       warehouses = _.toPairs(warehouses)
@@ -417,7 +413,7 @@ export default {
     }
   }
 
-  &__warehouse-schedule {
+  /*&__warehouse-schedule {
     margin-bottom: 21px;
     padding-left: 16px;
     color: $main-dark;
@@ -425,11 +421,12 @@ export default {
     .label {
       font: 12px/19px $montserrat-font;
     }
+
     .value {
       font: 500 16px/19px $montserrat-font;
       padding-left: 32px;
     }
-  }
+  }*/
 
   &__warehouse-description {
     max-width: 350px;
