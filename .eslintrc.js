@@ -18,7 +18,9 @@ module.exports = {
     'no-multiple-empty-lines': 'off',
     'no-unneeded-ternary': 'off',
     'object-curly-spacing': 'off',
+    'vue/no-unused-components': 'off',
     'vue/no-unused-vars': 'off',
+    'vue/no-use-v-if-with-v-for': 'off',
     'vue/require-v-for-key': 'off',
     'vue/valid-template-root': 'off',
     'vue/valid-v-bind': 'off',
@@ -26,4 +28,4 @@ module.exports = {
   parserOptions: {
     parser: 'babel-eslint'
   }
-}
+};
