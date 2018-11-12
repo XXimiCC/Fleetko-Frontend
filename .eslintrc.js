@@ -22,8 +22,9 @@ module.exports = {
     'vue/require-v-for-key': 'off',
     'vue/valid-template-root': 'off',
     'vue/valid-v-bind': 'off',
+    'vue/no-unused-components': 'off'
   },
   parserOptions: {
     parser: 'babel-eslint'
   }
-}
+};
