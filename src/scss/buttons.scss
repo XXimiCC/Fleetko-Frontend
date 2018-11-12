@@ -1,0 +1,460 @@
+//Button Variables
+$button-primary-bg: $main-gradient;
+$button-normal-bg: $main-color;
+$button-secondary-bg: white;
+$button-success-bg: $success;
+$button-danger-bg: #f44336;
+
+//Hover variables
+$button-primary-hover: $main-color;
+$button-normal-hover: #124FD3;
+$button-secondary-hover: #E7EEFD;
+$button-success-hover: #00B44B;
+$button-danger-hover: #DB3C30;
+
+//Disabled variables
+$button-primary-disable: #E6E7EA;
+$button-normal-disable: #E6E7EA;
+$button-secondary-disable: #E6E7EA;
+$button-success-disable: #E6E7EA;
+$button-danger-disable: #E6E7EA;
+
+//Button styles
+.button-prime {
+  width: 100%;
+  height: 40px;
+  padding: 0;
+  cursor: pointer;
+  background: $main-gradient;
+  color: white;
+  text-align: center;
+  text-transform: uppercase;
+  border-radius: 4px;
+  border: none;
+  font-size: 12px;
+  font-family: $montserrat-font;
+  font-weight: 500;
+  line-height: 1;
+  &.left-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    svg {
+      margin-right: 8px;
+      fill: white;
+    }
+    span {
+      font-family: $montserrat-font;
+      font-size: 12px;
+      font-weight: 500;
+      color: white;
+    }
+    &:disabled {
+      svg {
+        fill: $main-grey;
+      }
+      span {
+        color: $main-grey;
+      }
+    }
+  }
+  &:hover {
+    //background: $button-primary-hover;
+    //color: white;
+    background: $main-gradient--lighten;
+  }
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
+  &:disabled {
+    background: $button-primary-disable;
+    color: $main-grey;
+    &:hover {
+      box-shadow: none;
+      outline: none;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.button-normal {
+  width: 100%;
+  height: 40px;
+  padding: 0;
+  cursor: pointer;
+  background-color: $button-normal-bg;
+  color: white;
+  text-align: center;
+  text-transform: uppercase;
+  border-radius: 4px;
+  border: none;
+  font-size: 12px;
+  font-family: $montserrat-font;
+  line-height: 1;
+  &.left-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    svg {
+      margin-right: 8px;
+      fill: white;
+    }
+    span {
+      font-family: $montserrat-font;
+      font-size: 12px;
+      font-weight: 500;
+      color: white;
+    }
+    &:disabled {
+      svg {
+        fill: $main-grey;
+      }
+      span {
+        color: $main-grey;
+      }
+    }
+  }
+  &:hover {
+    background-color: $button-normal-hover;
+    color: white;
+  }
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
+  &:disabled {
+    background-color: $button-normal-disable;
+    color: $main-grey;
+    &:hover {
+      box-shadow: none;
+      outline: none;
+      cursor: not-allowed;
+    }
+  }
+}
+.button-second {
+  width: 100%;
+  height: 40px;
+  background: white;
+  cursor: pointer;
+  border: 1px solid $main-color;
+  border-radius: 4px;
+  color: $main-color;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: $montserrat-font;
+  line-height: 1;
+  text-transform: uppercase;
+  &.left-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    svg {
+      margin-right: 8px;
+      fill: $main-color;
+    }
+    span {
+      font-family: $montserrat-font;
+      font-size: 12px;
+      font-weight: 500;
+      color: $main-color;
+    }
+    &:disabled {
+      svg {
+        fill: $main-grey;
+      }
+      span {
+        color: $main-grey;
+      }
+    }
+  }
+  &.right-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    svg {
+      margin-left: 8px;
+      fill: $main-color;
+    }
+    span {
+      font-family: $montserrat-font;
+      font-size: 12px;
+      font-weight: 500;
+      color: $main-color;
+    }
+    &:disabled {
+      svg {
+        fill: $main-grey;
+      }
+      span {
+        color: $main-grey;
+      }
+    }
+  }
+  &:hover {
+    background-color: $button-secondary-hover;
+    border: 1px solid $main-color;
+    color: $main-color;
+  }
+  &:disabled {
+    border: 1px solid #CDD0D5;
+    background: $button-secondary-disable;
+    color: $main-grey;
+    &:hover {
+      box-shadow: none;
+    }
+  }
+  &--tertiary {
+    border: 1px solid $main-grey;
+    color: $main-grey;
+    &:hover {
+      border: 1px solid $main-color;
+      color: $main-color;
+      background-color: white;
+    }
+  }
+}
+
+.button-success {
+  width: 100%;
+  height: 40px;
+  padding: 0;
+  cursor: pointer;
+  background: $button-success-bg;
+  color: white;
+  text-align: center;
+  text-transform: uppercase;
+  border-radius: 4px;
+  border: none;
+  font-size: 12px;
+  font-family: $montserrat-font;
+  font-weight: 500;
+  line-height: 1;
+  &.left-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    svg {
+      margin-right: 8px;
+      fill: white;
+    }
+    span {
+      font-family: $montserrat-font;
+      font-size: 12px;
+      font-weight: 500;
+      color: white;
+    }
+    &:disabled {
+      svg {
+        fill: $main-grey;
+      }
+      span {
+        color: $main-grey;
+      }
+    }
+  }
+  &:hover {
+    background-color: $button-success-hover;
+    border: 1px solid $button-success-hover;
+    color: white;
+  }
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
+  &:disabled {
+    background-color: $button-success-disable;
+    color: $main-grey;
+    &:hover {
+      box-shadow: none;
+      outline: none;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.button-success-second {
+  width: 100%;
+  height: 40px;
+  background: white;
+  cursor: pointer;
+  border: 1px solid $button-success-bg;
+  border-radius: 4px;
+  color: $button-success-bg;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: $montserrat-font;
+  line-height: 1;
+  text-transform: uppercase;
+  &.left-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    svg {
+      margin-right: 8px;
+      fill: $button-success-bg;
+    }
+    span {
+      font-family: $montserrat-font;
+      font-size: 12px;
+      font-weight: 500;
+      color: $button-success-bg;
+    }
+    &:disabled {
+      svg {
+        fill: $main-grey;
+      }
+      span {
+        color: $main-grey;
+      }
+    }
+  }
+  &:hover {
+    background-color: #E5F9ED;
+    border: 1px solid $button-success-bg;
+    color: $button-success-bg;
+  }
+  &:disabled {
+    border: 1px solid #CDD0D5;
+    background: $button-secondary-disable;
+    color: $main-grey;
+    &:hover {
+      box-shadow: none;
+    }
+  }
+}
+
+.button-danger {
+  width: 100%;
+  height: 40px;
+  padding: 0;
+  cursor: pointer;
+  background: $button-danger-bg;
+  color: white;
+  text-align: center;
+  text-transform: uppercase;
+  border-radius: 4px;
+  border: none;
+  font-size: 12px;
+  font-family: $montserrat-font;
+  font-weight: 500;
+  line-height: 1;
+  &.left-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    svg {
+      margin-right: 8px;
+      fill: white;
+    }
+    span {
+      font-family: $montserrat-font;
+      font-size: 12px;
+      font-weight: 500;
+      color: white;
+    }
+    &:disabled {
+      svg {
+        fill: $main-grey;
+      }
+      span {
+        color: $main-grey;
+      }
+    }
+  }
+  &:hover {
+    background-color: $button-danger-hover;
+    border: 1px solid $button-danger-hover;
+    color: white;
+  }
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
+  &:disabled {
+    background-color: $button-danger-disable;
+    color: $main-grey;
+    &:hover {
+      box-shadow: none;
+      outline: none;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.button-danger-second {
+  width: 100%;
+  height: 40px;
+  background: white;
+  cursor: pointer;
+  border: 1px solid $button-danger-bg;
+  border-radius: 4px;
+  color: $button-danger-bg;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: $montserrat-font;
+  line-height: 1;
+  text-transform: uppercase;
+  &.left-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    svg {
+      margin-right: 8px;
+      fill: $button-danger-bg;
+    }
+    span {
+      font-family: $montserrat-font;
+      font-size: 12px;
+      font-weight: 500;
+      color: $button-danger-bg;
+    }
+    &:disabled {
+      svg {
+        fill: $main-grey;
+      }
+      span {
+        color: $main-grey;
+      }
+    }
+  }
+  &:hover {
+    background-color: #FEECEB;
+    border: 1px solid $button-danger-bg;
+    color: $button-danger-bg;
+  }
+  &:disabled {
+    border: 1px solid #CDD0D5;
+    background: $button-secondary-disable;
+    color: $main-grey;
+    &:hover {
+      box-shadow: none;
+    }
+  }
+}
+
+.button-icon-second {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  border: 1px solid $main-color;
+  background: white;
+  cursor: pointer;
+  svg {
+    fill: $main-color;
+  }
+  &:hover {
+    background: #E7EEFD;
+  }
+  &:disabled {
+    border: 1px solid #CDD0D5;
+    background: $button-secondary-disable;
+    svg {
+      fill: $main-grey;
+    }
+  }
+}

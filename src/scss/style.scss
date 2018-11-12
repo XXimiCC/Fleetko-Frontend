@@ -1,0 +1,11 @@
+$grid-breakpoints: (
+        xs: 0,
+        sm: 320px,
+        md: 648px,
+        lg: 960px,
+        xl: 1120px
+);
+
+@import '~toastr/toastr';
+@import '~bootstrap/scss/bootstrap';
+@import 'main';

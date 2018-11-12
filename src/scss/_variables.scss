@@ -1,0 +1,83 @@
+//color text and elements
+//bootstrap override
+$grid-gutter-width: 32px;
+$container-max-widths: (
+
+        sm: 480px,
+        md: 672px,
+        lg: 864px,
+        xl: 1152px
+) !default;
+
+$grid-breakpoints: (
+        xs: 0,
+        sm: 480px,
+        md: 672px,
+        lg: 864px,
+        xl: 1152px
+) !default;
+
+
+$grid-breakpoints: (
+        xs: 0,
+        sm: 576px,
+        md: 768px,
+        lg: 992px,
+        xl: 1200px
+) !default;
+
+//Media breackpoints for responsive
+$xs: 320px;
+$xssm: 480px;
+$sm: 648px;
+$md: 960px;
+$lg: 1120px;
+$xl: 1368px;
+
+
+//Colors
+//Blue Colors
+$main-color: #1458EB;
+$main-color-step-lighter: lighten($main-color, 20%);
+$light-blue: #4f82f0;
+$main-gradient: linear-gradient(to bottom, #4f82f0 0%,#1458eb 100%);
+$main-gradient--lighten: linear-gradient(to bottom, #80a5f4 0%,#437aef 100%);
+//Grey Colors
+$main-dark: #061a46;
+$dark-grey: #5c6578;
+$main-grey: #828CA2;
+$main-black: #000000;
+$grey: #cdd0d5;
+$light-grey: #e6e7ea;
+
+//Additional Colors
+$main-red: #F03D3D;
+$danger: $main-red;
+$success: #0BB07B;
+$warning: #FFAD0D;
+
+//Old Color
+$paragraph: #5C6578;
+$border-color: #e0e0e0;
+$caption-text-color: #9e9e9e;
+$interface-decoration-color: #cfd8dc;
+$main-hover: #0066FF;
+$label-background: #71A4EE;
+
+//SVG fill
+$svg-fill-secondary: $main-dark;
+$svg-fill-primary: $main-color;
+$svg-fill-tertiary: $main-grey;
+
+//fonts
+$sours-sans-p-font: "Source Sans Pro",serif;
+$montserrat-font:"Montserrat",serif;
+$ibm-font:"IBM Plex Mono", monospace;
+
+//Text-sizes
+$large-fs-paragraph: 16px;
+$normal-fs-paragraph: 14px;
+$small-fs-paragraph: 12px;
+
+
+

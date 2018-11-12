@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="4" height="4" viewBox="0 0 24 24">
+    <linearGradient id="linear-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#4f82f0"/>
+        <stop offset="100%" stop-color="#1458eb"/>
+    </linearGradient>
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"
+          fill="url(#linear-gradient)"
+          transform="scale(-1,.7) translate(5, 21) rotate(180)"/>
+</svg>

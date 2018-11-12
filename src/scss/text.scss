@@ -1,0 +1,255 @@
+//Text Colors
+$h1-primary-color: $main-color;
+$h1-secondary-color: $main-dark;
+$h1-tertiary-color: $main-grey;
+
+$h2-primary-color: $main-color;
+$h2-secondary-color: $main-dark;
+$h2-tertiary-color: $main-grey;
+
+$h3-primary-color: $main-color;
+$h3-secondary-color: $main-dark;
+$h3-tertiary-color: $main-grey;
+
+$h4-primary-color: $main-color;
+$h4-secondary-color: $main-dark;
+$h4-tertiary-color: $main-grey;
+
+$h5-primary-color: $main-color;
+$h5-secondary-color: $main-dark;
+$h5-tertiary-color: $main-grey;
+$h5-success-color: $success;
+$h5-danger-color: $main-red;
+
+//Text Size
+$h1-size: 48px;
+$h2-size: 34px;
+$h3-size: 20px;
+$h4-size: 16px;
+$h5-size: 12px;
+
+//Text Style
+h1 {
+  font-family: $montserrat-font;
+}
+
+.h1-primary {
+  font-weight: 600;
+  font-size: $h1-size;
+  line-height: 71px;
+  color: $h1-primary-color;
+}
+
+.h1-secondary {
+  font-weight: 500;
+  font-size: $h1-size;
+  line-height: 71px;
+  color: $h1-secondary-color;
+}
+
+.h1-tertiary {
+  font-weight: 500;
+  font-size: $h1-size;
+  line-height: 71px;
+  color: $h1-tertiary-color;
+}
+
+h2 {
+  font-family: $montserrat-font;
+  font-size: $h2-size;
+}
+
+.h2-primary {
+  font-weight: 600;
+  font-size: $h2-size;
+  line-height: 44px;
+  color: $h2-primary-color;
+}
+
+.h2-secondary {
+  font-weight: 500;
+  font-size: $h2-size;
+  line-height: 44px;
+  color: $h2-secondary-color;
+}
+
+.h2-tertiary {
+  font-weight: 500;
+  font-size: $h2-size;
+  line-height: 44px;
+  color: $h2-tertiary-color;
+}
+
+h3 {
+  font-family: $montserrat-font;
+  font-size: $h3-size;
+}
+
+.h3-primary {
+  font-weight: 600;
+  font-size: $h3-size;
+  line-height: 26px;
+  color: $h3-primary-color;
+}
+
+.h3-secondary {
+  font-weight: 500;
+  font-size: $h3-size;
+  line-height: 26px;
+  color: $h3-secondary-color;
+}
+
+.h3-tertiary {
+  font-weight: 500;
+  font-size: $h3-size;
+  line-height: 26px;
+  color: $h3-tertiary-color;
+}
+
+h4 {
+  font-family: $montserrat-font;
+  font-size: 16px;
+  color: $main-dark;
+  font-weight: 500;
+}
+
+.h4-primary {
+  font-weight: 600;
+  font-size: $h4-size;
+  line-height: 22px;
+  color: $h4-primary-color;
+  &.dark-title {
+    color: $h4-secondary-color;
+  }
+}
+
+.h4-secondary {
+  font-weight: 500;
+  font-size: $h4-size;
+  line-height: 22px;
+  color: $h4-secondary-color;
+}
+
+.h4-tertiary {
+  font-weight: 500;
+  font-size: $h4-size;
+  line-height: 22px;
+  color: $h4-tertiary-color;
+}
+
+h5 {
+  font-family: $montserrat-font;
+}
+
+.h5-primary {
+  font-weight: 400;
+  font-size: $h5-size;
+  line-height: 16px;
+  color: $h5-primary-color;
+  text-transform: uppercase;
+}
+
+.h5-secondary {
+  font-weight: 400;
+  font-size: $h5-size;
+  line-height: 16px;
+  color: $h5-secondary-color;
+  text-transform: uppercase;
+}
+
+.h5-tertiary {
+  font-weight: 400;
+  font-size: $h5-size;
+  line-height: 16px;
+  color: $h5-tertiary-color;
+  text-transform: uppercase;
+}
+
+.h5-success {
+  font-weight: 400;
+  font-size: $h5-size;
+  line-height: 16px;
+  color: $h5-success-color;
+  text-transform: uppercase;
+}
+
+.h5-danger {
+  font-weight: 400;
+  font-size: $h5-size;
+  line-height: 16px;
+  color: $h5-danger-color;
+  text-transform: uppercase;
+}
+
+p {
+  margin-bottom: 0px;
+}
+
+.paragraph-prime {
+  font-family: $sours-sans-p-font;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 19px;
+  color: $main-dark;
+}
+
+.paragraph-secondary {
+  font-family: $sours-sans-p-font;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 19px;
+  color: $dark-grey;
+}
+
+.paragraph-tertiary {
+  font-family: $sours-sans-p-font;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 19px;
+  color: $main-grey;
+}
+
+.paragraph-lg {
+  font-size: 16px;
+  line-height: 22px;
+}
+
+.text-title-primary {
+  font-family: $sours-sans-p-font;
+  font-weight: 600;
+  font-size: 14px;
+  color: $main-dark;
+  line-height: 19px;
+}
+
+.text-title-secondary {
+  font-family: $sours-sans-p-font;
+  font-weight: 600;
+  font-size: 14px;
+  color: $dark-grey;
+  line-height: 19px;
+}
+
+.text-title-tertiary {
+  font-family: $sours-sans-p-font;
+  font-weight: 600;
+  font-size: 14px;
+  color: $main-grey;
+  line-height: 19px;
+}
+
+.text-success {
+  font-family: $montserrat-font;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: $success;
+}
+
+.text-error {
+  font-family: $montserrat-font;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: $danger;
+}
