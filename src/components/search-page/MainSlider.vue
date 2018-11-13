@@ -50,6 +50,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~@/scss/mixins";
+
 .main-slider {
   position: relative;
   &--wrapper {
@@ -59,6 +61,7 @@ export default {
     height: 544px;
     background-position: center;
     overflow: hidden;
+    &:before { @include bgPattern() }
     .swiper-container {
       height: 544px;
     }

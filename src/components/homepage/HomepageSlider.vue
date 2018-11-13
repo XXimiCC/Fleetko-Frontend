@@ -96,6 +96,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "~@/scss/mixins";
+
 .homepage {
   &__slider {
     position: relative;
@@ -125,8 +127,12 @@ export default {
       }
     }
     &--slide {
+      position: relative;
       height: 100%;
       background-size: cover;
+      &:before {
+        @include bgPattern();
+      }
     }
     .buttons-wrap {
       position: absolute;

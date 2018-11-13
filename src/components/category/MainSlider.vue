@@ -83,6 +83,11 @@ export default {
     swiperSlide,
     search
   },
+  watch: {
+    $route (val, oldVal) {
+      if (val.params.slug !== oldVal.params.slug) this.pageMainSlider.init()
+    }
+  },
   methods: {
     isExternalLink (link) {
       return link &&
@@ -145,6 +150,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~@/scss/mixins";
+
 .padding-none {
   padding: 0;
 }
@@ -185,9 +192,11 @@ export default {
     }
   }
   &--slide {
+    position: relative;
     height: 100%;
     background-size: cover;
     background-position: center;
+    &:before { @include bgPattern() }
   }
   .buttons-wrap {
     position: absolute;

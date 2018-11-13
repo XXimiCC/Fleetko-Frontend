@@ -295,6 +295,7 @@ import _ from 'lodash'
 import { AlgoliaApi } from '@/mixins/AlgoliaApi'
 import config from '../../config'
 import { createFromAlgoliaCredentials } from 'vue-instantsearch'
+import { EventBus } from '../../event-bus'
 import { mapActions } from 'vuex'
 import { mixin as clickaway } from 'vue-clickaway'
 import utils from '@/mixins/utils'
@@ -326,6 +327,17 @@ export default {
     }
   },
   mixins: [clickaway, utils, AlgoliaApi, imageSource, EnterListener],
+  watch: {
+    $route (to, from) {
+      this.scrollingModalOpen(false)
+      this.closeModal()
+      if (to.name === 'searchResult' && from.name === 'searchResult') {
+        EventBus.$emit('changeQueryFromSearchModal', true)
+      } else if (to.name === 'catalog') {
+        EventBus.$emit('changeQueryFromSearchModal', true)
+      }
+    }
+  },
   methods: {
     ...mapActions(['setYearSearch', 'setBrandSearch', 'setModelSearch']),
     searchQueryInput: _.debounce(function (e) {
