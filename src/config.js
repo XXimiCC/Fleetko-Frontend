@@ -16,8 +16,8 @@ const config = {
     googleMapApi: 'AIzaSyDU3dmpZxk1wMPkbVU2zP9LLiCUfNcoYes',
     googleTagManager: 'GTM-WCNT46D',
     facebookAppId: '2656754357683779',
-    algoliaApiKey: '0afd97d3343f9fa23ca873b05745aa10',
-    algoliaApiId: 'D25SL6BJX7',
+    algoliaApiKey: '6ce60dca17d9a67244435d6808ebab0a',
+    algoliaApiId: 'UABHMWBSRM',
     gRecaptcha: '6Leuf1sUAAAAABGqVeamHI_qAA9_B24LqDe0oRT1',
     driftKey: 't4czyr5z32bs'
   },
