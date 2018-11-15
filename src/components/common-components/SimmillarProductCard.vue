@@ -74,6 +74,7 @@ export default {
   &__image {
     width: 144px;
     height: 144px;
+    margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: center;
