@@ -2,7 +2,7 @@
   <div class="slider">
     <div class="slider__wrapper">
       <div class="slider__counter">
-        image {{ activeSlide + 1}} of {{ images.length }}
+        image {{ defineCounter(activeSlide) + 1}} of {{ images.length }}
       </div>
 
       <swiper ref="sliderEl" :options="sliderOpts" @slideChange="slideChanged">
@@ -15,10 +15,10 @@
 
       <div class="buttons-wrap">
         <div class="slider__arrows">
-          <button v-if="activeSlide > 0" @click="swipePrev()" class="left">
+          <button @click="swipePrev()" class="left">
             <svg-arrow-left></svg-arrow-left>
           </button>
-          <button v-if="activeSlide < limitedImageQty.length - 1" @click="swipeNext()" class="right">
+          <button @click="swipeNext()" class="right">
             <svg-arrow-right></svg-arrow-right>
           </button>
         </div>
@@ -26,10 +26,10 @@
 
     </div>
     <div class="gallery__wrapper">
-      <div class="gallery__image"
-           :class="{'gallery__image--active': activeSlide === i}"
-           v-for="(img, i) in limitedImageQty" :key="i"
-           @click="goToSlide(i)">
+      <div v-for="(img, i) in limitedImageQty" :key="i"
+           @click="goToSlide(i)"
+           class="gallery__image"
+           :class="{'gallery__image--active': defineActive(i)}">
         <img :src="img.versions.tiny" alt="">
       </div>
     </div>
@@ -45,9 +45,10 @@
     props: ['images'],
     data () {
       return {
-        activeSlide: 0,
+        activeSlide: 1,
+        counterValue: 0,
         sliderOpts: {
-          loop: false
+          loop: true
         }
       }
     },
@@ -59,7 +60,20 @@
         return this.images.length <= 10 ? this.images : this.images.slice(0, 9)
       }
     },
+    mounted () {
+      this.sliderEl.slidePrev(0)
+    },
     methods: {
+      defineActive (index) {
+        return this.activeSlide === index || this.activeSlide - this.limitedImageQty.length === index
+      },
+      defineCounter () {
+        if (this.activeSlide > this.limitedImageQty.length - 1) {
+          return this.activeSlide - this.limitedImageQty.length
+        } else {
+          return this.activeSlide
+        }
+      },
       slideChanged () {
         this.activeSlide = this.sliderEl.activeIndex
       },
@@ -82,6 +96,8 @@
     display: flex;
     height: 100%;
     width: 100%;
+    opacity: 1;
+    transition: opacity .5s;
     &__wrapper {
       position: relative;
       display: flex;
@@ -226,6 +242,7 @@
       }
       &__slide {
         width: 100%;
+        max-width: 100%;
       }
       .buttons-wrap {
         top: calc(100% + 32px);
