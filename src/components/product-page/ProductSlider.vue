@@ -241,6 +241,7 @@ export default {
       })
     },
     switchSlide (number) {
+      this.$emit('slideChangeHandler', true)
       if (this.loop) {
         if (number < 0) {
           this.currentImage = this.productImages.length - 1
@@ -265,6 +266,7 @@ export default {
       clearTimeout(this.timer)
       this.timer = setTimeout(() => {
         this.$refs.sliderEl.classList.remove('is-animating')
+        this.$emit('slideChangeHandler', false)
       }, 400)
     }
   },
