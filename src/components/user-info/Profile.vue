@@ -5,42 +5,29 @@
         <div class="account-info__row row">
           <div v-if="userInfo" class="account-info--item col-xl-9 col-lg-8">
             <div class="image-wrap">
-              <img
-                class="account-info--item--avatar"
-                :src="userImageSrc(userInfo, 80)"
-                alt="user-avatar"
-              />
+              <img class="account-info--item--avatar"
+                   :src="userImageSrc(userInfo, 80)"
+                   alt="user-avatar" />
             </div>
-            <span v-if="fullName(userInfo)" class="account-info--item--name">{{
-              fullName(userInfo)
-            }}</span>
-            <span v-else="" class="account-info--item--name">{{
-              userInfo.email
-            }}</span>
+            <span v-if="fullName(userInfo)" class="account-info--item--name">{{ fullName(userInfo) }}</span>
+            <span v-else class="account-info--item--name">{{ userInfo.email }}</span>
           </div>
 
           <div class="account-info--stats-wrap col-xl-3 col-lg-2">
             <div class="account-info--item--stats stats-justify-right">
               <p>{{ userInfo.pending_orders_count }}</p>
-              <p>
-                Pending <br />
-                orders
-              </p>
+              <p>Pending<br />orders</p>
             </div>
 
             <div class="account-info--item--stats stats-justify-center">
               <p v-if="userWaitList">{{ userWaitList.length }}</p>
-              <p>
-                Wait <br />
-                List
+              <p>Wait<br />List
               </p>
             </div>
 
             <div class="account-info--item--stats stats-justify-content-left">
               <p>{{ userCreatedYear() }}</p>
-              <p>
-                Customer <br />
-                Since
+              <p>Customer<br />Since
               </p>
             </div>
           </div>
@@ -55,21 +42,17 @@
             <ul class="account-info__links--list">
               <li class="account-info__links--title">My Account</li>
 
-              <router-link
-                :to="{ name: tab.routeTo }"
-                tag="li"
-                :class="{ active: tab.active }"
-                :key="index"
-                v-for="(tab, index) in displayedTabs"
-              >
+              <router-link :to="{ name: tab.routeTo }"
+                           tag="li"
+                           :class="{ active: tab.active }"
+                           :key="index"
+                           v-for="(tab, index) in displayedTabs">
                 {{ tab.tabName }}
               </router-link>
 
-              <li
-                v-if="showMoreButton"
-                @click="openResponsiveSidebar"
-                class="account-info__responsive-more"
-              >
+              <li v-if="showMoreButton"
+                  @click="openResponsiveSidebar"
+                  class="account-info__responsive-more">
                 <span></span><span></span><span></span>
               </li>
             </ul>
@@ -90,6 +73,7 @@ import utils from '@/mixins/utils'
 
 export default {
   name: 'order-history',
+  mixins: [utils],
   data () {
     return {
       firstName: '',
@@ -121,7 +105,7 @@ export default {
         {
           active: false,
           routeTo: 'purchases',
-          tabName: 'My Reviews'
+          tabName: 'Purchased Goods'
         },
         {
           active: false,
@@ -136,7 +120,20 @@ export default {
       ]
     }
   },
-  mixins: [utils],
+  computed: {
+    currentPage () {
+      return this.$route.name
+    },
+    ...mapGetters(['isAuth', 'userInfo', 'userWaitList'])
+  },
+  created () {
+    this.calcDisplayedTabs()
+  },
+  mounted () {
+    this.checkActiveTab(this.$route.name)
+    this.fetchDataUser()
+    window.addEventListener('resize', this.calcDisplayedTabs)
+  },
   methods: {
     checkActiveTab (routeName) {
       this.tabs.forEach(tab => {
@@ -173,8 +170,7 @@ export default {
       if (vw <= 648) limit = 3
 
       if (limit) {
-        this.displayedTabs =
-          current <= limit
+        this.displayedTabs = current <= limit
             ? this.tabs.slice(0, limit)
             : this.tabs.slice(current - limit, current)
 
@@ -185,25 +181,11 @@ export default {
       }
     }
   },
-  computed: {
-    currentPage () {
-      return this.$route.name
-    },
-    ...mapGetters(['isAuth', 'userInfo', 'userWaitList'])
-  },
   beforeRouteUpdate (to, from, next) {
     this.checkActiveTab(to.name)
     this.calcDisplayedTabs()
 
     next()
-  },
-  created () {
-    this.calcDisplayedTabs()
-  },
-  mounted () {
-    this.checkActiveTab(this.$route.name)
-    this.fetchDataUser()
-    window.addEventListener('resize', this.calcDisplayedTabs)
   },
   beforeDestroy () {
     window.removeEventListener('resize', this.calcDisplayedTabs)
@@ -323,7 +305,6 @@ export default {
         }
       }
       li + li {
-        /* prevent .responsive-more wrap*/
         @media (min-width: 648px) and (max-width: 700px) {
           width: 20%;
         }
