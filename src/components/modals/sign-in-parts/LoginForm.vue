@@ -1,99 +1,73 @@
 <template>
   <div class="modal-body__login">
     <form>
-      <div
-        class="modal-body__login--item"
-        :class="{
-          'validation-margin': errors.has('email') && !animateValidation
-        }"
-      >
+      <div class="modal-body__login--item"
+           :class="{ 'validation-margin': errors.has('email') && !animateValidation }">
         <div class="input-wrap">
-          <input
-            v-validate="'required|email'"
-            :ref="'emailInput'"
-            :data-vv-validate-on="'submit'"
-            class="input-default"
-            @focus="resetValidator"
-            @keydown="noSpacesEmail($event)"
-            @input="emailValidationInput($event)"
-            :class="{
-              input: true,
-              'input-error':
-                (errors.has('email') ||
-                  !loginServerValid ||
-                  !registrationValid) &&
-                !animateValidation
-            }"
-            placeholder="Please enter an email"
-            name="email"
-            v-model="email"
-            type="text"
-          />
-          <span
-            :class="{ 'animate-validation': animateValidation }"
-            v-show="!registrationValid && !animateValidation"
-            class="help error-message-input is-danger"
-            >The email has already been registered.</span
-          >
-          <span
-            :class="{ 'animate-validation': animateValidation }"
-            v-show="errors.has('email') && !animateValidation"
-            class="help error-message-input is-danger"
-            >{{ errors.first('email') }}</span
-          >
+          <input v-validate="'required|email'"
+                 :ref="'emailInput'"
+                 :data-vv-validate-on="'submit'"
+                 class="input-default input"
+                 @focus="resetValidator"
+                 @keydown="noSpacesEmail($event)"
+                 @input="emailValidationInput($event)"
+                 :class="{
+                  'input-error':
+                    (errors.has('email') ||
+                      !loginServerValid ||
+                      !registrationValid) &&
+                      !animateValidation
+                 }"
+                 placeholder="Please enter an email"
+                 name="email"
+                 v-model="email"
+                 type="text" />
+          <span :class="{ 'animate-validation': animateValidation }"
+                v-show="!registrationValid && !animateValidation"
+                class="help error-message-input is-danger">
+            The email has already been registered
+          </span>
+          <span :class="{ 'animate-validation': animateValidation }"
+                v-show="errors.has('email') && !animateValidation"
+                class="help error-message-input is-danger">
+            {{ errors.first('email') }}
+          </span>
         </div>
       </div>
 
-      <div
-        class="modal-body__login--item"
-        :class="{
-          'validation-margin':
-            (errors.has('password') || !loginServerValid) && !animateValidation
-        }"
-      >
-        <div class="input-wrap" :class="{ control: true }">
-          <input
-            v-validate="'required|min:6'"
-            :ref="'passwordInput'"
-            :data-vv-validate-on="'submit'"
-            class="input-default"
-            :class="{
-              input: true,
-              'input-error':
-                (errors.has('password') || !loginServerValid) &&
-                !animateValidation
-            }"
-            v-model="password"
-            name="password"
-            @focus="resetValidator"
-            @input="passwordValidationInput"
-            placeholder="Please enter a password"
-            :type="hiddenPassword ? 'password' : 'text'"
-          />
+      <div class="modal-body__login--item"
+           :class="{ 'validation-margin': (errors.has('password') || !loginServerValid) && !animateValidation }">
+        <div class="input-wrap control">
+          <input v-validate="'required|min:6'"
+                 :ref="'passwordInput'"
+                 :data-vv-validate-on="'submit'"
+                 class="input-default input"
+                 :class="{ 'input-error':  (errors.has('password') || !loginServerValid) &&  !animateValidation }"
+                 v-model="password"
+                 name="password"
+                 @focus="resetValidator"
+                 @input="passwordValidationInput"
+                 placeholder="Please enter a password"
+                 :type="hiddenPassword ? 'password' : 'text'" />
           <div @click="hiddenPassword = !hiddenPassword" class="show-hide">
             <svg-eye-hide v-if="!hiddenPassword"></svg-eye-hide>
             <svg-eye-show v-if="hiddenPassword"></svg-eye-show>
           </div>
-          <span
-            :class="{ 'animate-validation': animateValidation }"
-            v-show="!loginServerValid && !animateValidation"
-            class="help error-message-input is-danger"
-            >Your email or password is not correct</span
-          >
-          <span
-            :class="{ 'animate-validation': animateValidation }"
-            v-show="errors.has('password') && !animateValidation"
-            class="help error-message-input is-danger"
-            >{{ errors.first('password') }}</span
-          >
+          <span :class="{ 'animate-validation': animateValidation }"
+                v-show="!loginServerValid && !animateValidation"
+                class="help error-message-input is-danger">
+            Your email or password is not correct
+          </span>
+          <span :class="{ 'animate-validation': animateValidation }"
+                v-show="errors.has('password') && !animateValidation"
+                class="help error-message-input is-danger">
+            {{ errors.first('password') }}</span>
         </div>
       </div>
       <div class="modal-body__login--item">
-        <button
-          type="submit"
-          @click="login('password', null, null, $event)"
-          class="button-prime"
-        >
+        <button type="submit"
+                @click="login('password', null, null, $event)"
+                class="button-prime">
           Sign In
         </button>
       </div>
@@ -106,12 +80,11 @@ import Vue from 'vue'
 import VeeValidate from 'vee-validate'
 import { mapGetters } from 'vuex'
 
-Vue.use(VeeValidate, {
-  locale: 'en'
-})
+Vue.use(VeeValidate, { locale: 'en' })
 
 export default {
   name: 'login-form',
+  props: ['facebookError'],
   data () {
     return {
       email: '',
@@ -122,7 +95,12 @@ export default {
       registrationValid: true
     }
   },
-  props: ['facebookError'],
+  computed: {
+    ...mapGetters(['tempEmailVerification'])
+  },
+  mounted () {
+    if (this.tempEmailVerification) this.email = this.tempEmailVerification
+  },
   methods: {
     login (grant_type, provider, token, $event) {
       if ($event) $event.preventDefault()
@@ -161,16 +139,6 @@ export default {
         }
       })
     },
-    // validatePasswordOnBlur () {
-    //   if (this.registration) {
-    //     this.$validator.validate('password')
-    //   }
-    // },
-    // validateEmailOnBlur () {
-    //   if (this.registration) {
-    //     this.$validator.validate('email')
-    //   }
-    // },
     resetValidator () {
       this.$validator.reset()
       this.loginServerValid = true
@@ -178,14 +146,12 @@ export default {
     passwordValidationInput () {
       this.loginServerValid = true
     },
-    emailValidationInput ($event) {
+    emailValidationInput () {
       this.loginServerValid = true
       this.registrationValid = true
     },
     noSpacesEmail ($event) {
-      if (this.EVENT_KEY_SPACE === $event.keyCode) {
-        $event.preventDefault()
-      }
+      if (this.EVENT_KEY_SPACE === $event.keyCode) $event.preventDefault()
     },
     enterKeyHandler: function (evt) {
       if (evt.keyCode === 13) {
@@ -193,12 +159,6 @@ export default {
         this.login('password', null)
       }
     }
-  },
-  computed: {
-    ...mapGetters(['tempEmailVerification'])
-  },
-  mounted () {
-    if (this.tempEmailVerification) this.email = this.tempEmailVerification
   }
 }
 </script>
