@@ -1,23 +1,23 @@
 <template>
-  <button
-    id="g-recaptcha"
-    class="g-recaptcha"
-    :data-sitekey="recaptcha"
-  ></button>
+  <button id="g-recaptcha" class="g-recaptcha" :data-sitekey="recaptcha"></button>
 </template>
 
 <script>
 import config from '../../config'
+
 export default {
   name: 'invisible-g-recaptcha',
+  props: ['noReset', 'delayedRender'],
   data () {
     return {
       recaptcha: config.gRecaptcha,
-      widgetId: 0
+      widgetId: 0,
+      timer: null
     }
   },
-  watch: {},
-  props: ['noReset', 'delayedRender'],
+  mounted () {
+    this.delayedRender ? this.timer = setTimeout(() => this.render(), 1000) : this.render()
+  },
   methods: {
     execute () {
       window.grecaptcha.execute(this.widgetId)
@@ -25,18 +25,10 @@ export default {
     reset () {
       window.grecaptcha.reset(this.widgetId)
 
-      const captchaContainerSelector =
-        'div[style^="visibility: hidden; position: absolute; width:100%; top: -10000px;"]'
-      const captchaDialogContainers = document.querySelectorAll(
-        captchaContainerSelector
-      )
+      const captchaEl = 'div[style^="visibility: hidden; position: absolute; width:100%; top: -10000px;"]'
+      const captchaContainers = document.querySelectorAll(captchaEl)
 
-      // Remove existing wrappers
-      if (captchaDialogContainers.length) {
-        captchaDialogContainers.forEach(dialog => {
-          dialog.parentNode.removeChild(dialog)
-        })
-      }
+      if (captchaContainers.length) captchaContainers.forEach(el => el.parentNode.removeChild(el))
     },
     render () {
       if (window.grecaptcha) {
@@ -44,21 +36,16 @@ export default {
           sitekey: this.recaptcha,
           size: 'invisible',
           badge: 'bottomleft',
-          // the callback executed when the user solve the recaptcha
-          callback: response => {
-            // reset the recaptcha widget so you can execute it again
-            if (!this.noReset) {
-              this.reset()
-            }
-            // emit an event called verify with the response as payload
-            this.$emit('verify', response)
+          callback: resp => {
+            if (!this.noReset) this.reset()
+            this.$emit('verify', resp)
           }
         })
       }
     }
   },
-  mounted () {
-    this.delayedRender ? setTimeout(() => this.render(), 1000) : this.render()
+  beforeDestroy () {
+    this.timer = null
   }
 }
 </script>
