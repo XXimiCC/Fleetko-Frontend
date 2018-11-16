@@ -2,31 +2,21 @@
   <transition name="fade">
     <div class="notification" :class="{ solid: solid }">
       <div class="notification__body" :class="notification.type">
-        <div
-          class="notification__body--close"
-          v-if="cancelable"
-          @click="$emit('clearNotify')"
-        >
+        <div class="notification__body--close"
+             v-if="cancelable"
+             @click="$emit('clearNotify')">
           <svg-close fill="#fff"></svg-close>
         </div>
         <div class="item notification__body--status">
           <div class="icon-wrap">
-            <svg-success
-              v-if="notification.type == 'success'"
-              height="24"
-              width="24"
-            ></svg-success>
-            <svg-error
-              v-if="notification.type == 'error' || notification.type == 'info'"
-            ></svg-error>
-            <svg-warning v-if="notification.type == 'warning'"></svg-warning>
+            <svg-success v-if="notification.type === 'success'" height="24" width="24">
+            </svg-success>
+            <svg-error v-if="notification.type === 'error' || notification.type === 'info'"></svg-error>
+            <svg-warning v-if="notification.type === 'warning'"></svg-warning>
           </div>
         </div>
         <div class="item notification__body--info">
-          <h2
-            v-if="!solid"
-            v-text="notification.type === 'info' ? 'Notice' : notification.type"
-          ></h2>
+          <h2 v-if="!solid" v-text="notification.type === 'info' ? 'Notice' : notification.type"></h2>
           <p>{{ notification.text }}</p>
         </div>
       </div>
@@ -37,22 +27,10 @@
 <script>
 export default {
   name: 'notification',
-  data () {
-    return {}
-  },
   props: ['notification', 'id', 'cancelable', 'solid'],
-  watch: {},
-  methods: {},
-  computed: {},
-  components: {},
   created () {
-    if (this.notification.timeout) {
-      setTimeout(() => {
-        this.$emit('clearNotify')
-      }, this.notification.timeout)
-    }
-  },
-  mounted () {}
+    if (this.notification.timeout) setTimeout(() => this.$emit('clearNotify'), this.notification.timeout)
+  }
 }
 </script>
 
@@ -60,6 +38,8 @@ export default {
 .error {
   border: 1px solid $main-red;
   .notification__body--status {
+    display: flex;
+    justify-content: center;
     background: $main-red;
   }
 }
