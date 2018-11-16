@@ -2,19 +2,15 @@
   <div class="bestsellers">
     <h2 class="h2-secondary bestsellers__title">Best Sellers</h2>
     <div class="bestsellers--wrap row">
-      <swiper
-        class="col-xl-12 swiper-popular"
-        ref="swiperPopular"
-        :options="options"
-      >
+      <swiper class="col-xl-12 swiper-popular"
+              ref="swiperPopular"
+              :options="Object.assign(options, {  pagination: { el: '.best-sellers-pagination', clickable: true } })">
         <swiper-slide v-for="(product, i) in bestSellersCollection" :key="i">
-          <product-card
-            link="dealer"
-            class-response="col-xl-12"
-            view="column"
-            :good="product"
-            item-description="werwefwwerfqwefqwdfqwfdqwf"
-          >
+          <product-card link="dealer"
+                        class-response="col-xl-12"
+                        view="column"
+                        :good="product"
+                        item-description="werwefwwerfqwefqwdfqwfdqwf">
           </product-card>
         </swiper-slide>
         <div class="best-sellers-pagination" slot="pagination"></div>
@@ -34,6 +30,7 @@
 <script>
 import ProductCard from '@/components/common-components/ProductCard'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
+
 export default {
   name: 'best-sellers-slider',
   data () {
@@ -41,12 +38,7 @@ export default {
   },
   watch: {
     $route (val, oldVal) {
-      /**
-       * Should refresh pagination only if slug params has changed
-       */
-      if (val.params.slug !== oldVal.params.slug) {
-        this.sliderBestSellers.init()
-      }
+      if (val.params.slug !== oldVal.params.slug) this.sliderBestSellers.init()
     }
   },
   props: ['options', 'bestSellersCollection'],

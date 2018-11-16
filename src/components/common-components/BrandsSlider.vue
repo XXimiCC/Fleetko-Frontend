@@ -1,10 +1,10 @@
 <template>
   <div class="col-xl-12 slider">
-    <swiper class="col-xl-12" ref="brandsSwiper" :options="swiperOptions">
+    <swiper :options="Object.assign(swiperOptions, {  pagination: { el: '.brands-pagination', clickable: true } })"
+            ref="brandsSwiper"
+            class="col-xl-12">
       <swiper-slide v-for="(brand, i) in brands" :key="i">
-        <div class="item">
-          <img :src="brandImage(brand.name)" alt="brand-logo" />
-        </div>
+        <div class="item"><img :src="brandImage(brand.name)" alt="brand-logo" /></div>
         <p class="slider__caption">{{ brand.name }}</p>
       </swiper-slide>
       <div class="brands-pagination" slot="pagination"></div>
@@ -26,35 +26,21 @@ import { swiper, swiperSlide } from 'vue-awesome-swiper'
 import $ from 'jquery'
 export default {
   name: 'brands-slider',
+  mixins: [utils],
+  components: {
+    swiper,
+    swiperSlide
+  },
+  props: ['swiperOptions'],
   data () {
     return {
       brands: [
-        {
-          name: 'Freightliner'
-        },
-        {
-          name: 'Volvo'
-        },
-        {
-          name: 'International'
-        },
-        {
-          name: 'Kenworth'
-        },
-        {
-          name: 'Mack'
-        }
+        { name: 'Freightliner' },
+        { name: 'Volvo' },
+        { name: 'International' },
+        { name: 'Kenworth' },
+        { name: 'Mack' }
       ]
-    }
-  },
-  props: ['swiperOptions'],
-  mixins: [utils],
-  methods: {
-    swipeNext () {
-      this.brandsSwiper.slideNext()
-    },
-    swipePrev () {
-      this.brandsSwiper.slidePrev()
     }
   },
   computed: {
@@ -62,16 +48,20 @@ export default {
       return this.$refs.brandsSwiper.swiper
     }
   },
-  components: {
-    swiper,
-    swiperSlide
-  },
   mounted () {
     let swiperSlider = this.brandsSwiper
 
     $(window).resize(function () {
       swiperSlider.update()
     })
+  },
+  methods: {
+    swipeNext () {
+      this.brandsSwiper.slideNext()
+    },
+    swipePrev () {
+      this.brandsSwiper.slidePrev()
+    }
   }
 }
 </script>
@@ -79,7 +69,7 @@ export default {
 <style scoped lang="scss">
 .brands-pagination {
   position: absolute;
-  bottom: 0px;
+  bottom: 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -97,7 +87,7 @@ export default {
 .item {
   border-radius: 4px;
   height: 128px;
-  box-shadow: 0px 3px 8.55px 0.45px rgba(6, 26, 70, 0.3);
+  box-shadow: 0 3px 8.55px 0.45px rgba(6, 26, 70, 0.3);
   img {
     width: 100%;
     height: 100%;

@@ -2,15 +2,10 @@
   <div class="bestsellers">
     <h2 class="h2-secondary bestsellers__title">Featured Products</h2>
     <div class="bestsellers--wrap row">
-      <swiper
-        class="col-xl-12 swiper-popular"
-        ref="swiperFeatured"
-        :options="options"
-      >
-        <swiper-slide
-          v-for="(product, i) in featuredProductsCollection"
-          :key="i"
-        >
+      <swiper class="col-xl-12 swiper-popular"
+              ref="swiperFeatured"
+              :options="Object.assign(options, {  pagination: { el: '.featured-products-pagination', clickable: true } })">
+        <swiper-slide v-for="(product, i) in featuredProductsCollection" :key="i">
           <product-card :good="product" view="column" item-description="legacy">
           </product-card>
         </swiper-slide>

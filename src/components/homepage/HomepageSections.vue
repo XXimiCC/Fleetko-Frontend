@@ -49,8 +49,10 @@ export default {
       swiperOption: {
         slidesPerView: 4,
         spaceBetween: 32,
-        pagination: '.swiper-pagination',
-        paginationClickable: true,
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true
+        },
         loopFillGroupWithBlank: true,
         breakpoints: {
           320: {

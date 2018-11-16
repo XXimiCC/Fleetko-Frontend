@@ -3,7 +3,7 @@
     <div class="homepage__slider--wrapper"
          @mouseenter="showSliderNavs = true"
          @mouseleave="showSliderNavs = false">
-      <!--  -->
+
       <swiper ref="homepageMainSlider" :options="swiperOption">
         <swiper-slide v-for="(sliderImage, i) in promotion" :key="i">
           <div class="homepage__slider--slide"
@@ -15,7 +15,7 @@
              slot="pagination">
         </div>
       </swiper>
-      <!--  -->
+
       <div class="buttons-wrap">
         <div class="container">
           <div class="homepage__slider--buttons">
@@ -57,8 +57,10 @@ export default {
       swiperOption: {
         slidesPerView: 1,
         spaceBetween: 0,
-        pagination: '.swiper-pagination',
-        paginationClickable: true,
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true
+        },
         loop: true
       },
       showSliderNavs: false

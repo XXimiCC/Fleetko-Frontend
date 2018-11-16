@@ -5,52 +5,32 @@
         <div class="col-12 style-mobile logo-and-button">
           <h1 class="caption-h1 text-center">Feature brands</h1>
 
-          <div
-            class=" button-right  d-none d-sm-none d-md-none d-lg-block d-xl-block"
-          >
+          <div class=" button-right  d-none d-sm-none d-md-none d-lg-block d-xl-block">
             <b-button class="slider-btn prew brend_prew">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="13"
-                viewBox="0 0 41.999 41.999"
-              >
-                <path
-                  d="M36.068 20.176l-29-20c-.307-.21-.705-.233-1.033-.062C5.705.287 5.5.627 5.5 1v40c0 .37.206.712.535.885.146.076.306.114.465.114.2 0 .397-.06.568-.178l29-20c.27-.187.432-.494.432-.823s-.162-.637-.432-.824z"
-                />
-              </svg> </b-button
-            ><b-button class="slider-btn next brend_next">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="13"
-                viewBox="0 0 41.999 41.999"
-              >
-                <path
-                  d="M36.068 20.176l-29-20c-.307-.21-.705-.233-1.033-.062C5.705.287 5.5.627 5.5 1v40c0 .37.206.712.535.885.146.076.306.114.465.114.2 0 .397-.06.568-.178l29-20c.27-.187.432-.494.432-.823s-.162-.637-.432-.824z"
-                />
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" viewBox="0 0 41.999 41.999">
+                <path d="M36.068 20.176l-29-20c-.307-.21-.705-.233-1.033-.062C5.705.287 5.5.627 5.5 1v40c0 .37.206.712.535.885.146.076.306.114.465.114.2 0 .397-.06.568-.178l29-20c.27-.187.432-.494.432-.823s-.162-.637-.432-.824z"></path>
+              </svg>
+            </b-button><b-button class="slider-btn next brend_next">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" viewBox="0 0 41.999 41.999">
+                <path d="M36.068 20.176l-29-20c-.307-.21-.705-.233-1.033-.062C5.705.287 5.5.627 5.5 1v40c0 .37.206.712.535.885.146.076.306.114.465.114.2 0 .397-.06.568-.178l29-20c.27-.187.432-.494.432-.823s-.162-.637-.432-.824z"></path>
               </svg>
             </b-button>
           </div>
         </div>
         <div class="col-xl-12 style-mobile">
-          <swiper
-            :not-next-tick="true"
-            ref="mySwiper"
-            :options="swiperOption"
-            class="brand-slider"
-          >
+          <swiper :options="swiperOption"
+                  :not-next-tick="true"
+                  ref="mySwiper"
+                  class="brand-slider">
             <swiper-slide :key="brand.id" v-for="brand in brands" class="media">
-              <router-link
-                :to="{ name: 'dealer' }"
-                class=" dealer-account"
-                tag="div"
-              >
-                <img class="d-flex align-self-center" :src="randomImage()" />
+              <router-link :to="{ name: 'dealer' }" class=" dealer-account" tag="div">
+                <img class="d-flex align-self-center" :src="randomImage()"  alt=""/>
               </router-link>
             </swiper-slide>
             <div
               class="swiper-pagination d-sm-block d-md-block d-lg-none d-xl-none"
-              slot="pagination"
-            ></div>
+              slot="pagination">
+            </div>
           </swiper>
           <p>
             If you drive a late model vehicle with an air bag and steering wheel
@@ -77,6 +57,11 @@ import utils from '@/mixins/utils'
 
 export default {
   name: 'brand',
+  mixins: [utils],
+  components: {
+    swiper,
+    swiperSlide
+  },
   data () {
     return {
       brands: [],
@@ -87,8 +72,10 @@ export default {
         initialSlide: 0,
         spaceBetween: 30,
         autoplay: false,
-        pagination: '.swiper-pagination',
-        paginationClickable: true,
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true
+        },
         loop: false,
         loopedSlides: 4,
         breakpoints: {
@@ -108,7 +95,15 @@ export default {
       }
     }
   },
-  mixins: [utils],
+  computed: {
+    swiper () {
+      return this.$refs.mySwiper.swiper
+    },
+    ...mapGetters(['getBrands'])
+  },
+  mounted () {
+    this.setBrands()
+  },
   methods: {
     randomImage () {
       let arr = ['brand_1', 'brand_2', 'brand_3', 'brand_4']
@@ -119,31 +114,14 @@ export default {
       this.$store.dispatch('fetchDealers').then(
         resp => {
           this.brands = resp.data
-          // eslint-disable-next-line
-        },
-        error => {
-          console.error(error)
         }
       )
     }
-  },
-  computed: {
-    swiper () {
-      return this.$refs.mySwiper.swiper
-    },
-    ...mapGetters(['getBrands'])
-  },
-  components: {
-    swiper,
-    swiperSlide
-  },
-  mounted () {
-    this.setBrands()
   }
 }
 </script>
 
-<style lang="scss" scoped="">
+<style lang="scss" scoped>
 .caption-h1 {
 }
 .logo-and-button {

@@ -70,8 +70,10 @@ export default {
       swiperOption: {
         slidesPerView: 1,
         spaceBetween: 0,
-        pagination: '.swiper-pagination',
-        paginationClickable: true,
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true
+        },
         loop: true
       }
     }
