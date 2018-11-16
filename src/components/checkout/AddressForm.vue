@@ -466,7 +466,7 @@ export default {
       }
       &--error {
         span {
-          color: #ff6d4a;
+          color: $input-error-border;
         }
       }
     }

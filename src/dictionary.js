@@ -18,7 +18,7 @@ export const dictionary = {
       },
       'review-message': {
         required: 'Please enter the message',
-        max: 'Please enter the message less than 2000 characters.'
+        max: 'Please enter the message less than 2000 characters'
       },
       email: {
         required: 'Please enter the email',

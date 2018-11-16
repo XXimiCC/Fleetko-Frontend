@@ -79,7 +79,7 @@
         <div class="input-wrap">
           <textarea
             name="feedback-message"
-            :class="{ 'error-border': errors.has('feedback-message') }"
+            :class="{ 'error-textarea': errors.has('feedback-message') }"
             v-model="message"
             v-validate="'required'"
             placeholder="Your message"
@@ -210,7 +210,6 @@ export default {
         bottom: -18px;
         left: 0;
         font-size: 12px;
-        color: #ff6d4a;
         line-height: 1;
       }
       textarea {
