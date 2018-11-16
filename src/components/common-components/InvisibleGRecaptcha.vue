@@ -7,28 +7,18 @@ import config from '../../config'
 
 export default {
   name: 'invisible-g-recaptcha',
-  props: ['noReset', 'delayedRender'],
   data () {
     return {
       recaptcha: config.gRecaptcha,
-      widgetId: 0,
-      timer: null
+      widgetId: 0
     }
   },
   mounted () {
-    this.delayedRender ? this.timer = setTimeout(() => this.render(), 1000) : this.render()
+    this.render()
   },
   methods: {
     execute () {
       window.grecaptcha.execute(this.widgetId)
-    },
-    reset () {
-      window.grecaptcha.reset(this.widgetId)
-
-      const captchaEl = 'div[style^="visibility: hidden; position: absolute; width:100%; top: -10000px;"]'
-      const captchaContainers = document.querySelectorAll(captchaEl)
-
-      if (captchaContainers.length) captchaContainers.forEach(el => el.parentNode.removeChild(el))
     },
     render () {
       if (window.grecaptcha) {
@@ -36,16 +26,10 @@ export default {
           sitekey: this.recaptcha,
           size: 'invisible',
           badge: 'bottomleft',
-          callback: resp => {
-            if (!this.noReset) this.reset()
-            this.$emit('verify', resp)
-          }
+          callback: resp => this.$emit('verify', resp)
         })
       }
     }
-  },
-  beforeDestroy () {
-    this.timer = null
   }
 }
 </script>
