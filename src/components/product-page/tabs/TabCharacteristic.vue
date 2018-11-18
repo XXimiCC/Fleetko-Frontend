@@ -120,7 +120,7 @@ export default {
       font-family: $sours-sans-p-font;
       color: $main-dark;
       font-size: 14px;
-      white-space: pre;
+      white-space: pre-wrap;
     }
   }
   .specification {

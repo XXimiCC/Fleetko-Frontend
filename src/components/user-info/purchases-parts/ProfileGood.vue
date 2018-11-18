@@ -92,11 +92,11 @@
                   :position="++i"
                   :readOnly="true"
                   :size="$mq === 'sm' ? 13 : 18"
-                  :rating="good.rating_average"
+                  :rating="good.review.rating + 1"
                 >
                 </star>
                 <span class="value">{{
-                  roundDecimalRating(good.rating_average || 0)
+                  roundDecimalRating(good.review.rating || 0)
                 }}</span>
               </div>
               <meta itemprop="worstRating" content="1" />
@@ -188,6 +188,9 @@ export default {
     return {
       hovered: false
     }
+  },
+  created () {
+    console.log(this.good)
   },
   computed: {
     ...mapGetters(['userWaitList']),
