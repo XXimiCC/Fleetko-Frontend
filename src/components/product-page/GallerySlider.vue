@@ -13,7 +13,7 @@
         </swiper-slide>
       </swiper>
 
-      <div class="buttons-wrap">
+      <div v-if="images.length > 1" class="buttons-wrap">
         <div class="slider__arrows">
           <button @click="swipePrev()" class="left">
             <svg-arrow-left></svg-arrow-left>
@@ -48,7 +48,7 @@
         activeSlide: 1,
         counterValue: 0,
         sliderOpts: {
-          loop: true
+          loop: this.images.length > 1
         }
       }
     },

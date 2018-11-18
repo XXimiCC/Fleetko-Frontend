@@ -97,6 +97,7 @@
           class="locations__slider"
         >
           <main-slider
+            class="slider"
             :banners="
               currentWarehouse.images.length
                 ? currentWarehouse.images
@@ -443,6 +444,9 @@ export default {
   &__slider {
     position: relative;
     margin: 32px 0 64px;
+    & /deep/ .main-slider--slide:before {
+      display: none;
+    }
   }
 }
 
