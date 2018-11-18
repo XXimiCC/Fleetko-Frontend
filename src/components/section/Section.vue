@@ -1,28 +1,17 @@
 <template>
   <div class="section">
     <div class="relative-wrap">
-      <main-slider
-        v-if="section"
-        :banners="section.banner_images"
-      ></main-slider>
-      <search
-        :position="$mq === 'xs' || $mq === 'sm' || $mq === 'md' ? 0 : -124"
-        class="search-common"
-      ></search>
-    </div>
+      <main-slider ref="mainSwiper" v-if="section" :banners="section.banner_images"></main-slider>
+      <search :position="['xs', 'sm', 'md'].includes($mq) ? 0 : -124" class="search-common"></search></div>
+
     <div class="container">
-      <div
-        class="section__breadcrumbs breadcrumb-links"
-        itemscope
-        itemtype="http://schema.org/BreadcrumbList"
-      >
-        <router-link
-          itemprop="itemListElement"
-          itemtype="http://schema.org/ListItem"
-          itemscope
-          :to="{ name: 'home' }"
-          tag="a"
-        >
+      <div class="section__breadcrumbs breadcrumb-links"
+           itemscope
+           itemtype="http://schema.org/BreadcrumbList">
+        <router-link itemprop="itemListElement"
+                     itemtype="http://schema.org/ListItem"
+                     itemscope
+                     :to="{ name: 'home' }">
           <span itemprop="name">Home</span>
           <meta itemprop="position" content="1" />
         </router-link>
@@ -34,20 +23,13 @@
           {{ getSection.name }}
         </h2>
         <div class="section__categories--item-wrap">
-          <router-link
-            :to="{ name: 'catalog', params: { slug: category.slug } }"
-            :key="category.id"
-            class="section__categories--item"
-            v-for="category in getSection.categories"
-            tag="a"
-          >
-            <categoryCard
-              :category="category"
-              :counter="enableCounters()"
-              :textMaxWidth="
-                $mq === 'sm' || $mq === 'md' || $mq === 'lg' ? '120px' : '100%'
-              "
-            >
+          <router-link :to="{ name: 'catalog', params: { slug: category.slug } }"
+                       :key="category.id"
+                       class="section__categories--item"
+                       v-for="category in getSection.categories">
+            <categoryCard :category="category"
+                          :counter="enableCounters()"
+                          :textMaxWidth="['lg', 'sm', 'md'].includes($mq) ? '120px' : '100%' ">
             </categoryCard>
           </router-link>
         </div>
@@ -56,10 +38,9 @@
         <p class="paragraph-secondary">{{ getSection.description }}</p>
       </div>
       <div v-if="bestSellersCollection.length">
-        <best-sellers-slider
-          :options="swiperOptionBestSellers"
-          :bestSellersCollection="bestSellersCollection"
-        ></best-sellers-slider>
+        <best-sellers-slider :options="swiperOptionBestSellers"
+                             :bestSellersCollection="bestSellersCollection">
+        </best-sellers-slider>
       </div>
       <div class="section__categories--brands row">
         <h2 class="h2-secondary section__categories--brands__title">
@@ -87,6 +68,21 @@ Vue.use(Meta)
 
 export default {
   name: 'Section',
+  components: {
+    MainSlider,
+    categoryCard,
+    BrandsSlider,
+    swiper,
+    swiperSlide,
+    BestSellersSlider,
+    search
+  },
+  mixins: [utils],
+  metaInfo () {
+    return {
+      title: `Fleetko`
+    }
+  },
   data () {
     return {
       section: null,
@@ -95,8 +91,10 @@ export default {
       swiperOptionBestSellers: {
         slidesPerView: 4,
         spaceBetween: 16,
-        pagination: '.best-sellers-pagination',
-        paginationClickable: true,
+        pagination: {
+          el: '.best-sellers-pagination',
+          clickable: true
+        },
         slidesPerGroup: 4,
         loopFillGroupWithBlank: true,
         breakpoints: {
@@ -114,12 +112,13 @@ export default {
       swiperOptionBrands: {
         slidesPerView: 4,
         spaceBetween: 30,
-        pagination: '.brands-pagination',
-        paginationClickable: true,
+        pagination: {
+          el: '.brands-pagination',
+          clickable: true
+        },
         slidesPerGroup: 4,
         loopFillGroupWithBlank: true,
         breakpoints: {
-          // when window width is <= 940
           640: {
             slidesPerView: 2,
             slidesPerColumn: 2,
@@ -132,63 +131,40 @@ export default {
       }
     }
   },
-  metaInfo () {
-    return {
-      title: `Fleetko`
-    }
+  computed: {
+    ...mapGetters(['getSection', 'enableSearch'])
   },
-  watch: {},
-  mixins: [utils],
+  mounted () {
+    this.fetchSection()
+    this.fetchBestSellersProducts()
+  },
   methods: {
     enableCounters () {
       return !!this.$route.query.model
     },
     fetchSection (update) {
       this.sectionSlug = update ? update : this.$route.params.slug
-      this.$store.dispatch('fetchSection', this.sectionSlug).then(
-        resp => {
+      this.$store.dispatch('fetchSection', this.sectionSlug)
+        .then(resp => {
           this.section = resp.data
-          // eslint-disable-next-line
-        },
-        error => {
-          console.error(error)
         }
       )
     },
     fetchBestSellersProducts () {
-      this.$store
-        .dispatch('fetchBestsellersProducts', {
-          slug: this.sectionSlug,
-          type: 'sections'
-        })
+      this.$store.dispatch('fetchBestsellersProducts', { slug: this.sectionSlug, type: 'sections' })
         .then(response => {
           this.bestSellersCollection = response
         })
     }
   },
-  components: {
-    MainSlider,
-    categoryCard,
-    BrandsSlider,
-    swiper,
-    swiperSlide,
-    BestSellersSlider,
-    search
-  },
-  computed: {
-    ...mapGetters(['getSection', 'enableSearch'])
-  },
   beforeRouteUpdate (to, from, next) {
     this.fetchSection(to.params.slug)
     this.fetchBestSellersProducts()
     next()
-  },
-  mounted () {
-    this.fetchSection()
-    this.fetchBestSellersProducts()
   }
 }
 </script>
+
 <style lang="scss" scoped>
 .relative-wrap {
   position: relative;
@@ -293,7 +269,7 @@ export default {
       margin-top: 64px;
       margin-bottom: 143px;
       .swiper-pagination {
-        bottom: 0px;
+        bottom: 0;
       }
       .swiper-container {
         height: 166px;
@@ -316,8 +292,8 @@ export default {
         align-items: center;
         justify-content: center;
         &:hover {
-          box-shadow: 0px 10px 14.1px 0.9px rgba(0, 0, 0, 0.14),
-            0px 4px 19.6px 0.4px rgba(0, 0, 0, 0.06);
+          box-shadow: 0 10px 14.1px 0.9px rgba(0, 0, 0, 0.14),
+            0 4px 19.6px 0.4px rgba(0, 0, 0, 0.06);
         }
         img {
           max-width: 80%;

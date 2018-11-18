@@ -4,7 +4,7 @@
     <div class="bestsellers--wrap row">
       <swiper class="col-xl-12 swiper-popular"
               ref="swiperFeatured"
-              :options="Object.assign(options, {  pagination: { el: '.featured-products-pagination', clickable: true } })">
+              :options="options">
         <swiper-slide v-for="(product, i) in featuredProductsCollection" :key="i">
           <product-card :good="product" view="column" item-description="legacy">
           </product-card>

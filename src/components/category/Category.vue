@@ -3,6 +3,7 @@
     <div class="relative-wrap">
       <main-slider
         v-if="category"
+        :key="category.id"
         :banners="category.banner_images"
       ></main-slider>
       <div id="search-form-anchor"></div>
@@ -69,8 +70,10 @@ export default {
       swiperOption: {
         slidesPerView: 4,
         spaceBetween: 16,
-        pagination: '.best-sellers-pagination',
-        paginationClickable: true,
+        pagination: {
+          el: '.best-sellers-pagination',
+          clickable: true
+        },
         slidesPerGroup: 4,
         loopFillGroupWithBlank: true,
         breakpoints: {
@@ -107,7 +110,7 @@ export default {
   },
   mixins: [utils],
   watch: {
-    $route (val, oldVal) {
+    '$route' (val, oldVal) {
       if (val.params.slug !== oldVal.params.slug) {
         this.fetchCategory()
         this.fetchBestSellersProducts()
@@ -142,8 +145,7 @@ export default {
       }
     },
     fetchBestSellersProducts () {
-      this.$store
-        .dispatch('fetchBestsellersProducts', {
+      this.$store.dispatch('fetchBestsellersProducts', {
           slug: this.$route.params.slug,
           type: 'categories'
         })

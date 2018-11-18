@@ -4,7 +4,7 @@
     <div class="bestsellers--wrap row">
       <swiper class="col-xl-12 swiper-popular"
               ref="swiperPopular"
-              :options="Object.assign(options, {  pagination: { el: '.best-sellers-pagination', clickable: true } })">
+              :options="options">
         <swiper-slide v-for="(product, i) in bestSellersCollection" :key="i">
           <product-card link="dealer"
                         class-response="col-xl-12"

@@ -53,8 +53,10 @@ export default {
       swiperOptionBrands: {
         slidesPerView: 6,
         spaceBetween: 0,
-        pagination: '.brands-pagination',
-        paginationClickable: true,
+        pagination: {
+          el: '.brands-pagination',
+          clickable: true
+        },
         slidesPerGroup: 6,
         loopFillGroupWithBlank: true,
         breakpoints: {

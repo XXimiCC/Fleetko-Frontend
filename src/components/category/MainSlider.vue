@@ -1,52 +1,40 @@
 <template>
   <div class="main-slider">
-    <div
-      v-if="banners"
-      class="main-slider--wrapper"
-      :class="{ 'fixed-controls': fixedControls }"
-      @mouseenter="showSliderNavs = true"
-      @mouseleave="showSliderNavs = false"
-    >
+    <div v-if="slides"
+         class="main-slider--wrapper"
+         :class="{ 'fixed-controls': fixedControls }"
+         @mouseenter="showSliderNavs = true"
+         @mouseleave="showSliderNavs = false">
       <swiper ref="pageMainSlider" :options="swiperOption">
-        <swiper-slide v-for="(sliderImage, i) in banners" :key="i">
-          <component
-            :is="isExternalLink(sliderImage.href)"
-            :href="sliderImage.href"
-            :target="isTargetBlank(sliderImage)"
-            :to="bannerLink(sliderImage)"
-          >
-            <div
-              class="main-slider--slide"
-              :style="{
-                'background-image': `url(${componentBannerImage(
-                  sliderImage
-                )}), url(${sliderImage.versions.original})`
-              }"
-            ></div>
+        <swiper-slide v-for="(sliderImage, i) in slides" :key="i">
+          <component :is="isOuter(sliderImage.href) ? 'a' : 'router-link'"
+                     :target="isOuter(sliderImage.href) ? '_blank' : '_self'"
+                     :href="sliderImage.href"
+                     :to="bannerLink(sliderImage)">
+            <div class="main-slider--slide"
+                 :style="{
+                   'background-image': `url(${componentBannerImage(sliderImage)}), url(${sliderImage.versions.original})`
+                 }">
+            </div>
           </component>
         </swiper-slide>
-        <div
-          v-if="fixedControls"
-          class="swiper-pagination"
-          slot="pagination"
-        ></div>
+        <div v-if="fixedControls"
+             class="swiper-pagination"
+             slot="pagination">
+        </div>
       </swiper>
 
       <div class="buttons-wrap">
         <div class="container">
           <div class="main-slider--buttons">
-            <button
-              @click="swipePrev()"
-              :class="{ visible: showSliderNavs }"
-              class="left"
-            >
+            <button @click="swipePrev()"
+                    :class="{ visible: showSliderNavs }"
+                    class="left">
               <svg-arrow-left></svg-arrow-left>
             </button>
-            <button
-              @click="swipeNext()"
-              :class="{ visible: showSliderNavs }"
-              class="right"
-            >
+            <button @click="swipeNext()"
+                    :class="{ visible: showSliderNavs }"
+                    class="right">
               <svg-arrow-right></svg-arrow-right>
             </button>
           </div>
@@ -63,9 +51,17 @@ import search from '@/components/parts/SearchCommon'
 
 export default {
   name: 'MainSlider',
+  mixins: [imageSource],
+  components: {
+    swiper,
+    swiperSlide,
+    search
+  },
+  props: ['banners', 'fixedControls'],
   data () {
     return {
       filterSearch: true,
+      slides: this.banners,
       showSliderNavs: false,
       swiperOption: {
         slidesPerView: 1,
@@ -78,74 +74,40 @@ export default {
       }
     }
   },
-  props: ['banners', 'fixedControls'],
-  mixins: [imageSource],
-  components: {
-    swiper,
-    swiperSlide,
-    search
-  },
-  watch: {
-    $route (val, oldVal) {
-      if (val.params.slug !== oldVal.params.slug) this.pageMainSlider.init()
-    }
-  },
-  methods: {
-    isExternalLink (link) {
-      return link &&
-        link.startsWith('http') &&
-        !link.includes(window.location.host)
-        ? 'a'
-        : 'router-link'
-    },
-    bannerLink (banner) {
-      let parser = document.createElement('a')
-
-      parser.href = banner.href
-
-      if (banner.href && banner.href.includes(window.location.host)) {
-        return parser.pathname
-      } else {
-        return banner.href || this.$route.fullPath
-      }
-    },
-    componentBannerImage (images, onError) {
-      let sizeProperty = ''
-
-      if (this.$mq === 'xl' || this.$mq === 'lg') {
-        sizeProperty = 'big'
-      } else if (this.$mq === 'md') {
-        sizeProperty = 'medium'
-      } else {
-        sizeProperty = 'small'
-      }
-
-      return this.serverImageSource(
-        images,
-        sizeProperty,
-        onError,
-        this.SERVER_IMAGE_BANNERS
-      )
-    },
-    isTargetBlank (sliderImage) {
-      // eslint-disable-next-line
-      return '_blank'
-        ? sliderImage.href && !sliderImage.href.includes(window.location.host)
-        : '_self'
-    },
-    swipeNext () {
-      this.pageMainSlider.slideNext()
-    },
-    swipePrev () {
-      this.pageMainSlider.slidePrev()
-    }
-  },
   computed: {
     pageMainSlider () {
       return this.$refs.pageMainSlider.swiper
     },
     vehicleSearch () {
       return this.$route.query.vehicle
+    }
+  },
+  methods: {
+    isOuter (link) {
+      return link && link.startsWith('http') && !link.includes(window.location.host)
+    },
+    bannerLink (banner) {
+      const parser = document.createElement('a')
+
+      parser.href = banner.href
+
+      return (banner.href && banner.href.includes(window.location.host))
+        ? parser.pathname
+        : banner.href || this.$route.fullPath
+    },
+    componentBannerImage (images, onError) {
+      let sizeProperty = 'big'
+
+      if (this.$mq === 'md') sizeProperty = 'medium'
+      if (this.$mq === 'sm') sizeProperty = 'small'
+
+      return this.serverImageSource(images, sizeProperty, onError, this.SERVER_IMAGE_BANNERS)
+    },
+    swipeNext () {
+      this.pageMainSlider.slideNext()
+    },
+    swipePrev () {
+      this.pageMainSlider.slidePrev()
     }
   }
 }

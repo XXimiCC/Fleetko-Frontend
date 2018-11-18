@@ -223,11 +223,6 @@ export default {
         })
       }
     }
-  },
-  beforeDestroy () {
-    const captcha = document.querySelectorAll('.grecaptcha-badge')[0]
-    if (captcha) captcha.parentElement.innerHTML = ''
-    //this.$refs.recaptcha.$destroy()
   }
 }
 </script>
