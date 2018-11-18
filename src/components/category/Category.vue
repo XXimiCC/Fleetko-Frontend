@@ -3,6 +3,8 @@
     <div class="relative-wrap">
       <main-slider
         v-if="category"
+        :liftUpPagination="openSearch"
+        fixedControls="true"
         :key="category.id"
         :banners="category.banner_images"
       ></main-slider>
@@ -91,8 +93,10 @@ export default {
       featuredSliderOptions: {
         slidesPerView: 4,
         spaceBetween: 16,
-        pagination: '.featured-products-pagination',
-        paginationClickable: true,
+        pagination: {
+          el: '.featured-pagination',
+          clickable: true
+        },
         slidesPerGroup: 4,
         loopFillGroupWithBlank: true,
         breakpoints: {

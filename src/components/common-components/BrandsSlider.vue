@@ -1,13 +1,13 @@
 <template>
   <div class="col-xl-12 slider">
-    <swiper :options="Object.assign(swiperOptions, {  pagination: { el: '.brands-pagination', clickable: true } })"
+    <swiper :options="Object.assign(swiperOptions, {  pagination: { el: '.swiper-pagination', clickable: true } })"
             ref="brandsSwiper"
             class="col-xl-12">
       <swiper-slide v-for="(brand, i) in brands" :key="i">
         <div class="item"><img :src="brandImage(brand.name)" alt="brand-logo" /></div>
         <p class="slider__caption">{{ brand.name }}</p>
       </swiper-slide>
-      <div class="brands-pagination" slot="pagination"></div>
+      <div class="swiper-pagination" slot="pagination"></div>
     </swiper>
     <div class="slider--buttons">
       <button @click="swipePrev()" class="left">
@@ -67,7 +67,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.brands-pagination {
+.swiper-pagination {
   position: absolute;
   bottom: 0;
   display: flex;

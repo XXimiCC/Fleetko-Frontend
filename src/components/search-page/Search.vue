@@ -147,7 +147,7 @@ export default {
         slidesPerView: 4,
         spaceBetween: 30,
         pagination: {
-          el: '.brands-pagination',
+          el: '.swiper-pagination',
           clickable: true
         },
         slidesPerGroup: 4,
@@ -167,7 +167,7 @@ export default {
       swiperOption: {
         slidesPerView: 4,
         slidesPerGroup: 4,
-        pagination: '.best-sellers-pagination',
+        pagination: '.swiper-pagination',
         paginationClickable: true,
         spaceBetween: 0,
         height: 'auto',

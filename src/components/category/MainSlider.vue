@@ -1,12 +1,12 @@
 <template>
   <div class="main-slider">
-    <div v-if="slides"
+    <div v-if="banners"
          class="main-slider--wrapper"
          :class="{ 'fixed-controls': fixedControls }"
          @mouseenter="showSliderNavs = true"
          @mouseleave="showSliderNavs = false">
       <swiper ref="pageMainSlider" :options="swiperOption">
-        <swiper-slide v-for="(sliderImage, i) in slides" :key="i">
+        <swiper-slide v-for="(sliderImage, i) in banners" :key="i">
           <component :is="isOuter(sliderImage.href) ? 'a' : 'router-link'"
                      :target="isOuter(sliderImage.href) ? '_blank' : '_self'"
                      :href="sliderImage.href"
@@ -18,13 +18,14 @@
             </div>
           </component>
         </swiper-slide>
-        <div v-if="fixedControls"
+        <div v-if="fixedControls && banners.length > 1"
+             :class="{'lifted-up': liftUpPagination}"
              class="swiper-pagination"
              slot="pagination">
         </div>
       </swiper>
 
-      <div class="buttons-wrap">
+      <div v-if="banners.length > 1" class="buttons-wrap">
         <div class="container">
           <div class="main-slider--buttons">
             <button @click="swipePrev()"
@@ -57,11 +58,10 @@ export default {
     swiperSlide,
     search
   },
-  props: ['banners', 'fixedControls'],
+  props: ['banners', 'fixedControls', 'liftUpPagination'],
   data () {
     return {
       filterSearch: true,
-      slides: this.banners,
       showSliderNavs: false,
       swiperOption: {
         slidesPerView: 1,
@@ -121,6 +121,18 @@ export default {
 }
 
 .fixed-controls {
+  .swiper-pagination {
+    bottom: 10px;
+    left: 0;
+    width: 100%;
+    transition: bottom .2s;
+    & /deep/ .swiper-pagination-bullet {
+      margin: 0 4px;
+    }
+    &.lifted-up {
+      bottom: 85px;
+    }
+  }
   .main-slider--buttons {
     .left {
       left: 40px;

@@ -9,7 +9,7 @@
           <product-card :good="product" view="column" item-description="legacy">
           </product-card>
         </swiper-slide>
-        <div class="featured-products-pagination" slot="pagination"></div>
+        <div class="featured-pagination" slot="pagination"></div>
       </swiper>
       <div class="slider-buttons">
         <button @click="swipePrev('swiperFeatured')" class="left">
@@ -111,15 +111,19 @@ export default {
     position: relative;
     padding-top: 16px;
     padding-bottom: 43px;
-
-    .featured-products-pagination {
-      position: absolute;
-      bottom: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
   }
+}
+
+.featured-pagination {
+  bottom: 10px;
+  left: 0;
+  width: 100%;
+  height: 30px;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
 }
 
 @media (max-width: $xl) {

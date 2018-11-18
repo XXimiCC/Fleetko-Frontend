@@ -105,14 +105,19 @@ export default {
     position: relative;
     padding-top: 16px;
     padding-bottom: 43px;
-    .best-sellers-pagination {
-      position: absolute;
-      bottom: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
   }
+}
+
+.best-sellers-pagination {
+  bottom: 10px;
+  left: 0;
+  width: 100%;
+  height: 30px;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
 }
 
 @media (max-width: $xl) {

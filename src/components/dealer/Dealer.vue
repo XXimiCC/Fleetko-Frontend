@@ -74,7 +74,7 @@ export default {
       swiperOption: {
         slidesPerView: 4,
         spaceBetween: 16,
-        pagination: '.best-sellers-pagination',
+        pagination: '.swiper-pagination',
         paginationClickable: true,
         slidesPerGroup: 4,
         loopFillGroupWithBlank: true,

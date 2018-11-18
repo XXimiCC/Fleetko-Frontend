@@ -53,7 +53,7 @@ export default {
         slidesPerView: 4,
         spaceBetween: 30,
         pagination: {
-          el: '.brands-pagination',
+          el: '.swiper-pagination',
           clickable: true
         },
         slidesPerGroup: 4,
@@ -72,8 +72,10 @@ export default {
       featuredSliderOptions: {
         slidesPerView: 4,
         spaceBetween: 16,
-        pagination: '.featured-products-pagination',
-        paginationClickable: true,
+        pagination: {
+          el: '.featured-pagination',
+          clickable: true
+        },
         slidesPerGroup: 4,
         loopFillGroupWithBlank: true,
         breakpoints: {
