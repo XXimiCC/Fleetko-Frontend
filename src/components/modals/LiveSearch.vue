@@ -695,7 +695,7 @@ export default {
           font-size: 16px;
           font-weight: 500;
           &--blurred {
-            color: $grey;
+            color: $main-grey;
           }
         }
       }
