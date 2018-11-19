@@ -4,6 +4,7 @@
       <dealer-slider
         v-if="dealer"
         :key="dealer.id"
+        :liftUpPagination="true"
         :banners="dealer.banner_images"
       ></dealer-slider>
       <search
