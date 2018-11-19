@@ -118,20 +118,15 @@ export default {
   },
   methods: {
     fetchFeaturedProducts () {
-      this.$store
-        .dispatch('fetchFeaturedProducts', {
-          slug: null,
-          type: null
-        })
+      this.$store.dispatch('fetchFeaturedProducts', { slug: null, type: null })
         .then(response => {
           this.featuredProducts = response
         })
     },
     fetchHomepageBanners () {
-      this.$store
-        .dispatch('fetchHomepageBanners')
+      this.$store.dispatch('fetchHomepageBanners')
         .then(resp => {
-          this.homepageBanners = resp
+          this.homepageBanners = resp.data
         })
     }
   }

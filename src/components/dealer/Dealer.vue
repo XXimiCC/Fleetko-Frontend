@@ -76,7 +76,7 @@ export default {
         slidesPerView: 4,
         spaceBetween: 16,
         pagination: {
-          el: '.brands-pagination',
+          el: '.best-sellers-pagination',
           clickable: true
         },
         slidesPerGroup: 4,

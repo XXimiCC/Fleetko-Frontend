@@ -3,9 +3,9 @@
     <div class="homepage__slider--wrapper" @mouseenter="showSliderNavs = true" @mouseleave="showSliderNavs = false">
 
       <swiper ref="sliderEl" :options="swiperOption">
-        <swiper-slide v-for="(img, i) in promotion" :key="i">
+        <swiper-slide v-for="(img, i) in banners" :key="i">
           <div class="homepage__slider--slide"
-               :style="{ 'background-image': `url(${imageSrc(`homepage-slider/${img.src}.png` )})` }">
+               :style="{ 'background-image': `url(${componentBannerImage(img)}), url(${img.versions.original})` }">
           </div>
         </swiper-slide>
         <div :class="{ 'visible': showSliderNavs }"
@@ -37,10 +37,11 @@
 <script>
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 import utils from '@/mixins/utils'
+import imageSource from '@/mixins/imagesSource'
 
 export default {
   name: 'homepage-slider',
-  mixins: [utils],
+  mixins: [utils, imageSource],
   components: {
     swiper,
     swiperSlide
@@ -48,17 +49,6 @@ export default {
   props: ['banners'],
   data () {
     return {
-      promotion: [
-        {
-          src: 'homepage-slider-1'
-        },
-        {
-          src: 'homepage-slider-2'
-        },
-        {
-          src: 'homepage-slider-3'
-        }
-      ],
       swiperOption: {
         slidesPerView: 1,
         spaceBetween: 0,
@@ -76,12 +66,23 @@ export default {
       return this.$refs.sliderEl.swiper
     }
   },
+  created () {
+    console.log('created')
+  },
   methods: {
     swipeNext () {
       this.sliderEl.slideNext()
     },
     swipePrev () {
       this.sliderEl.slidePrev()
+    },
+    componentBannerImage (images, onError) {
+      let sizeProperty = 'big'
+
+      if (this.$mq === 'md') sizeProperty = 'medium'
+      if (this.$mq === 'sm') sizeProperty = 'small'
+
+      return this.serverImageSource(images, sizeProperty, onError, this.SERVER_IMAGE_BANNERS)
     }
   }
 }

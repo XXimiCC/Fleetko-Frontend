@@ -167,8 +167,10 @@ export default {
       swiperOption: {
         slidesPerView: 4,
         slidesPerGroup: 4,
-        pagination: '.swiper-pagination',
-        paginationClickable: true,
+        pagination: {
+          el: '.best-sellers-pagination',
+          clickable: true
+        },
         spaceBetween: 0,
         height: 'auto',
         onInit: function (swiper) {

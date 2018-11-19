@@ -86,7 +86,6 @@ export default {
   },
   methods: {
     singlePhoto () {
-      console.log(this.banners.length > 1)
       return this.banners.length > 1
     },
     isOuter (link) {
