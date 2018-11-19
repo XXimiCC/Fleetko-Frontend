@@ -18,31 +18,18 @@ import imageSource from '@/mixins/imagesSource'
 
 export default {
   name: 'vehiclePageSlider',
-  data () {
-    return {}
-  },
   mixins: [imageSource],
   methods: {
     componentBannerImage (images, onError) {
-      let sizeProperty = ''
+      let size = 'big'
 
-      if (this.$mq === 'xl' || this.$mq === 'lg') {
-        sizeProperty = 'big'
-      } else if (this.$mq === 'md') {
-        sizeProperty = 'medium'
-      } else {
-        sizeProperty = 'small'
-      }
+      if (this.$mq === 'md') size = 'medium'
+      if (this.$mq === 'sm') size = 'small'
 
-      return this.serverImageSource(
-        images,
-        sizeProperty,
-        onError,
-        this.SERVER_IMAGE_BANNERS
+      return this.serverImageSource(images, size, onError, this.SERVER_IMAGE_BANNERS
       )
     }
   },
-  components: {},
   computed: {
     ...mapGetters(['getVehicle'])
   }

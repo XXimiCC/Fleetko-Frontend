@@ -54,9 +54,7 @@
       <div class="container">
         <div class="row">
           <div class="col-md-4 contact__feedback--title-wrap">
-            <h2 class="contact__feedback--title">
-              Leave a message and we will contact you!
-            </h2>
+            <h2 class="contact__feedback--title">Leave a message and we will contact you!</h2>
           </div>
           <div class="col-md-8 contact__feedback--body">
             <feedback></feedback>

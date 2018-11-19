@@ -1,16 +1,14 @@
 <template>
   <div class="homepage__slider">
-    <div class="homepage__slider--wrapper"
-         @mouseenter="showSliderNavs = true"
-         @mouseleave="showSliderNavs = false">
+    <div class="homepage__slider--wrapper" @mouseenter="showSliderNavs = true" @mouseleave="showSliderNavs = false">
 
-      <swiper ref="homepageMainSlider" :options="swiperOption">
-        <swiper-slide v-for="(sliderImage, i) in promotion" :key="i">
+      <swiper ref="sliderEl" :options="swiperOption">
+        <swiper-slide v-for="(img, i) in promotion" :key="i">
           <div class="homepage__slider--slide"
-               :style="{ 'background-image': `url(${imageSrc(`homepage-slider/${sliderImage.src}.png` )})` }">
+               :style="{ 'background-image': `url(${imageSrc(`homepage-slider/${img.src}.png` )})` }">
           </div>
         </swiper-slide>
-        <div :class="{ visible: showSliderNavs }"
+        <div :class="{ 'visible': showSliderNavs }"
              class="container homepage-slider-pagination swiper-pagination"
              slot="pagination">
         </div>
@@ -20,12 +18,12 @@
         <div class="container">
           <div class="homepage__slider--buttons">
             <button @click="swipePrev()"
-                    :class="{ visible: showSliderNavs }"
+                    :class="{ 'visible': showSliderNavs }"
                     class="left">
               <svg-arrow-left></svg-arrow-left>
             </button>
             <button @click="swipeNext()"
-                    :class="{ visible: showSliderNavs }"
+                    :class="{ 'visible': showSliderNavs }"
                     class="right">
               <svg-arrow-right></svg-arrow-right>
             </button>
@@ -39,8 +37,14 @@
 <script>
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 import utils from '@/mixins/utils'
+
 export default {
   name: 'homepage-slider',
+  mixins: [utils],
+  components: {
+    swiper,
+    swiperSlide
+  },
   props: ['banners'],
   data () {
     return {
@@ -67,23 +71,18 @@ export default {
       showSliderNavs: false
     }
   },
-  mixins: [utils],
+  computed: {
+    sliderEl () {
+      return this.$refs.sliderEl.swiper
+    }
+  },
   methods: {
     swipeNext () {
-      this.homepageMainSlider.slideNext()
+      this.sliderEl.slideNext()
     },
     swipePrev () {
-      this.homepageMainSlider.slidePrev()
+      this.sliderEl.slidePrev()
     }
-  },
-  computed: {
-    homepageMainSlider () {
-      return this.$refs.homepageMainSlider.swiper
-    }
-  },
-  components: {
-    swiper,
-    swiperSlide
   }
 }
 </script>
