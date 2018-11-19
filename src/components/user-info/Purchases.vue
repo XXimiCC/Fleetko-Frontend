@@ -169,7 +169,7 @@ export default {
 
       this.$store.dispatch('userUpdateReview', review).then(
         response => {
-          let reviewForUpdate = this.purchases.findIndex(good => good.review && good.review.id === good.data.id)
+          let reviewForUpdate = this.purchases.findIndex(good => good.review && good.review.id === response.data.id)
 
           delete response.data.product
 
@@ -186,11 +186,11 @@ export default {
     userCreateReview (review) {
       this.localLoader = true
 
-      this.$store.dispatch('userCreateReview', review).then(
-        response => {
-          let productForCreate = this.purchases.findIndex(good => good.id === good.data.product_id)
+      this.$store.dispatch('userCreateReview', review)
+        .then(({ data }) => {
+          let productForCreate = this.purchases.findIndex(good => good.id === data.product_id)
 
-          this.purchases[productForCreate].review = response.data
+          this.purchases[productForCreate].review = data
           this.localLoader = false
         },
         () => {

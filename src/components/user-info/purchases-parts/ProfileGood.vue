@@ -189,9 +189,6 @@ export default {
       hovered: false
     }
   },
-  created () {
-    console.log(this.good)
-  },
   computed: {
     ...mapGetters(['userWaitList']),
     viewedMode () {
