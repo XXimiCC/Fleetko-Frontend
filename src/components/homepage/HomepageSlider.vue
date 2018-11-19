@@ -41,6 +41,7 @@ import { swiper, swiperSlide } from 'vue-awesome-swiper'
 import utils from '@/mixins/utils'
 export default {
   name: 'homepage-slider',
+  props: ['banners'],
   data () {
     return {
       promotion: [

@@ -171,6 +171,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "~@/scss/mixins";
+
 .contact {
   margin-bottom: 56px;
   &__info {
@@ -270,6 +272,7 @@ export default {
     height: 400px;
     background-position: center;
     background-color: #f5f5f5;
+    &:before { @include bgPattern() }
   }
 }
 

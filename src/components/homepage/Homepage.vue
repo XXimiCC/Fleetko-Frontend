@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="relative-block">
-      <homepage-slider></homepage-slider>
+      <homepage-slider :banners="homepageBanners"></homepage-slider>
       <homepage-search></homepage-search>
     </div>
     <homepage-categories
@@ -45,10 +45,19 @@ Vue.use(Meta)
 
 export default {
   name: 'Homepage',
+  mixins: [utils],
+  components: {
+    HomepageSlider,
+    HomepageCategories,
+    HomepageSearch,
+    BrandsSlider,
+    FeaturedProduct
+  },
   data: function () {
     return {
       sections: [],
       featuredProducts: [],
+      homepageBanners: [],
       swiperOptionBrands: {
         slidesPerView: 4,
         spaceBetween: 30,
@@ -92,11 +101,20 @@ export default {
       }
     }
   },
-  mixins: [utils],
+  computed: {
+    ...mapState({
+      loading: state => state.user.loading
+    }),
+    ...mapGetters(['isAuth', 'getSections'])
+  },
   metaInfo () {
     return {
       title: 'Fleetko'
     }
+  },
+  mounted () {
+    this.fetchFeaturedProducts()
+    this.fetchHomepageBanners()
   },
   methods: {
     fetchFeaturedProducts () {
@@ -108,23 +126,14 @@ export default {
         .then(response => {
           this.featuredProducts = response
         })
+    },
+    fetchHomepageBanners () {
+      this.$store
+        .dispatch('fetchHomepageBanners')
+        .then(resp => {
+          this.homepageBanners = resp
+        })
     }
-  },
-  computed: {
-    ...mapState({
-      loading: state => state.user.loading
-    }),
-    ...mapGetters(['isAuth', 'getSections'])
-  },
-  components: {
-    HomepageSlider,
-    HomepageCategories,
-    HomepageSearch,
-    BrandsSlider,
-    FeaturedProduct
-  },
-  mounted () {
-    this.fetchFeaturedProducts()
   }
 }
 </script>
