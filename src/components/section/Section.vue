@@ -1,7 +1,7 @@
 <template>
   <div class="section">
     <div class="relative-wrap">
-      <main-slider ref="mainSwiper" v-if="section" :banners="section.banner_images"></main-slider>
+      <main-slider ref="mainSwiper" v-if="section" :key="section.id" :banners="section.banner_images"></main-slider>
       <search :position="['xs', 'sm', 'md'].includes($mq) ? 0 : -124" class="search-common"></search></div>
 
     <div class="container">

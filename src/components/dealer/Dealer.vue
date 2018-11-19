@@ -3,6 +3,7 @@
     <div class="relative-wrap">
       <dealer-slider
         v-if="dealer"
+        :key="dealer.id"
         :banners="dealer.banner_images"
       ></dealer-slider>
       <search
