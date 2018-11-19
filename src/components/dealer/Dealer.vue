@@ -61,7 +61,6 @@ export default {
         slidesPerGroup: 6,
         loopFillGroupWithBlank: true,
         breakpoints: {
-          // when window width is <= 940
           640: {
             slidesPerView: 2,
             slidesPerColumn: 2,
@@ -75,8 +74,10 @@ export default {
       swiperOption: {
         slidesPerView: 4,
         spaceBetween: 16,
-        pagination: '.swiper-pagination',
-        paginationClickable: true,
+        pagination: {
+          el: '.brands-pagination',
+          clickable: true
+        },
         slidesPerGroup: 4,
         loopFillGroupWithBlank: true,
         breakpoints: {

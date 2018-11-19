@@ -90,10 +90,7 @@
           ></textarea>
           <span
             v-show="errors.has('feedback-message')"
-            class="error-message-input"
-          >
-            {{ errors.first('feedback-message') }}</span
-          >
+            class="error-message-input"> {{ errors.first('feedback-message')}} </span>
         </div>
       </div>
       <div class="feedback__body--submit">

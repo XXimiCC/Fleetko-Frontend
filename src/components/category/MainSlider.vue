@@ -18,7 +18,7 @@
             </div>
           </component>
         </swiper-slide>
-        <div v-if="fixedControls && banners.length > 1"
+        <div v-if="banners.length > 1"
              :class="{'lifted-up': liftUpPagination}"
              class="swiper-pagination"
              slot="pagination">
@@ -70,7 +70,9 @@ export default {
           el: '.swiper-pagination',
           clickable: true
         },
-        loop: true
+        loop: true,
+        allowSlidePrev: this.singlePhoto(),
+        allowSlideNext: this.singlePhoto()
       }
     }
   },
@@ -83,6 +85,10 @@ export default {
     }
   },
   methods: {
+    singlePhoto () {
+      console.log(this.banners.length > 1)
+      return this.banners.length > 1
+    },
     isOuter (link) {
       return link && link.startsWith('http') && !link.includes(window.location.host)
     },
@@ -120,19 +126,26 @@ export default {
   padding: 0;
 }
 
-.fixed-controls {
-  .swiper-pagination {
-    bottom: 10px;
-    left: 0;
-    width: 100%;
-    transition: bottom .2s;
-    & /deep/ .swiper-pagination-bullet {
-      margin: 0 4px;
-    }
-    &.lifted-up {
-      bottom: 85px;
-    }
+.swiper-pagination {
+  bottom: 10px;
+  left: 0;
+  width: 100%;
+  transition: bottom .2s;
+  & /deep/ .swiper-pagination-bullet {
+    margin: 0 4px;
   }
+  &.lifted-up {
+    bottom: 85px;
+  }
+}
+
+@media (max-width: $md) {
+  .swiper-pagination {
+    display: none;
+  }
+}
+
+.fixed-controls {
   .main-slider--buttons {
     .left {
       left: 40px;
