@@ -1,6 +1,6 @@
 <template>
   <div class="slider">
-    <div class="slider__wrapper">
+    <div class="slider__wrapper" :class="{ 'slider__wrapper--single': limitedImageQty.length < 2}">
       <div class="slider__counter">
         image {{ defineCounter(activeSlide) + 1}} of {{ images.length }}
       </div>
@@ -29,7 +29,7 @@
       <div v-for="(img, i) in limitedImageQty" :key="i"
            @click="goToSlide(i)"
            class="gallery__image"
-           :class="{'gallery__image--active': defineActive(i)}">
+           :class="{'gallery__image--active': activeSlide === i}">
         <img :src="img.versions.tiny" alt="">
       </div>
     </div>
@@ -45,10 +45,11 @@
     props: ['images'],
     data () {
       return {
-        activeSlide: 1,
+        activeSlide: 0,
         counterValue: 0,
         sliderOpts: {
-          loop: this.images.length > 1
+          loop: false,
+          initialSlide: 0
         }
       }
     },
@@ -60,13 +61,7 @@
         return this.images.length <= 10 ? this.images : this.images.slice(0, 9)
       }
     },
-    mounted () {
-      this.sliderEl.slidePrev(0)
-    },
     methods: {
-      defineActive (index) {
-        return this.activeSlide === index || this.activeSlide - this.limitedImageQty.length === index
-      },
       defineCounter () {
         if (this.activeSlide > this.limitedImageQty.length - 1) {
           return this.activeSlide - this.limitedImageQty.length
@@ -79,13 +74,17 @@
       },
       goToSlide (index) {
         this.activeSlide = index
-        this.sliderEl.slideTo(index)
+        this.sliderEl.slideTo(this.activeSlide)
       },
       swipeNext () {
-        this.sliderEl.slideNext()
+        if (++this.activeSlide >= this.limitedImageQty.length) this.activeSlide = 0
+
+        this.sliderEl.slideTo(this.activeSlide)
       },
       swipePrev () {
-        this.sliderEl.slidePrev()
+        if (--this.activeSlide < 0) this.activeSlide = this.limitedImageQty.length - 1
+
+        this.sliderEl.slideTo(this.activeSlide)
       }
     }
   }
@@ -107,6 +106,15 @@
       width: 70%;
       .swiper-container {
         height: 100%;
+      }
+      &--single {
+        .swiper-container {
+          width: 100%;
+        }
+        .slider__slide {
+          width: 100%;
+          max-width: 100%;
+        }
       }
     }
     &__counter {
@@ -166,10 +174,10 @@
   }
   .gallery {
     &__wrapper {
-      width: 208px;
+      width: 198px;
       margin-left: auto;
       font-size: 1.75rem;
-      text-align: right;
+      text-align: left;
       overflow: hidden;
     }
     &__image {
@@ -227,6 +235,9 @@
       }
     }
     .gallery {
+      &__wrapper {
+        width: 150px;
+      }
       &__image  {
         width: 72px;
         height: 72px;
