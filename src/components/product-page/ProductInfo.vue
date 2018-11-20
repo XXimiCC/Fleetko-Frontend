@@ -96,12 +96,8 @@
                        @mouseleave="unavailablePrice = false">
                     <tooltip v-if="unavailablePrice"
                              class="price-row--unavailable--tooltip"
-                             :allignRight="false"
-                             :top="['xs', 'sm', 'md'].includes($mq) ? 40 : -64"
-                             :allignBottom="!['xs', 'sm', 'md'].includes($mq)"
-                             :arrowBottom="!['xs', 'sm', 'md'].includes($mq)"
-                             :arrowRight="!['xs', 'sm', 'md'].includes($mq)"
-                             :arrowTop="['xs', 'sm', 'md'].includes($mq)"
+                             :allignRight="true"
+                             :allignBottom="true"
                              :notification="{
                                 type: 'info-toolbox',
                                 text:
@@ -246,7 +242,7 @@
                   to Wait List and we will notify you as soon as the product
                   becomes available for the order. For more information please
                   contact our
-                  <router-link :to="{ name: 'contactUs' }">Support centre</router-link>.
+                  <router-link :to="{ name: 'contactUs' }" target='_blank'>Support centre</router-link>.
                 </p>
                 <p v-if="product.status === 'disabled'"
                    class="product-page__available-text">
@@ -666,7 +662,7 @@ export default {
       white-space: nowrap;
     }
     &--rate-sku {
-      padding: 0 16px;
+      padding: 0 16px 2px 16px;
       border-left: 1px solid $grey;
       font: 14px $sours-sans-p-font;
       color: $grey;
@@ -689,6 +685,8 @@ export default {
           font-weight: 600;
           color: $main-dark;
           line-height: 1;
+          display: flex;
+          align-items: center;
         }
         &--body {
           width: 100%;
@@ -715,18 +713,17 @@ export default {
             align-items: center;
           }
           span {
-            color: $grey;
+            color: $main-grey;
           }
           svg {
             margin-left: 22px;
             width: 20px;
             height: 20px;
-            fill: $grey;
+            fill: $main-grey;
             cursor: pointer;
           }
           &--tooltip {
-            left: -60px;
-            width: 210px;
+            transform: translate(104%, -64%);
             .arrow {
               &:after {
                 transform: rotate(-45deg);

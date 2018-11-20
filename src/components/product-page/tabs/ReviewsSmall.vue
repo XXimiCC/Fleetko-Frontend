@@ -48,7 +48,7 @@
           <span itemprop="ratingValue">{{
             roundDecimalRating(product.rating_average)
           }}</span>
-          <span>out of 5 star</span>
+          <span> out of 5 star</span>
         </div>
       </div>
       <div class="reviews__body">
