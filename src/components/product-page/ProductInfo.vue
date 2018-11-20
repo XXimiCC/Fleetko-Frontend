@@ -49,7 +49,7 @@
           <span v-if="product.part_number" class="product-page__info--rate-mpn">
             mpn: {{ product.part_number }}
           </span>
-          <star v-for="i in 5"
+          <star v-for="(star, i) in 5"
                 :position="++i"
                 :key="i"
                 :readOnly="true"

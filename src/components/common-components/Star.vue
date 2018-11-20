@@ -1,33 +1,24 @@
 <template>
-  <div
-    class="star"
-    :class="{ smallMargin: smallMargin }"
-    @mouseenter="fillStarByHoverEvent"
-    @click="setRating"
-  >
-    <svg
-      version="1.1"
-      xmlns="http://www.w3.org/2000/svg"
-      :width="getSize"
-      :height="getSize"
-      viewBox="0 0 24 24"
-      :fill="getFillColor"
-      :stroke-width="borderWidth"
-      :stroke="getBorderColor"
-    >
+  <div class="star"
+       :class="{ smallMargin: smallMargin }"
+       @mouseenter="fillStarByHoverEvent"
+       @click="setRating">
+    <svg version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         :width="getSize"
+         :height="getSize"
+         viewBox="0 0 24 24"
+         :fill="getFillColor"
+         :stroke-width="borderWidth"
+         :stroke="getBorderColor">
       <defs>
         <linearGradient id="half_grad">
-          <stop offset="50%" :stop-color="activeColor" />
-          <stop offset="50%" :stop-color="inActiveColor" stop-opacity="1" />
+          <stop offset="50%" :stop-color="activeColor"></stop>
+          <stop offset="50%" :stop-color="inActiveColor" stop-opacity="1"></stop>
         </linearGradient>
       </defs>
-      <!-- For half fill use fill="url(#half_grad)" -->
-      <path
-        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
-      />
-      <!---->
-      <!-- <polygon :points="starPointsToString" /> -->
-      <!-- <polygon :points="starPointsToString" :fill="getFillColor" /> -->
+
+      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path>
     </svg>
   </div>
 </template>
@@ -105,7 +96,6 @@ export default {
       }
     },
     getFillColor () {
-      // Only if read-only
       if (this.readOnly) {
         if (this.rating % 1 === 0) {
           if (parseFloat(this.rating) >= this.position) {
@@ -155,8 +145,7 @@ export default {
   },
   mounted () {
     this.calculatePoints()
-  },
-  created () {}
+  }
 }
 </script>
 

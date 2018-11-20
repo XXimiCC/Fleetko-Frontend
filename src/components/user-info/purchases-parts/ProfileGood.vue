@@ -27,7 +27,7 @@
         <div class="good__rating">
           <div class="stars">
             <star
-              v-for="i in 5"
+              v-for="(star, i) in 5"
               :key="i"
               :position="++i"
               :readOnly="true"
@@ -36,7 +36,7 @@
             >
             </star>
             <span class="value">{{
-              roundDecimalRating(good.rating_average || 0)
+              roundDecimalRating(good.rating_average)
             }}</span>
           </div>
           <router-link
@@ -87,12 +87,12 @@
             >
               <div class="stars">
                 <star
-                  v-for="i in 5"
+                  v-for="(star, i) in 5"
                   :key="i"
                   :position="++i"
                   :readOnly="true"
                   :size="$mq === 'sm' ? 13 : 18"
-                  :rating="good.review.rating + 1"
+                  :rating="good.review.rating"
                 >
                 </star>
                 <span class="value">{{

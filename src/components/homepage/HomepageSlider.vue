@@ -4,6 +4,8 @@
 
       <swiper ref="sliderEl" :options="swiperOption">
         <swiper-slide v-for="(img, i) in banners" :key="i">
+          <img :src="img" alt="">
+          <!--<img :src="componentBannerImage(img)" alt="">-->
           <div class="homepage__slider--slide"
                :style="{ 'background-image': `url(${componentBannerImage(img)}), url(${img.versions.original})` }">
           </div>
@@ -49,7 +51,12 @@ export default {
   props: ['banners'],
   data () {
     return {
+      testPromo: [
+        'https://fleetko-api-dev.s3.amazonaws.com/media/1888/versions/homepage-slider-2-big.jpg',
+        'https://fleetko-api-dev.s3.amazonaws.com/media/1889/versions/homepage-slider-3-big.jpg'
+      ],
       swiperOption: {
+        lazy: true,
         slidesPerView: 1,
         spaceBetween: 0,
         pagination: {
@@ -63,12 +70,15 @@ export default {
   },
   computed: {
     sliderEl () {
+      console.log(this.banners)
       return this.$refs.sliderEl.swiper
     }
   },
-  created () {
-    console.log('created')
-  },
+  // mounted () {
+  //   window.addEventListener('load', () => {
+  //     console.log(this.sliderEl)
+  //   })
+  // },
   methods: {
     swipeNext () {
       this.sliderEl.slideNext()

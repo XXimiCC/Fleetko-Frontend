@@ -46,7 +46,7 @@
       <div class="rating">
         <div class="stars">
           <star
-            v-for="i in 5"
+            v-for="(star, i) in 5"
             :position="++i"
             :key="i"
             readOnly="true"
