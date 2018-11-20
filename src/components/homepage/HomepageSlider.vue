@@ -15,13 +15,14 @@
           </component>
         </swiper-slide>
 
-        <div :class="{ 'visible': showSliderNavs }"
+        <div v-if="singlePhoto()"
+             :class="{ 'visible': showSliderNavs }"
              class="container homepage-slider-pagination swiper-pagination"
              slot="pagination">
         </div>
       </swiper>
 
-      <div class="buttons-wrap">
+      <div v-if="singlePhoto()" class="buttons-wrap">
         <div class="container">
           <div class="homepage__slider--buttons">
             <button @click="swipePrev()"
@@ -68,7 +69,9 @@ export default {
           el: '.swiper-pagination',
           clickable: true
         },
-        loop: true
+        loop: true,
+        allowSlidePrev: this.singlePhoto(),
+        allowSlideNext: this.singlePhoto()
       },
       showSliderNavs: false
     }
@@ -80,6 +83,9 @@ export default {
     }
   },
   methods: {
+    singlePhoto () {
+      return this.banners.length > 1
+    },
     isOuter (link) {
       return link && link.startsWith('http') && !link.includes(window.location.host)
     },
