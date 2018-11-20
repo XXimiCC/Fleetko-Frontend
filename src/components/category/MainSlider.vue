@@ -188,7 +188,7 @@ export default {
     background-position: center;
     &:before { @include bgPattern() }
     &--stub {
-      background-size: 80%;
+      background-size: 60%;
       background-repeat: no-repeat;
     }
   }

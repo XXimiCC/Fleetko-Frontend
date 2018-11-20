@@ -43,7 +43,7 @@
         <p class="paragraph-secondary">{{ getSection.description }}</p>
       </div>
       <div v-if="bestSellersCollection.length">
-        <best-sellers-slider :options="swiperOptionBestSellers"
+        <best-sellers-slider :key="section.id" :options="swiperOptionBestSellers"
                              :bestSellersCollection="bestSellersCollection">
         </best-sellers-slider>
       </div>
@@ -51,7 +51,7 @@
         <h2 class="h2-secondary section__categories--brands__title">
           Featured Brands
         </h2>
-        <brands-slider></brands-slider>
+        <brands-slider :key="section.id"></brands-slider>
       </div>
     </div>
   </div>
