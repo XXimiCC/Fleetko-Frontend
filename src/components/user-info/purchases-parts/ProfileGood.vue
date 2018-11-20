@@ -36,7 +36,7 @@
             >
             </star>
             <span class="value">{{
-              roundDecimalRating(good.rating_average)
+              roundDecimalRating(good.rating_average || 0)
             }}</span>
           </div>
           <router-link

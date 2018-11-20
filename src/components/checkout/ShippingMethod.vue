@@ -67,7 +67,7 @@
                         <app-notification v-if="house.notification || house.error"
                                           @clearNotify="clearNotification(key)"
                                           :notification="house.notification || house.error"
-                                          cancelable="true"
+                                          :cancelable="!house.error"
                                           class="notification-wrap">
                         </app-notification>
                         <div class="address-preview__body"
