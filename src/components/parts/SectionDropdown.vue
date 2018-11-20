@@ -1,38 +1,27 @@
 <template>
   <div class="section-dropdown" @mouseleave="$emit('hideDropdownSection')">
     <div class="section-dropdown__wrap">
-      <transition-group
-        mode="out-in"
-        name="list"
-        tag="div"
-        class="section-dropdown__body"
-      >
-        <div
-          class="section-dropdown__body--category"
-          :key="i"
-          v-for="(category, i) in checkLenghtCategories(sectionProp.categories)"
-        >
-          <router-link
-            :to="{ name: 'catalog', params: { slug: category.slug } }"
-            tag="a"
-          >
-            <div class="image-wrap">
-              <img
-                :src="componentCategoryImage(category.image)"
-                @error="errorSrc($event, category)"
-                alt="dropdown-category"
-              />
-            </div>
-            <div class="info">
-              <p class="paragraph-prime">{{ category.name }}</p>
-            </div>
-          </router-link>
-        </div>
+      <transition-group mode="out-in"
+                        name="list"
+                        tag="div"
+                        class="section-dropdown__body">
 
-        <div
-          class="section-dropdown__body--category view-all"
-          v-if="sectionProp.categories.length >= 20"
-        >
+        <router-link v-for="(category, i) in checkLenghtCategories(sectionProp.categories)"
+                     :key="i"
+                     class="section-dropdown__body--category"
+                     :to="{ name: 'catalog', params: { slug: category.slug } }">
+          <div class="image-wrap">
+            <img :src="componentCategoryImage(category.image)"
+                 @error="errorSrc($event, category)"
+                 alt="dropdown-category" />
+          </div>
+          <div class="info">
+            <p class="paragraph-prime">{{ category.name }}</p>
+          </div>
+        </router-link>
+
+        <div class="section-dropdown__body--category view-all"
+             v-if="sectionProp.categories.length >= 20">
           View All
         </div>
       </transition-group>
@@ -43,42 +32,25 @@
 <script>
 import utils from '@/mixins/utils'
 import imageSource from '@/mixins/imagesSource'
+
 export default {
   name: 'SectionDropdown',
-  data () {
-    return {}
-  },
   mixins: [utils, imageSource],
+  props: ['sectionProp'],
   methods: {
     errorSrc (e, category) {
-      this.serverImageSource(
-        category.image,
-        null,
-        e,
-        this.SERVER_IMAGE_CATEGORY
-      )
+      this.serverImageSource(category.image, null, e, this.SERVER_IMAGE_CATEGORY)
     },
     componentCategoryImage (images, onError) {
-      let sizeProperty = 'tiny'
-
-      return this.serverImageSource(
-        images,
-        sizeProperty,
-        onError,
-        this.SERVER_IMAGE_CATEGORY
-      )
+      return this.serverImageSource(images, 'tiny', onError, this.SERVER_IMAGE_CATEGORY)
     },
     checkLenghtCategories (section) {
       return section.length >= 20 ? section.slice(0, 19) : section
     }
-  },
-  props: ['sectionProp'],
-  computed: {},
-  created () {},
-  mounted () {}
+  }
 }
 </script>
-<style lang="scss" scroped>
+<style lang="scss" scoped>
 .section-dropdown {
   position: absolute;
   left: 0;
@@ -99,12 +71,14 @@ export default {
     background: white;
     border-bottom-right-radius: 4px;
     border-bottom-left-radius: 4px;
-    box-shadow: 0px 10px 14.1px 0.9px rgba(0, 0, 0, 0.14),
-      0px 4px 19.6px 0.4px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 10px 14.1px 0.9px rgba(0, 0, 0, 0.14),
+      0 4px 19.6px 0.4px rgba(0, 0, 0, 0.06);
     &--category {
       display: flex;
+      align-items: center;
       padding: 12px 16px;
       width: 264px;
+      cursor: pointer;
       &:hover {
         background: #f5f8ff;
         .paragraph-prime {
@@ -140,8 +114,7 @@ export default {
   transition: all 0.5s;
 }
 
-.list-enter /* .list-leave-active до версии 2.1.8 */
- {
+.list-enter {
   opacity: 0;
   height: 0;
   transform: translateY(30px);
