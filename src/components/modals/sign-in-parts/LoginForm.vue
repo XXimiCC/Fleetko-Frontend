@@ -6,7 +6,7 @@
         <div class="input-wrap">
           <input v-validate="'required|email'"
                  :ref="'emailInput'"
-                 :data-vv-validate-on="'submit'"
+                 :data-vv-validate-on="'submit|blur'"
                  class="input-default input"
                  @focus="resetValidator"
                  @keydown="noSpacesEmail($event)"
@@ -40,7 +40,7 @@
         <div class="input-wrap control">
           <input v-validate="'required|min:6'"
                  :ref="'passwordInput'"
-                 :data-vv-validate-on="'submit'"
+                 :data-vv-validate-on="'submit|blur'"
                  class="input-default input"
                  :class="{ 'input-error':  (errors.has('password') || !loginServerValid) &&  !animateValidation }"
                  v-model="password"
