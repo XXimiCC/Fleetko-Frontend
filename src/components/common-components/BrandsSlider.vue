@@ -1,6 +1,6 @@
 <template>
   <div class="col-xl-12 slider">
-    <swiper :options="Object.assign(swiperOptions, {  pagination: { el: '.swiper-pagination', clickable: true } })"
+    <swiper :options="swiperOptions"
             ref="brandsSwiper"
             class="col-xl-12">
       <swiper-slide v-for="(brand, i) in brands" :key="i">

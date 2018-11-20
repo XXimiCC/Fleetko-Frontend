@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="relative-block">
-      <homepage-slider :banners="homepageBanners"></homepage-slider>
+      <homepage-slider :key="homepageBanners.length" :banners="homepageBanners"></homepage-slider>
       <homepage-search></homepage-search>
     </div>
     <homepage-categories

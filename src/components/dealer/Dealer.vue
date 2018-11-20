@@ -40,7 +40,6 @@ import DealerSlider from '../category/MainSlider'
 import DealerInfo from './DealerInfo'
 import DealerSections from './DealerSections'
 import DealerReviews from './DealerReviews'
-import BrandsSlider from '../common-components/BrandsSlider'
 import search from '@/components/parts/SearchCommon'
 import utils from '@/mixins/utils'
 
@@ -52,26 +51,6 @@ export default {
       dealerSlug: this.$route.params.slug,
       sections: [],
       bestSellersCollection: [],
-      swiperOptionBrands: {
-        slidesPerView: 6,
-        spaceBetween: 0,
-        pagination: {
-          el: '.brands-pagination',
-          clickable: true
-        },
-        slidesPerGroup: 6,
-        loopFillGroupWithBlank: true,
-        breakpoints: {
-          640: {
-            slidesPerView: 2,
-            slidesPerColumn: 2,
-            slidesPerColumnFill: 'row'
-          },
-          960: {
-            slidesPerView: 4
-          }
-        }
-      },
       swiperOption: {
         slidesPerView: 4,
         spaceBetween: 16,
@@ -146,7 +125,6 @@ export default {
     DealerInfo,
     DealerSections,
     DealerReviews,
-    BrandsSlider,
     search,
     Catalog,
     BestSellersSlider

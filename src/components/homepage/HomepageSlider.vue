@@ -5,7 +5,6 @@
       <swiper ref="sliderEl" :options="swiperOption">
         <swiper-slide v-for="(img, i) in banners" :key="i">
           <img :src="img" alt="">
-          <!--<img :src="componentBannerImage(img)" alt="">-->
           <div class="homepage__slider--slide"
                :style="{ 'background-image': `url(${componentBannerImage(img)}), url(${img.versions.original})` }">
           </div>

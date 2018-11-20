@@ -85,7 +85,7 @@ export default {
   mixins: [utils],
   metaInfo () {
     return {
-      title: `Fleetko`
+      title: 'Fleetko'
     }
   },
   data () {
@@ -118,7 +118,7 @@ export default {
         slidesPerView: 4,
         spaceBetween: 30,
         pagination: {
-          el: '.brands-pagination',
+          el: '.swiper-pagination',
           clickable: true
         },
         slidesPerGroup: 4,
