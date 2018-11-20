@@ -4,7 +4,7 @@
       <main-slider ref="mainSwiper"
                    liftUpPagination="true"
                    v-if="section"
-                   :key="section.id"
+                   :key="$route.path"
                    :banners="section.banner_images">
       </main-slider>
       <search :position="['xs', 'sm', 'md'].includes($mq) ? 0 : -124" class="search-common"></search></div>
@@ -43,7 +43,7 @@
         <p class="paragraph-secondary">{{ getSection.description }}</p>
       </div>
       <div v-if="bestSellersCollection.length">
-        <best-sellers-slider :key="section.id" :options="swiperOptionBestSellers"
+        <best-sellers-slider :key="$route.path"
                              :bestSellersCollection="bestSellersCollection">
         </best-sellers-slider>
       </div>
@@ -51,7 +51,7 @@
         <h2 class="h2-secondary section__categories--brands__title">
           Featured Brands
         </h2>
-        <brands-slider :key="section.id"></brands-slider>
+        <brands-slider :key="$route.path"></brands-slider>
       </div>
     </div>
   </div>
@@ -92,28 +92,7 @@ export default {
     return {
       section: null,
       sectionSlug: null,
-      bestSellersCollection: [],
-      swiperOptionBestSellers: {
-        slidesPerView: 4,
-        spaceBetween: 16,
-        pagination: {
-          el: '.best-sellers-pagination',
-          clickable: true
-        },
-        slidesPerGroup: 4,
-        loopFillGroupWithBlank: true,
-        breakpoints: {
-          648: {
-            slidesPerView: 2,
-            slidesPerGroup: 2,
-            spaceBetween: 0
-          },
-          900: {
-            slidesPerView: 3,
-            slidesPerGroup: 3
-          }
-        }
-      }
+      bestSellersCollection: []
     }
   },
   computed: {

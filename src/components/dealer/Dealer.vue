@@ -3,7 +3,7 @@
     <div class="relative-wrap">
       <dealer-slider
         v-if="dealer"
-        :key="dealer.id"
+        :key="$route.path"
         :liftUpPagination="true"
         :banners="dealer.banner_images"
       ></dealer-slider>
@@ -25,7 +25,7 @@
 
     <div class="container">
       <best-sellers-slider
-        :options="swiperOption"
+        :key="$route.path"
         v-if="bestSellersCollection.length"
         :bestSellersCollection="bestSellersCollection"
       ></best-sellers-slider>
@@ -50,28 +50,7 @@ export default {
       dealer: null,
       dealerSlug: this.$route.params.slug,
       sections: [],
-      bestSellersCollection: [],
-      swiperOption: {
-        slidesPerView: 4,
-        spaceBetween: 16,
-        pagination: {
-          el: '.best-sellers-pagination',
-          clickable: true
-        },
-        slidesPerGroup: 4,
-        loopFillGroupWithBlank: true,
-        breakpoints: {
-          648: {
-            slidesPerView: 2,
-            slidesPerGroup: 2,
-            spaceBetween: 0
-          },
-          900: {
-            slidesPerView: 3,
-            slidesPerGroup: 3
-          }
-        }
-      }
+      bestSellersCollection: []
     }
   },
   mixins: [utils],

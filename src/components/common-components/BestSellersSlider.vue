@@ -4,7 +4,7 @@
     <div class="bestsellers--wrap row">
       <swiper class="col-xl-12 swiper-popular"
               ref="swiperPopular"
-              :options="options">
+              :options="options || swiperOption">
         <swiper-slide v-for="(product, i) in bestSellersCollection" :key="i">
           <product-card link="dealer"
                         class-response="col-xl-12"
@@ -33,31 +33,48 @@ import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
 export default {
   name: 'best-sellers-slider',
-  data () {
-    return {}
-  },
-  watch: {
-    $route (val, oldVal) {
-      if (val.params.slug !== oldVal.params.slug) this.sliderBestSellers.init()
-    }
+  components: {
+    swiper,
+    swiperSlide,
+    ProductCard
   },
   props: ['options', 'bestSellersCollection'],
+  data () {
+    return {
+      swiperOption: {
+        slidesPerView: 4,
+        spaceBetween: 16,
+        pagination: {
+          el: '.best-sellers-pagination',
+          clickable: true
+        },
+        slidesPerGroup: 4,
+        loopFillGroupWithBlank: true,
+        breakpoints: {
+          648: {
+            slidesPerView: 2,
+            slidesPerGroup: 2,
+            spaceBetween: 0
+          },
+          900: {
+            slidesPerView: 3,
+            slidesPerGroup: 3
+          }
+        }
+      }
+    }
+  },
+  computed: {
+    sliderBestSellers () {
+      return this.$refs.swiperPopular.swiper
+    }
+  },
   methods: {
     swipeNext () {
       this.sliderBestSellers.slideNext()
     },
     swipePrev () {
       this.sliderBestSellers.slidePrev()
-    }
-  },
-  components: {
-    swiper,
-    swiperSlide,
-    ProductCard
-  },
-  computed: {
-    sliderBestSellers () {
-      return this.$refs.swiperPopular.swiper
     }
   }
 }

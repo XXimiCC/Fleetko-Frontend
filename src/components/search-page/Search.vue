@@ -106,7 +106,7 @@
         </div>
       </div>
       <best-sellers-slider
-        :options="swiperOption"
+        :key="$route.path"
         v-if="bestSellers.length"
         :bestSellersCollection="bestSellers"
       ></best-sellers-slider>
@@ -114,7 +114,7 @@
         <h2 class="h2-secondary search__categories--brands__title">
           Featured Brands
         </h2>
-        <brands-slider class="dealers-slider"></brands-slider>
+        <brands-slider :key="$route.path" class="dealers-slider"></brands-slider>
       </div>
     </div>
   </div>
@@ -171,6 +171,7 @@ export default {
         spaceBetween: 0,
         height: 'auto',
         onInit: function (swiper) {
+          console.log('rwere')
           let slidesOutsideEvenGrid =
             swiper.slides.length % swiper.params.slidesPerColumn
 

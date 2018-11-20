@@ -5,7 +5,7 @@
         v-if="category"
         :liftUpPagination="openSearch"
         fixedControls="true"
-        :key="category.id"
+        :key="$route.path"
         :banners="category.banner_images"
       ></main-slider>
       <div id="search-form-anchor"></div>
@@ -34,13 +34,14 @@
     </catalog>
     <div class="container" v-if="featuredProductsCollection.length">
       <featured-product
+        :key="$route.path"
         :options="featuredSliderOptions"
         :featuredProductsCollection="featuredProductsCollection"
       ></featured-product>
     </div>
     <div class="container">
       <best-sellers-slider
-        :options="swiperOption"
+        :key="$route.path"
         v-if="bestSellersCollection.length"
         :bestSellersCollection="bestSellersCollection"
       ></best-sellers-slider>
@@ -68,27 +69,6 @@ export default {
       filterSearch: true,
       bestSellersCollection: [],
       featuredProductsCollection: [],
-      swiperOption: {
-        slidesPerView: 4,
-        spaceBetween: 16,
-        pagination: {
-          el: '.best-sellers-pagination',
-          clickable: true
-        },
-        slidesPerGroup: 4,
-        loopFillGroupWithBlank: true,
-        breakpoints: {
-          648: {
-            slidesPerView: 2,
-            slidesPerGroup: 2,
-            spaceBetween: 0
-          },
-          900: {
-            slidesPerView: 3,
-            slidesPerGroup: 3
-          }
-        }
-      },
       featuredSliderOptions: {
         slidesPerView: 4,
         spaceBetween: 16,
