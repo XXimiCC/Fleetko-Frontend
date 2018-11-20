@@ -12,8 +12,10 @@
                      :href="sliderImage.href"
                      :to="bannerLink(sliderImage)">
             <div class="main-slider--slide"
+                 :class="{'main-slider--slide--stub': !sliderImage.versions}"
                  :style="{
-                   'background-image': `url(${componentBannerImage(sliderImage)}), url(${sliderImage.versions.original})`
+                   'background-image': `url(${componentBannerImage(sliderImage)}),
+                   url(${sliderImage.versions ? sliderImage.versions.original : ''})`
                  }">
             </div>
           </component>
@@ -185,6 +187,10 @@ export default {
     background-size: cover;
     background-position: center;
     &:before { @include bgPattern() }
+    &--stub {
+      background-size: 80%;
+      background-repeat: no-repeat;
+    }
   }
   .buttons-wrap {
     position: absolute;
