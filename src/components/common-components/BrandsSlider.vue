@@ -1,14 +1,18 @@
 <template>
   <div class="col-xl-12 slider">
-    <swiper :options="swiperOptions"
+    <swiper :options="swiperOptions || optionsDefault"
             ref="brandsSwiper"
             class="col-xl-12">
+
       <swiper-slide v-for="(brand, i) in brands" :key="i">
         <div class="item"><img :src="brandImage(brand.name)" alt="brand-logo" /></div>
         <p class="slider__caption">{{ brand.name }}</p>
       </swiper-slide>
-      <div class="swiper-pagination" slot="pagination"></div>
+
+      <div class="brands-pagination" slot="pagination"></div>
+
     </swiper>
+
     <div class="slider--buttons">
       <button @click="swipePrev()" class="left">
         <svg-arrow-left></svg-arrow-left>
@@ -17,6 +21,7 @@
         <svg-arrow-right></svg-arrow-right>
       </button>
     </div>
+
   </div>
 </template>
 
@@ -24,6 +29,7 @@
 import utils from '@/mixins/utils'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 import $ from 'jquery'
+
 export default {
   name: 'brands-slider',
   mixins: [utils],
@@ -40,7 +46,27 @@ export default {
         { name: 'International' },
         { name: 'Kenworth' },
         { name: 'Mack' }
-      ]
+      ],
+      optionsDefault: {
+        slidesPerView: 4,
+        spaceBetween: 30,
+        pagination: {
+          el: '.brands-pagination',
+          clickable: true
+        },
+        slidesPerGroup: 4,
+        loopFillGroupWithBlank: true,
+        breakpoints: {
+          640: {
+            slidesPerView: 2,
+            slidesPerColumn: 2,
+            slidesPerColumnFill: 'row'
+          },
+          960: {
+            slidesPerView: 3
+          }
+        }
+      }
     }
   },
   computed: {
@@ -57,6 +83,7 @@ export default {
   },
   methods: {
     swipeNext () {
+      console.log(this.brandsSwiper.params)
       this.brandsSwiper.slideNext()
     },
     swipePrev () {
@@ -67,12 +94,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.swiper-pagination {
-  position: absolute;
-  bottom: 0;
+.brands-pagination {
   display: flex;
   justify-content: center;
-  align-items: center;
+  width: 100%;
 }
 .swiper-container {
   padding-left: 0;

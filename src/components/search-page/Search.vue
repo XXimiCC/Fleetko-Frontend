@@ -114,10 +114,7 @@
         <h2 class="h2-secondary search__categories--brands__title">
           Featured Brands
         </h2>
-        <brands-slider
-          :swiperOptions="swiperOptionBrands"
-          class="dealers-slider"
-        ></brands-slider>
+        <brands-slider class="dealers-slider"></brands-slider>
       </div>
     </div>
   </div>

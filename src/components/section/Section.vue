@@ -51,7 +51,7 @@
         <h2 class="h2-secondary section__categories--brands__title">
           Featured Brands
         </h2>
-        <brands-slider :swiperOptions="swiperOptionBrands"></brands-slider>
+        <brands-slider></brands-slider>
       </div>
     </div>
   </div>
@@ -111,26 +111,6 @@ export default {
           900: {
             slidesPerView: 3,
             slidesPerGroup: 3
-          }
-        }
-      },
-      swiperOptionBrands: {
-        slidesPerView: 4,
-        spaceBetween: 30,
-        pagination: {
-          el: '.swiper-pagination',
-          clickable: true
-        },
-        slidesPerGroup: 4,
-        loopFillGroupWithBlank: true,
-        breakpoints: {
-          640: {
-            slidesPerView: 2,
-            slidesPerColumn: 2,
-            slidesPerColumnFill: 'row'
-          },
-          960: {
-            slidesPerView: 3
           }
         }
       }

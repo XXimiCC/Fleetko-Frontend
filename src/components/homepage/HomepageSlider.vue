@@ -3,12 +3,18 @@
     <div class="homepage__slider--wrapper" @mouseenter="showSliderNavs = true" @mouseleave="showSliderNavs = false">
 
       <swiper ref="sliderEl" :options="swiperOption">
+
         <swiper-slide v-for="(img, i) in banners" :key="i">
-          <img :src="img" alt="">
-          <div class="homepage__slider--slide"
-               :style="{ 'background-image': `url(${componentBannerImage(img)}), url(${img.versions.original})` }">
-          </div>
+          <component :is="isOuter(img.href) ? 'a' : 'router-link'"
+                     :target="isOuter(img.href) ? '_blank' : '_self'"
+                     :href="img.href"
+                     :to="bannerLink(img)">
+            <div class="homepage__slider--slide"
+                 :style="{ 'background-image': `url(${componentBannerImage(img)}), url(${img.versions.original})` }">
+            </div>
+          </component>
         </swiper-slide>
+
         <div :class="{ 'visible': showSliderNavs }"
              class="container homepage-slider-pagination swiper-pagination"
              slot="pagination">
@@ -73,12 +79,19 @@ export default {
       return this.$refs.sliderEl.swiper
     }
   },
-  // mounted () {
-  //   window.addEventListener('load', () => {
-  //     console.log(this.sliderEl)
-  //   })
-  // },
   methods: {
+    isOuter (link) {
+      return link && link.startsWith('http') && !link.includes(window.location.host)
+    },
+    bannerLink (banner) {
+      const parser = document.createElement('a')
+
+      parser.href = banner.href
+
+      return (banner.href && banner.href.includes(window.location.host))
+        ? parser.pathname
+        : banner.href || this.$route.fullPath
+    },
     swipeNext () {
       this.sliderEl.slideNext()
     },

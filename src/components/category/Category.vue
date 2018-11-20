@@ -55,7 +55,6 @@ import FeaturedProduct from '../common-components/FeaturedProductsSlider'
 import MainSlider from '@/components/category/MainSlider'
 import CategoryInfo from '@/components/category/CategoryInfo'
 import Catalog from '@/components/category/Catalog'
-import Brand from '@/components/common-components/Brand'
 import utils from '@/mixins/utils'
 import _ from 'lodash'
 import { mapGetters } from 'vuex'
@@ -179,7 +178,6 @@ export default {
   components: {
     MainSlider,
     CategoryInfo,
-    Brand,
     Catalog,
     search,
     BestSellersSlider,

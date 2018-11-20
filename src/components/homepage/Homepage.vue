@@ -21,10 +21,7 @@
     <div class="featured-brands">
       <div class="container">
         <h2 class="featured-brands--title">Featured Brands</h2>
-        <brands-slider
-          :swiperOptions="swiperOptionBrands"
-          class="dealers-slider"
-        ></brands-slider>
+        <brands-slider class="dealers-slider"></brands-slider>
       </div>
     </div>
   </div>
@@ -58,26 +55,6 @@ export default {
       sections: [],
       featuredProducts: [],
       homepageBanners: [],
-      swiperOptionBrands: {
-        slidesPerView: 4,
-        spaceBetween: 30,
-        pagination: {
-          el: '.swiper-pagination',
-          clickable: true
-        },
-        slidesPerGroup: 4,
-        loopFillGroupWithBlank: true,
-        breakpoints: {
-          640: {
-            slidesPerView: 2,
-            slidesPerColumn: 2,
-            slidesPerColumnFill: 'row'
-          },
-          960: {
-            slidesPerView: 3
-          }
-        }
-      },
       featuredSliderOptions: {
         slidesPerView: 4,
         spaceBetween: 16,
