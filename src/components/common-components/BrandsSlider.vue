@@ -83,7 +83,6 @@ export default {
   },
   methods: {
     swipeNext () {
-      console.log(this.brandsSwiper.params)
       this.brandsSwiper.slideNext()
     },
     swipePrev () {

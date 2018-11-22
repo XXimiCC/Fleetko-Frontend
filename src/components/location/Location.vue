@@ -180,7 +180,6 @@ export default {
         _.forEach(this.listWarehouses, state => {
           _.forEach(state, house => {
             this.displayedWarehouses.push(house)
-            console.log(house)
           })
         })
       }

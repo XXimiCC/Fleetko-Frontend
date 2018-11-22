@@ -1,33 +1,23 @@
 <template>
-  <div
-    class="product-card-row"
-    :class="{ catalog: catalog }"
-    @mouseenter="hovered = true"
-    @mouseleave="hovered = false"
-  >
+  <div class="product-card-row"
+       :class="{ catalog: catalog }"
+       @mouseenter="hovered = true"
+       @mouseleave="hovered = false">
     <div class="flex-item-block">
-      <router-link
-        :to="{ name: 'product-page', params: { slug: product.slug } }"
-        class="product-card-row--link-wrap"
-        tag="a"
-      >
+      <router-link :to="{ name: 'product-page', params: { slug: product.slug } }"
+                   class="product-card-row--link-wrap">
         <div class="image-block" :class="{ blurred: noStock }">
           <div v-if="noStock" class="no-stock">
-            <div>
-              <h1>Out</h1>
-              <h2>Of Stock</h2>
-            </div>
+            <div><h1>Out</h1><h2>Of Stock</h2></div>
           </div>
 
           <div class="product-card--image-wrap">
-            <app-image
-              :imagePath="componentProductImage(product.image)"
-              @emitErrorImage="errorImage"
-            ></app-image>
-            <div class="product-card-row__freight-label">
-              <svg-freight
-                v-if="$mq === 'xl' || $mq === 'lg' || $mq === 'md'"
-              ></svg-freight>
+            <app-image :imagePath="componentProductImage(product.image)"
+                       @emitErrorImage="errorImage">
+            </app-image>
+            <div v-if="product.freight" class="product-card-row__freight-label">
+              <svg-freight v-if="$mq === 'xl' || $mq === 'lg' || $mq === 'md'">
+              </svg-freight>
               <span>Freight</span>
             </div>
           </div>
@@ -36,76 +26,54 @@
 
       <div class="product-card-row--info-wrap">
         <div class="item text-block">
-          <router-link
-            :to="{ name: 'product-page', params: { slug: product.slug } }"
-            class="link-product-name product-name"
-            itemprop="url"
-          >
+          <router-link :to="{ name: 'product-page', params: { slug: product.slug } }"
+                       class="link-product-name product-name"
+                       itemprop="url">
             {{ product.name }}
           </router-link>
 
           <div class="rating">
             <div class="stars">
-              <star
-                v-for="(star, i) in 5"
-                :key="i"
-                :position="++i"
-                :readOnly="true"
-                :size="$mq === 'sm' ? 13 : 18"
-                :rating="product.rating_average"
-              >
+              <star v-for="(star, i) in 5"
+                    :key="i"
+                    :position="++i"
+                    :readOnly="true"
+                    :size="$mq === 'sm' ? 13 : 18"
+                    :rating="product.rating_average">
               </star>
-              <span class="value">{{
-                roundDecimalRating(product.rating_average || 0)
-              }}</span>
+              <span class="value">{{ roundDecimalRating(product.rating_average || 0) }}</span>
             </div>
-            <router-link
-              class="reviews"
-              :to="{
-                name: 'product-page',
-                params: { slug: product.slug },
-                query: { tab: 'reviews' }
-              }"
-            >
+            <router-link class="reviews"
+                         :to="{
+                           name: 'product-page',
+                           params: { slug: product.slug },
+                           query: { tab: 'reviews' }
+                         }">
               <span>({{ product.rating_count }} reviews)</span>
             </router-link>
           </div>
 
           <div class="product-card-row--dealer">
             <span class="product-card-row--dealer-label">Dealer:</span>
-            <router-link
-              :to="{ name: 'dealer', params: { slug: product.dealer_slug } }"
-              tag="a"
-            >
+            <router-link :to="{ name: 'dealer', params: { slug: product.dealer_slug } }">
               <span class="link-quaternary">{{ product.dealer_name }}</span>
             </router-link>
           </div>
           <div class="responsive-price">
-            <span class="responsive-price--available" v-if="product.price"
-              >${{ toDollarDecimal(product.price) }}</span
-            >
+            <span class="responsive-price--available" v-if="product.price">${{ toDollarDecimal(product.price) }}</span>
             <span class="responsive-price--blurred" v-else>Unavailable</span>
           </div>
-          <p class="product-card-row--description">
-            {{ cutText(product.description, 135) }}
-          </p>
+          <p class="product-card-row--description">{{ cutText(product.description, 135) }}</p>
         </div>
         <div class="item button-block">
-          <h4
-            v-if="product.price"
-            :class="{ 'blurred-price': !product.quantity }"
-          >
+          <h4 v-if="product.price" :class="{ 'blurred-price': !product.quantity }">
             $ {{ toDollarDecimal(product.price) }}
           </h4>
           <div class="blurred-price__wrap" v-if="!product.price">
-            <h4 :class="{ 'blurred-price': !product.price }" class="price">
-              Unavailable
-            </h4>
-            <div
-              class="blurred-price__wrap--help"
-              @mouseleave="showInfoBlock = false"
-              @mouseenter="showInfoBlock = true"
-            >
+            <h4 :class="{ 'blurred-price': !product.price }" class="price">Unavailable</h4>
+            <div class="blurred-price__wrap--help"
+                 @mouseleave="showInfoBlock = false"
+                 @mouseenter="showInfoBlock = true">
               <svg-help></svg-help>
             </div>
             <div class="blurred-price__wrap--info" v-show="showInfoBlock">
@@ -116,131 +84,84 @@
             </div>
           </div>
 
-          <button
-            v-if="!catalog"
-            @click="openModalCart"
-            :class="{
-              'button-prime': inStockProduct,
-              'button-second': !inStockProduct
-            }"
-            :disabled="disabledAddToCart"
-            class="button-block--buy left-icon"
-          >
+          <button v-if="!catalog"
+                  @click="openModalCart"
+                  :class="{ 'button-prime': inStockProduct, 'button-second': !inStockProduct }"
+                  :disabled="disabledAddToCart"
+                  class="button-block--buy left-icon">
             <svg-basket></svg-basket>
             <span>Add to cart</span>
           </button>
 
-          <router-link
-            :to="{ name: 'product-page', params: { slug: product.slug } }"
-            tag="a"
-          >
-            <button
-              v-if="!catalog"
-              class="button-block--details button-second left-icon"
-            >
+          <router-link :to="{ name: 'product-page', params: { slug: product.slug } }">
+            <button v-if="!catalog" class="button-block--details button-second left-icon">
               <svg-eye-show></svg-eye-show>
               <span>View details</span>
             </button>
           </router-link>
 
-          <div
-            v-if="!catalog"
-            class="delete-block"
-            @click="deleteProductFromWaitList"
-          >
+          <div v-if="!catalog" class="delete-block" @click="deleteProductFromWaitList">
             <svg-delete></svg-delete>
             <span>Delete</span>
           </div>
 
-          <button
-            v-if="catalog && product.quantity && product.price"
-            @click="openModalCart"
-            :class="{
-              'button-prime': inStockProduct,
-              'button-second': !inStockProduct
-            }"
-            :disabled="disabledAddToCart"
-            class="button-block--buy left-icon"
-          >
+          <button v-if="catalog && product.quantity && product.price"
+                  @click="openModalCart"
+                  :class="{ 'button-prime': inStockProduct, 'button-second': !inStockProduct }"
+                  :disabled="disabledAddToCart"
+                  class="button-block--buy left-icon">
             <svg-basket></svg-basket>
             <span>Add to cart</span>
           </button>
 
-          <button
-            v-if="catalog && (!product.quantity || !product.price)"
-            @click="addToWaitList"
-            class="button-add button-second"
-          >
+          <button v-if="catalog && (!product.quantity || !product.price)"
+                  @click="addToWaitList"
+                  class="button-add button-second">
             <svg-wishlist v-if="!inWaitList"></svg-wishlist>
             <svg-check-xl v-if="inWaitList"></svg-check-xl>
             <p v-if="inWaitList">{{ 'In Wait List' }}</p>
-            <p v-if="!inWaitList">
-              Add to <span class="break-point">wait list</span>
-            </p>
+            <p v-if="!inWaitList">Add to <span class="break-point">wait list</span></p>
           </button>
         </div>
       </div>
 
       <div class="product-card-row--responsive-info">
-        <button
-          v-if="!catalog"
-          @click="openModalCart"
-          :class="{
-            'button-prime': inStockProduct,
-            'button-second': !inStockProduct
-          }"
-          :disabled="disabledAddToCart"
-          class="button-block--buy left-icon"
-        >
+        <button v-if="!catalog" @click="openModalCart"
+                :class="{ 'button-prime': inStockProduct, 'button-second': !inStockProduct }"
+                :disabled="disabledAddToCart"
+                class="button-block--buy left-icon">
           <svg-basket></svg-basket>
           <span>Add to cart</span>
         </button>
 
-        <button
-          v-if="catalog && product.quantity && product.price"
-          @click="openModalCart"
-          :class="{
-            'button-prime': inStockProduct,
-            'button-second': !inStockProduct
-          }"
-          :disabled="disabledAddToCart"
-          class="button-block--buy left-icon"
-        >
+        <button v-if="catalog && product.quantity && product.price"
+                @click="openModalCart"
+                :class="{ 'button-prime': inStockProduct, 'button-second': !inStockProduct }"
+                :disabled="disabledAddToCart"
+                class="button-block--buy left-icon">
           <svg-basket></svg-basket>
           <span>Add to cart</span>
         </button>
 
-        <button
-          v-if="catalog && (!product.quantity || !product.price)"
-          @click="addToWaitList"
-          class="button-add button-second"
-        >
+        <button v-if="catalog && (!product.quantity || !product.price)"
+                @click="addToWaitList"
+                class="button-add button-second">
           <svg-wishlist v-if="!inWaitList"></svg-wishlist>
           <svg-check-xl v-if="inWaitList"></svg-check-xl>
           <p v-if="inWaitList">{{ 'In Wait List' }}</p>
-          <p v-if="!inWaitList">
-            Add to <span class="break-point">wait list</span>
-          </p>
+          <p v-if="!inWaitList">Add to <span class="break-point">wait list</span></p>
         </button>
 
-        <router-link
-          :to="{ name: 'product-page', params: { slug: product.slug } }"
-          tag="a"
-        >
-          <button
-            v-if="!catalog"
-            class="button-block--details button-second left-icon"
-          >
+        <router-link :to="{ name: 'product-page', params: { slug: product.slug } }">
+          <button v-if="!catalog" class="button-block--details button-second left-icon">
             <svg-eye-show></svg-eye-show>
             <span>View details</span>
           </button>
         </router-link>
 
-        <div
-          v-if="!catalog"
-          class="delete-block"
-          @click="deleteProductFromWaitList"
-        >
+        <div v-if="!catalog"
+             class="delete-block"
+             @click="deleteProductFromWaitList">
           <svg-delete></svg-delete>
           <span>Delete</span>
         </div>
@@ -258,11 +179,9 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'product-card-row',
-  data () {
-    return {
-      showInfoBlock: false,
-      hovered: false
-    }
+  components: {
+    AppImage,
+    Star
   },
   mixins: [utils, imageSource],
   props: [
@@ -273,6 +192,12 @@ export default {
     'inStockProduct',
     'catalog'
   ],
+  data () {
+    return {
+      showInfoBlock: false,
+      hovered: false
+    }
+  },
   computed: {
     noStock () {
       if (['md', 'lg', 'xl'].includes(this.$mq)) {
@@ -293,17 +218,9 @@ export default {
       this.serverImageSource(image, null, e, this.SERVER_IMAGE_PRODUCT)
     },
     componentProductImage (images, onError) {
-      let sizeProperty = ''
-
-      if (this.$mq === 'xl' || this.$mq === 'lg' || this.$mq === 'md') {
-        sizeProperty = 'medium'
-      } else {
-        sizeProperty = 'tiny'
-      }
-
       return this.serverImageSource(
         images,
-        sizeProperty,
+        this.$mq === 'sm' ? 'tiny' : 'medium',
         onError,
         this.SERVER_IMAGE_PRODUCT
       )
@@ -317,6 +234,12 @@ export default {
       this.$emit('deleteProductFromWaitList', this.product.id)
     },
     addToWaitList () {
+      if (this.$parent.$options.name === 'ProductCard') {
+        this.$emit('addTo', window.scrollY)
+
+        return
+      }
+
       if (!this.isAuth) {
         this.$store.dispatch('toggleLoginModal', {
           open: true,
@@ -328,10 +251,6 @@ export default {
 
       if (!this.inWaitList) { this.$store.dispatch('createWaitListedProduct', this.product.id) }
     }
-  },
-  components: {
-    AppImage,
-    Star
   }
 }
 </script>
@@ -581,8 +500,8 @@ export default {
           background: #fcfcfc;
           border-radius: 4px;
           border: 1px solid $border-color;
-          box-shadow: 0px 5px 6.58px 0.42px rgba(0, 0, 0, 0.05),
-            0px 2px 9.8px 0.2px rgba(0, 0, 0, 0.02);
+          box-shadow: 0 5px 6.58px 0.42px rgba(0, 0, 0, 0.05),
+            0 2px 9.8px 0.2px rgba(0, 0, 0, 0.02);
           p {
             position: relative;
             margin-bottom: 0;
@@ -808,8 +727,8 @@ export default {
           color: $main-color;
         }
         &:hover {
-          box-shadow: 0px 1px 0.94px 0.06px rgba(0, 28, 236, 0.24),
-            0px 0px 0.98px 0.02px rgba(0, 28, 236, 0.16);
+          box-shadow: 0 1px 0.94px 0.06px rgba(0, 28, 236, 0.24),
+            0 0 0.98px 0.02px rgba(0, 28, 236, 0.16);
           background-color: $main-color;
           border: 1px solid $main-color;
           color: white;

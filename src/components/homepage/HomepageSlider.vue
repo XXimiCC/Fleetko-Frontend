@@ -78,7 +78,6 @@ export default {
   },
   computed: {
     sliderEl () {
-      console.log(this.banners)
       return this.$refs.sliderEl.swiper
     }
   },

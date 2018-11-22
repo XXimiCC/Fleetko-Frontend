@@ -3,61 +3,54 @@
     <div class="responsive-wrap">
       <transition name="fade">
         <keep-alive>
-          <catalog-filters-responsive
-            @clearAll="clearAll(true)"
-            @dealerOpenedByUser="dealerOpenedByUser"
-            @deleteTag="deleteTag"
-            @changePrice="setPrices"
-            @cheangeSortinnMethod="changeResponsiveSortingMethod"
-            @checkbox-false="deleteFilterCheckbox"
-            @checkbox="setFilterCheckbox"
-            @checkbox-dealer-false="deleteDealerCheckbox"
-            @checkbox-dealer="setDealerCheckbox"
-            @openedByUser="openedByUser"
-            :relativePrices="[minPriceSelected, maxPriceSelected]"
-            :minPriceSelected="minPriceSelected"
-            :maxPriceSelected="maxPriceSelected"
-            :filtersOpenedByUser="filtersOpenedByUser"
-            :openResponsiveDealers="openResponsiveDealers"
-            :dataReady="dataReady"
-            :minPriceLimit="minPriceLimit"
-            :maxPriceLimit="maxPriceLimit"
-            :selectedSorting="selectedSorting"
-            :sorting="sorting"
-            :tags="tags"
-            :filters="filters"
-            :dealers="dealers"
-            :catalogDealer="catalogDealer"
-            @toggleResponsiveFilters="toggleResponsiveFilters"
-            v-if="openResponsiveFilters"
-          ></catalog-filters-responsive>
+          <catalog-filters-responsive v-if="openResponsiveFilters"
+                                      @clearAll="clearAll(true)"
+                                      @dealerOpenedByUser="dealerOpenedByUser"
+                                      @deleteTag="deleteTag"
+                                      @changePrice="setPrices"
+                                      @cheangeSortinnMethod="changeResponsiveSortingMethod"
+                                      @checkbox-false="deleteFilterCheckbox"
+                                      @checkbox="setFilterCheckbox"
+                                      @checkbox-dealer-false="deleteDealerCheckbox"
+                                      @checkbox-dealer="setDealerCheckbox"
+                                      @openedByUser="openedByUser"
+                                      :relativePrices="[minPriceSelected, maxPriceSelected]"
+                                      :minPriceSelected="minPriceSelected"
+                                      :maxPriceSelected="maxPriceSelected"
+                                      :filtersOpenedByUser="filtersOpenedByUser"
+                                      :openResponsiveDealers="openResponsiveDealers"
+                                      :dataReady="dataReady"
+                                      :minPriceLimit="minPriceLimit"
+                                      :maxPriceLimit="maxPriceLimit"
+                                      :selectedSorting="selectedSorting"
+                                      :sorting="sorting"
+                                      :tags="tags"
+                                      :filters="filters"
+                                      :dealers="dealers"
+                                      :catalogDealer="catalogDealer"
+                                      @toggleResponsiveFilters="toggleResponsiveFilters">
+          </catalog-filters-responsive>
         </keep-alive>
       </transition>
     </div>
-    <empty-result-vehicle
-      @changeEmptyVehicle="$emit('changeEmptyVehicle')"
-      v-if="filtersResponseEmpty"
-    ></empty-result-vehicle>
-    <!-- Here Empty Vehicle component if filtersResponseEmpty -->
-    <!-- End empty Vehicle Component -->
+    <empty-result-vehicle v-if="filtersResponseEmpty"
+                          @changeEmptyVehicle="$emit('changeEmptyVehicle')">
+    </empty-result-vehicle>
+
     <div class="container" v-else>
       <div class="row">
         <transition name="fade">
-          <div
-            :class="{ 'opacity-fade': preloader }"
-            class="category-filters col-xl-3 col-lg-3 d-lg-block d-md-none d-sm-none d-xs-none"
-          >
+          <div :class="{ 'opacity-fade': preloader }"
+               class="category-filters col-xl-3 col-lg-3 d-lg-block d-md-none d-sm-none d-xs-none">
             <div class="filter-info">
               <div class="filter-info--text">
                 <span>Showing</span>
-                <span class="category-filters__pagination--black"
-                  >{{ pagination.from || 0 }} - {{ pagination.to }}</span
-                >
-                <span>of</span>
-                <span class="category-filters__pagination--black">{{
-                  pagination.total
-                }}</span>
-                <span>results</span>
+                <span class="category-filters__pagination--black">
+                  {{ pagination.from || 0 }} - {{ pagination.to }}
+                </span>
+                <span>of </span>
+                <span class="category-filters__pagination--black">{{ pagination.total }}</span>
+                <span> results</span>
               </div>
               <div class="filter-info--button">
                 <button @click="clearAll(true)" class="button-second left-icon">
@@ -66,44 +59,35 @@
                 </button>
               </div>
             </div>
-            <filter-price
-              @changePrice="setPrices"
-              :relativePrices="[minPriceSelected, maxPriceSelected]"
-              :minPriceSelected="minPriceSelected"
-              :maxPriceSelected="maxPriceSelected"
-              :dataReady="dataReady"
-              :minPriceLimit="minPriceLimit"
-              v-if="minPriceSelected && maxPriceSelected"
-              :maxPriceLimit="maxPriceLimit"
-            ></filter-price>
-            <div
-              class="filter-group"
-              v-for="(filter, i) in filters"
-              v-if="!catalogDealer"
-            >
-              <options-filter
-                @checkbox-false="deleteFilterCheckbox"
-                @checkbox="setFilterCheckbox"
-                :relative="filters[i]"
-                :filter="filter"
-              >
+            <filter-price v-if="minPriceSelected && maxPriceSelected"
+                          @changePrice="setPrices"
+                          :relativePrices="[minPriceSelected, maxPriceSelected]"
+                          :minPriceSelected="minPriceSelected"
+                          :maxPriceSelected="maxPriceSelected"
+                          :dataReady="dataReady"
+                          :minPriceLimit="minPriceLimit"
+                          :maxPriceLimit="maxPriceLimit">
+            </filter-price>
+            <div v-if="!catalogDealer"
+                 class="filter-group"
+                 v-for="(filter, i) in filters">
+              <options-filter @checkbox-false="deleteFilterCheckbox"
+                              @checkbox="setFilterCheckbox"
+                              :relative="filters[i]"
+                              :filter="filter">
               </options-filter>
             </div>
-            <div class="filter-group" v-if="!catalogDealer">
-              <options-dealers
-                @checkbox-dealer-false="deleteDealerCheckbox"
-                @checkbox-dealer="setDealerCheckbox"
-                :filter="dealers"
-              >
+            <div v-if="!catalogDealer" class="filter-group">
+              <options-dealers @checkbox-dealer-false="deleteDealerCheckbox"
+                               @checkbox-dealer="setDealerCheckbox"
+                               :filter="dealers">
               </options-dealers>
             </div>
           </div>
         </transition>
         <transition name="fade">
-          <div
-            class="category-filters__body col-xl-9 col-lg-9 col-md-12 col-sm-12 col-xs-12"
-            id="anchor-scroll"
-          >
+          <div class="category-filters__body col-xl-9 col-lg-9 col-md-12 col-sm-12 col-xs-12"
+               id="anchor-scroll">
             <div v-if="preloader" class="col-xl-12">
               <loader :position="'buildin'"></loader>
             </div>
@@ -128,7 +112,7 @@
                 </div>
                 <div
                   class="view-block--item"
-                  v-if="$mq === 'md' || $mq === 'sm' || $mq === 'xs'"
+                  v-if="['md', 'sm', 'xs'].includes($mq)"
                 >
                   <button
                     class="button-filter"
@@ -179,6 +163,7 @@
                   ></empty-result>
                 </div>
                 <product-card
+                  @beforeLogin="beforeLogin"
                   v-for="(product, i) in products"
                   :key="i"
                   :position="i + 1"
@@ -194,15 +179,13 @@
                   v-if="products.length"
                 >
                   <div class="item">
-                    <span>Showing</span>
-                    <span class="category-filters__pagination--black"
-                      >{{ pagination.from }} - {{ pagination.to }}</span
-                    >
-                    <span>of</span>
-                    <span class="category-filters__pagination--black">{{
-                      pagination.total
-                    }}</span>
-                    <span>results</span>
+                    <span>Showing </span>
+                    <span class="category-filters__pagination--black">
+                      {{ pagination.from }} - {{ pagination.to }}
+                    </span>
+                    <span> of </span>
+                    <span class="category-filters__pagination--black">{{ pagination.total }}</span>
+                    <span> results</span>
                   </div>
                   <div class="item" v-show="pagination.lastPage > 1">
                     <pagination
@@ -259,6 +242,12 @@ export default {
     EmptyResultVehicle
   },
   mixins: [utils],
+  metaInfo () {
+    return {
+      link: this.paginationMetaLinks,
+      title: 'Fleetko'
+    }
+  },
   props: ['type'],
   data () {
     return {
@@ -284,6 +273,7 @@ export default {
       sorting: ['New', 'Old', 'Expensive', 'Cheap'],
       selectedSorting: this.$route.query.sort_by || 'New',
       paginationMetaLinks: [],
+      scrollPos: 0,
       pagination: {
         ready: false,
         currentPage: 1,
@@ -295,16 +285,17 @@ export default {
       }
     }
   },
-  metaInfo () {
-    return {
-      link: this.paginationMetaLinks,
-      title: 'Fleetko'
+  computed: {
+    ...mapGetters(['preloader', 'getProductView', 'getSearchOptions', 'hasToken']),
+    catalogDealer () {
+      return this.$route.name === 'dealer'
     }
   },
   watch: {
-    $route (to, from) {
-      let differentVehicle =
-        to.query.vehicle && to.query.vehicle !== from.query.vehicle
+    '$route' (to, from) {
+      let differentVehicle = to.query.vehicle && to.query.vehicle !== from.query.vehicle
+
+      if (from.query.page !== to.query.page) this.$scrollTo('#anchor-scroll', 1500, { offset: -200 })
 
       to.query.vehicle
         ? this.$store.dispatch('fetchVehicle', to.query.vehicle)
@@ -317,20 +308,42 @@ export default {
         this.vehicleSlug = to.query.vehicle || ''
         this.clearAll(differentVehicle)
         this.fetchFilters()
-
-        setTimeout(() => {
-          if (to.params.slug === from.params.slug) { this.$scrollTo('#anchor-scroll', 1500, { offset: -200 }) }
-        }, 1000)
       } else {
         this.parseQueryParams()
       }
     }
   },
-  computed: {
-    ...mapGetters(['preloader', 'getProductView', 'getSearchOptions']),
-    catalogDealer () {
-      return this.$route.name === 'dealer'
+  created () {
+    if (this.type === 'category') {
+      EventBus.$on('changeQueryFromSearchModal', scroll => {
+        this.fetchFilters()
+      })
+
+      EventBus.$on('filterCategoryByVehicle', vehicle => {
+        if (this.vehicleSlug !== this.getSearchOptions.slug) {
+          this.vehicleSlug = this.getSearchOptions.slug
+          this.clearAll(true)
+        }
+      })
+
+      EventBus.$on('filterClearVehicle', vehicle => {
+        this.vehicleSlug = ''
+        this.clearAll(true)
+      })
     }
+  },
+  mounted () {
+    this.$store.dispatch('setLoaderManual', true)
+
+    if (this.$route.query.available_min) {
+      this.fetchFromRoute()
+      this.fetchProducts()
+    } else {
+      this.fetchFilters()
+      this.checkSearchByVehicle()
+    }
+
+    if (this.scrollPos) window.scrollTo({ top: this.scrollPos })
   },
   methods: {
     ...mapActions([
@@ -385,7 +398,6 @@ export default {
        */
       this.parseQueryParams()
     },
-
     processingServerFilters (slug, options) {
       this.filtersResponseEmpty = false
 
@@ -455,7 +467,6 @@ export default {
 
       this.processingServerFilters(slug, options)
     },
-
     parseQueryParams () {
       this.catalogSlug = this.$route.params.slug
       this.pagination.ready = false
@@ -589,8 +600,6 @@ export default {
       this.changeRouterQuery()
 
       this.fetchProducts()
-
-      this.$scrollTo('#anchor-scroll', 1500, { offset: -200 })
     },
     setPrices (prices) {
       this.minPriceSelected = prices[0]
@@ -717,15 +726,12 @@ export default {
     },
     deleteTag (tag) {
       if (tag.type === 'filters') {
- this.selectedFilters = this.selectedFilters.filter(
-          obj => obj !== tag.id
-        )
-}
+        this.selectedFilters = this.selectedFilters.filter(obj => obj !== tag.id)
+      }
+
       if (tag.type === 'dealers') {
-this.selectedDealers = this.selectedDealers.filter(
-          obj => obj !== tag.slug
-        )
-}
+        this.selectedDealers = this.selectedDealers.filter(obj => obj !== tag.slug)
+      }
 
       if (tag.filterName === 'Price') {
         this.minPriceSelected = this.minPriceLimit
@@ -810,36 +816,9 @@ this.selectedDealers = this.selectedDealers.filter(
           })
         }
       }
-    }
-  },
-  created () {
-    if (this.type === 'category') {
-      EventBus.$on('changeQueryFromSearchModal', scroll => {
-        this.fetchFilters()
-      })
-
-      EventBus.$on('filterCategoryByVehicle', vehicle => {
-        if (this.vehicleSlug !== this.getSearchOptions.slug) {
-          this.vehicleSlug = this.getSearchOptions.slug
-          this.clearAll(true)
-        }
-      })
-
-      EventBus.$on('filterClearVehicle', vehicle => {
-        this.vehicleSlug = ''
-        this.clearAll(true)
-      })
-    }
-  },
-  mounted () {
-    this.$store.dispatch('setLoaderManual', true)
-
-    if (this.$route.query.available_min) {
-      this.fetchFromRoute()
-      this.fetchProducts()
-    } else {
-      this.fetchFilters()
-      this.checkSearchByVehicle()
+    },
+    beforeLogin (scrollY) {
+      this.scrollPos = scrollY
     }
   },
   beforeDestroy () {

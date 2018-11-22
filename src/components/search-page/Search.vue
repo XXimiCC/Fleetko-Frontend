@@ -171,7 +171,6 @@ export default {
         spaceBetween: 0,
         height: 'auto',
         onInit: function (swiper) {
-          console.log('rwere')
           let slidesOutsideEvenGrid =
             swiper.slides.length % swiper.params.slidesPerColumn
 

@@ -83,11 +83,9 @@
     </div>
 
     <div v-if="view === 'column'" class="card__actions">
-      <div
-        v-if="good.price"
-        class="price"
-        :class="{ 'price--grey': showNoStock }"
-      >
+      <div v-if="good.price"
+           class="price"
+           :class="{ 'price--grey': good.quantity < 1 }">
         ${{ toDollarDecimal(good.price) }}
       </div>
 
@@ -138,6 +136,7 @@
     </div>
 
     <product-card-row
+      @addTo="addToWaitList"
       v-if="view !== 'column'"
       :product="good"
       catalog="true"
@@ -198,17 +197,20 @@ export default {
         .dispatch('setModalProductId', this.good.slug)
         .then(() => this.$store.dispatch('toggleCartModal', true))
     },
-    addToWaitList () {
+    addToWaitList ($event, scrollY) {
       if (!this.isAuth) {
+        this.$emit('beforeLogin', scrollY || window.scrollY)
+
         this.$store.dispatch('toggleLoginModal', {
           open: true,
           authGuard: false
         })
+
         this.$store.dispatch('setTemporaryProductId', this.good.id)
         return
       }
 
-      if (!this.inWaitList) { this.$store.dispatch('createWaitListedProduct', this.good.id) }
+      if (!this.inWaitList) this.$store.dispatch('createWaitListedProduct', this.good.id)
     },
     errorImage (e, image) {
       this.serverImageSource(image, null, e, this.SERVER_IMAGE_PRODUCT)
@@ -270,6 +272,9 @@ export default {
       width: 100%;
       .price {
         text-align: left;
+        &--grey {
+          color: $main-grey;
+        }
       }
       .details {
         display: none;
