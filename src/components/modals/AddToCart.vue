@@ -35,10 +35,11 @@
 
             <div class="qty-input">
               <p class="label">Quantity</p>
-              <quantity-input :initialValue="1"
+              <quantity-input :initialValue="initialValue"
                               :product="product"
                               :userCart="getUserCart"
                               :min="2"
+                              ref="mainQuantity"
                               @setQuantity="setQuantity">
               </quantity-input>
             </div>
@@ -155,6 +156,7 @@ export default {
         nonExist: 'You entered a nonexistent ZIP code'
       },
       userQuantity: 1,
+      initialValue: 1,
       proposalWarehouse: null,
       proposalWarehouseQty: 0,
       totalPrice: 0,
@@ -226,8 +228,7 @@ export default {
         .userQuantity -= this.proposalWarehouseQty
 
       this.proposalWarehouse = null
-      this.proposalWarehouseQty = 0
-      this.userQuantity = 1
+      this.initialValue = this.userQuantity
     },
 
     validateZip ({ type: eventType }) {
