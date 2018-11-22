@@ -1,7 +1,7 @@
 <template>
   <div class="search">
     <div class="relative-wrap">
-      <main-slider></main-slider>
+      <main-slider :key="getVehicle.slug"></main-slider>
       <transition name="fade">
         <search
           :position="$mq === 'xs' || $mq === 'sm' || $mq === 'md' ? 0 : -121"
@@ -38,14 +38,12 @@
         itemscope
         itemtype="http://schema.org/BreadcrumbList"
         v-if="getVehicle.slug"
-        :class="{ 'large-top': openSearch }"
       >
         <router-link
           itemprop="itemListElement"
           itemtype="http://schema.org/ListItem"
           itemscope
           :to="{ name: 'home' }"
-          tag="a"
         >
           <span itemprop="name">Home</span>
           <meta itemprop="position" content="1" />
@@ -71,11 +69,11 @@
           <img src="@/assets/images/empty-back.png" alt="" />
         </div>
       </div>
-      <div
-        class="search__categories"
-        v-for="section in getVehicleSections"
-        v-else
-      >
+
+      <div v-else
+           class="search__categories"
+           v-for="section in getVehicleSections">
+
         <h2 class="h2-secondary search__categories__title">
           {{ section.name }}
         </h2>
@@ -105,6 +103,7 @@
           </router-link>
         </div>
       </div>
+
       <best-sellers-slider
         :key="$route.path"
         v-if="bestSellers.length"
@@ -150,7 +149,6 @@ export default {
         slidesPerGroup: 4,
         loopFillGroupWithBlank: true,
         breakpoints: {
-          // when window width is <= 940
           640: {
             slidesPerView: 2,
             slidesPerColumn: 2,
@@ -198,7 +196,7 @@ export default {
     }
   },
   watch: {
-    $route (to, from) {
+    $route (to) {
       if (to.name === 'searchPage') {
         this.fetchData()
         this.fetchBestSellersProducts()
@@ -242,7 +240,7 @@ export default {
       this.$store
         .dispatch('fetchVehicle', this.$route.params.slug)
         .then(resp => {
-          resp.vehicle_brand_name ? (this.loaded = true) : (this.loaded = false)
+          this.loaded = !!resp.vehicle_brand_name
           this.model = {
             value: resp.id,
             label: resp.name
@@ -311,9 +309,6 @@ export default {
       justify-content: center;
       align-items: center;
     }
-  }
-  .large-top {
-    margin-top: 142px;
   }
   &__info {
     position: relative;

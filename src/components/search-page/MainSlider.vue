@@ -1,14 +1,6 @@
 <template>
   <div class="main-slider">
-    <div
-      class="main-slider--wrapper"
-      v-if="getVehicle.banner_image"
-      :style="{
-        'background-image': `url(${componentBannerImage(
-          getVehicle.banner_image
-        )}), url(${getVehicle.banner_image.versions.original})`
-      }"
-    ></div>
+    <div class="main-slider--wrapper" :class="{ 'no-pattern': !getVehicle.banner_image}" :style="getBg()"></div>
   </div>
 </template>
 
@@ -28,6 +20,12 @@ export default {
 
       return this.serverImageSource(images, size, onError, this.SERVER_IMAGE_BANNERS
       )
+    },
+    getBg () {
+      const banner = this.getVehicle.banner_image
+
+      return banner
+        ? `background-image: url(${this.componentBannerImage(banner)}), url(${banner.versions.original});` : ''
     }
   },
   computed: {
@@ -43,6 +41,7 @@ export default {
   position: relative;
   &--wrapper {
     position: relative;
+    background-color: #f5f5f5;
     background-size: cover;
     background-repeat: no-repeat;
     height: 544px;
@@ -52,6 +51,8 @@ export default {
     .swiper-container {
       height: 544px;
     }
+    &.no-pattern {
+      &:before { display: none }}
   }
 }
 
