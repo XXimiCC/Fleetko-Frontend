@@ -8,7 +8,6 @@
                  :ref="'emailInput'"
                  :data-vv-validate-on="'submit|blur'"
                  class="input-default input"
-                 @focus="resetValidator"
                  @keydown="noSpacesEmail($event)"
                  @input="emailValidationInput($event)"
                  :class="{
@@ -45,7 +44,6 @@
                  :class="{ 'input-error':  (errors.has('password') || !loginServerValid) &&  !animateValidation }"
                  v-model="password"
                  name="password"
-                 @focus="resetValidator"
                  @input="passwordValidationInput"
                  placeholder="Please enter a password"
                  :type="hiddenPassword ? 'password' : 'text'" />
@@ -138,10 +136,6 @@ export default {
           }, 500)
         }
       })
-    },
-    resetValidator () {
-      this.$validator.reset()
-      this.loginServerValid = true
     },
     passwordValidationInput () {
       this.loginServerValid = true
