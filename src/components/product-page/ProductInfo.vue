@@ -156,7 +156,7 @@
               </div>
             </div>
             <div class="info-row warehouses-row">
-              <div class="info-row--label">Avalability:</div>
+              <div class="info-row--label info-row--label--availability">Availability:</div>
               <div class="info-row--body">
                 <div class="warehouses-responsive"
                      @click="showResponsiveWarehouses = !showResponsiveWarehouses"
@@ -687,6 +687,9 @@ export default {
           line-height: 1;
           display: flex;
           align-items: center;
+          &--availability {
+            align-self: flex-start;
+          }
         }
         &--body {
           width: 100%;
