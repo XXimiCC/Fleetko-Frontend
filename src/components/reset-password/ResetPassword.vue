@@ -5,7 +5,7 @@
         <div class="container">
           <div class="item">
             <router-link :to="{ name: 'home' }" tag="div">
-              <img class="logo-img" src="~@/assets/logo.png" />
+              <img class="logo-img" src="~@/assets/logo.png"  alt=""/>
             </router-link>
           </div>
           <div class="item reset-password__header--title">
@@ -16,98 +16,61 @@
       <div class="reset-password__body">
         <div class="reset-password__body--title"><h2>Welcome Back!</h2></div>
         <div class="form-wrap">
-          <div
-            v-if="success"
-            @submit.prevent="submit"
-            class="reset-password__body--form"
-          >
+          <div v-if="success" @submit.prevent="submit" class="reset-password__body--form">
             <div class="reset-password__checked-wrap">
               <svg-check></svg-check>
             </div>
-            <h3 class="success-title">
-              You`ve successfully changed your password!
-            </h3>
+            <h3 class="success-title">You`ve successfully changed your password!</h3>
             <div class="success-button">
-              <button class="button-prime" @click="login">
-                Proceed to my account
-              </button>
+              <button class="button-prime" @click="login">Proceed to my account</button>
             </div>
           </div>
-          <form
-            v-else=""
-            @submit.prevent="submit"
-            class="reset-password__body--form"
-          >
+
+          <form v-else="" @submit.prevent="submit" class="reset-password__body--form">
             <div class="reset-password__body--form--key-icon">
               <svg-key-password></svg-key-password>
             </div>
             <h3>Change Password</h3>
-            <div
-              class="reset-password__body--form--item"
-              :class="{ 'validation-margin': errors.has('password') }"
-            >
+            <div class="reset-password__body--form--item" :class="{ 'validation-margin': errors.has('password') }">
               <p class="paragraph-secondary">
                 You change password for the <b>{{ email }}</b> account. Don`t
                 use too short and simple password
               </p>
-              <div class="input-wrap" :class="{ control: true }">
-                <input
-                  v-validate="'required|min:6'"
-                  class="input-default"
-                  :class="{
-                    input: true,
-                    'error-border': errors.has('password')
-                  }"
-                  name="password"
-                  ref="password"
-                  id="password"
-                  placeholder="Please enter a password"
-                  :type="hiddenPassword ? 'password' : 'text'"
-                />
-                <div
-                  @click="hiddenPassword = !hiddenPassword"
-                  class="show-hide"
-                >
+              <div class="input-wrap control">
+                <input v-validate="'required|min:6'"
+                       class="input-default input"
+                       :class="{ 'input-error': errors.has('password') }"
+                       name="password"
+                       ref="password"
+                       id="password"
+                       placeholder="Please enter a password"
+                       :type="hiddenPassword ? 'password' : 'text'" />
+                <div @click="hiddenPassword = !hiddenPassword" class="show-hide">
                   <svg-eye-hide v-if="!hiddenPassword"></svg-eye-hide>
                   <svg-eye-show v-if="hiddenPassword"></svg-eye-show>
                 </div>
-                <div
-                  class="reset-password__error-text"
-                  v-show="errors.has('password')"
-                >
-                  <span class="help error-message-input is-danger">{{
-                    errors.first('password')
-                  }}</span>
+                <div class="reset-password__error-text" v-show="errors.has('password')">
+                  <span class="help error-message-input is-danger">{{ errors.first('password') }}</span>
                 </div>
               </div>
             </div>
             <div class="reset-password__body--form--item">
-              <div class="input-wrap" :class="{ control: true }">
-                <input
-                  v-validate="'required|min:6|confirmed:password'"
-                  :class="{
-                    input: true,
-                    'error-border': errors.has('password-confirm')
-                  }"
-                  class="input-default"
-                  data-vv-as="password"
-                  name="password-confirm"
-                  ref="passwordConfirm"
-                  placeholder="Please confirm a password"
-                  :type="hiddenConfirm ? 'password' : 'text'"
-                />
+              <div class="input-wrap control">
+                <input v-validate="'required|min:6|confirmed:password'"
+                       :class="{ 'input-error': errors.has('password-confirm') }"
+                       class="input-default input"
+                       data-vv-as="password"
+                       name="password-confirm"
+                       ref="passwordConfirm"
+                       placeholder="Please confirm a password"
+                       :type="hiddenConfirm ? 'password' : 'text'"/>
                 <div @click="hiddenConfirm = !hiddenConfirm" class="show-hide">
                   <svg-eye-hide v-if="!hiddenConfirm"></svg-eye-hide>
                   <svg-eye-show v-if="hiddenConfirm"></svg-eye-show>
                 </div>
 
-                <div
-                  class="reset-password__error-text"
-                  v-show="errors.has('password-confirm')"
-                >
-                  <span class="help error-message-input is-danger">{{
-                    errors.first('password-confirm')
-                  }}</span>
+                <div class="reset-password__error-text" v-show="errors.has('password-confirm')">
+                  <span class="help error-message-input is-danger">{{ errors.first('password-confirm') }}</span>
                 </div>
               </div>
             </div>
@@ -129,8 +92,12 @@ import { mapGetters } from 'vuex'
 import AppFooterEmpty from '../parts/AppFooterEmpty'
 
 Vue.use(VeeValidate)
+
 export default {
   name: 'reset',
+  components: {
+    AppFooterEmpty
+  },
   data () {
     return {
       password: '',
@@ -139,15 +106,19 @@ export default {
       token: '',
       hiddenPassword: true,
       hiddenConfirm: true,
-      switchText: 'Show',
       success: false
     }
   },
-  watch: {
-    hasToken (v) {
-      if (v) {
-      }
-    }
+  computed: {
+    ...mapGetters({
+      hasToken: 'hasToken'
+    })
+  },
+  mounted () {
+    this.email = this.$route.query.email
+    this.token = this.$route.query.token
+
+    this.validateResetPasswordToken()
   },
   methods: {
     validateResetPasswordToken () {
@@ -157,13 +128,8 @@ export default {
           token: this.token
         })
         .then(
-          resp => {},
-          // eslint-disable-next-line
-          error => {
-            this.$router.push({
-              name: 'not-found'
-            })
-          }
+          () => {},
+          () => this.$router.push({ name: 'not-found' })
         )
     },
     login () {
@@ -175,16 +141,9 @@ export default {
           provider: '',
           token: this.token
         })
-        .then(resp => {
-          this.$store.dispatch('getAuthUser').then(resp => {
-            this.$store.dispatch('mergeServerCart').then(
-              resp => {},
-              err => {
-                // eslint-disable-next-line
-                console.log(err)
-              }
-            )
-
+        .then(() => {
+          this.$store.dispatch('getAuthUser').then(() => {
+            this.$store.dispatch('mergeServerCart')
             this.$router.push({ name: 'orderHistory' })
           })
           this.$store.dispatch('toggleLoginModal', {
@@ -203,36 +162,18 @@ export default {
               password: this.$refs.password.value
             })
             .then(
-              response => {
+              () => {
                 this.password = this.$refs.password.value
                 this.success = true
-                // eslint-disable-next-line
-              },
-              error => {
-                // eslint-disable-next-line
-                console.error(error)
               }
             )
         }
       })
     }
-  },
-  computed: {
-    ...mapGetters({
-      hasToken: 'hasToken'
-    })
-  },
-  components: {
-    AppFooterEmpty
-  },
-  mounted () {
-    this.email = this.$route.query.email
-    this.token = this.$route.query.token
-
-    this.validateResetPasswordToken()
   }
 }
 </script>
+
 <style lang="scss" scoped>
 .error-message-input {
   display: flex;
@@ -283,7 +224,7 @@ body {
     justify-content: space-between;
     align-items: center;
     background-color: white;
-    box-shadow: 0px 0px 9.5px 0.5px rgba(102, 102, 102, 0.2);
+    box-shadow: 0 0 9.5px 0.5px rgba(102, 102, 102, 0.2);
     .container {
       display: flex;
       justify-content: space-between;
@@ -330,7 +271,7 @@ body {
       padding: 64px 32px;
       background: white;
       border-radius: 4px;
-      box-shadow: 0px 2px 7px 0px rgba(6, 26, 70, 0.17);
+      box-shadow: 0 2px 7px 0 rgba(6, 26, 70, 0.17);
       &--key-icon {
         margin-right: auto;
         margin-left: auto;
@@ -458,10 +399,6 @@ body {
         }
       }
     }
-  }
-}
-@media (min-width: $xs) and (max-width: $xssm) {
-  .reset-password {
   }
 }
 </style>
