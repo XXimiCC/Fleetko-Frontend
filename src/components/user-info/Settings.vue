@@ -3,111 +3,73 @@
     <div class="settings">
       <div class="settings__body">
         <p class="settings__title">Account Settings</p>
+
         <div class="item settings--text-right">
           <label for="first-name">First name</label>
           <div class="input-wrap">
-            <input
-              class="input-default"
-              :class="{ 'error-border': errors.has('first-name') }"
-              v-validate="'max:20|required'"
-              @input="formInputHandler"
-              name="first-name"
-              id="first-name"
-              v-model="firstName"
-              type="text"
-            />
-            <span v-show="errors.has('first-name')" class="error-message-input">
-              {{ errors.first('first-name') }}</span
-            >
+            <input class="input-default"
+                   :class="{ 'error-border': errors.has('first-name') }"
+                   v-validate="'max:20|required'"
+                   name="first-name"
+                   id="first-name"
+                   v-model="firstName"
+                   type="text" />
+            <span v-show="errors.has('first-name')" class="error-message-input">{{ errors.first('first-name') }}</span>
           </div>
         </div>
+
         <div class="item settings--text-right">
           <label for="last-name">Last name</label>
           <div class="input-wrap">
-            <input
-              class="input-default"
-              :class="{ 'error-border': errors.has('last-name') }"
-              id="last-name"
-              v-validate="'max:20|required'"
-              @input="formInputHandler"
-              name="last-name"
-              v-model="lastName"
-              type="text"
-            />
-            <span v-show="errors.has('last-name')" class="error-message-input">
-              {{ errors.first('last-name') }}</span
-            >
+            <input class="input-default"
+                   :class="{ 'error-border': errors.has('last-name') }"
+                   id="last-name"
+                   v-validate="'max:20|required'"
+                   name="last-name"
+                   v-model="lastName"
+                   type="text" />
+            <span v-show="errors.has('last-name')" class="error-message-input">{{ errors.first('last-name') }}</span>
           </div>
         </div>
+
         <div class="item settings--text-right">
           <label for="last-name">Phone</label>
           <div class="input-wrap">
-            <masked-input
-              :class="{ 'error-border': errors.has('phone') }"
-              class="input-default"
-              @input="formInputHandler"
-              v-model="phone"
-              :showMask="false"
-              :guide="true"
-              :mask="[
-                '+',
-                '1',
-                '(',
-                /[1-9]/,
-                /\d/,
-                /\d/,
-                ')',
-                ' ',
-                /\d/,
-                /\d/,
-                /\d/,
-                '-',
-                /\d/,
-                /\d/,
-                /\d/,
-                /\d/
-              ]"
-              placeholder="+1(456) 456-5445"
-              type="tel"
-              v-validate:phoneNumber="'min:12'"
-              data-vv-name="phone"
-              data-vv-value-path="phoneNumber"
-            ></masked-input>
-            <div
-              class="counter"
-              :class="{
-                'counter--error':
-                  phoneNumber.length !== 12 && errors.has('phone')
-              }"
-            >
+            <masked-input :class="{ 'error-border': errors.has('phone') }"
+                          class="input-default"
+                          v-model="phone"
+                          :showMask="false"
+                          :guide="true"
+                          :mask="['+','1','(',/[1-9]/,/\d/,/\d/,')',' ',/\d/,/\d/,/\d/,'-',/\d/,/\d/,/\d/,/\d/]"
+                          placeholder="+1(456) 456-5445"
+                          type="tel"
+                          v-validate:phoneNumber="'min:12'"
+                          data-vv-name="phone"
+                          data-vv-value-path="phoneNumber">
+            </masked-input>
+            <div class="counter" :class="{ 'counter--error': phoneNumber.length !== 12 && errors.has('phone') }">
               <span>{{ phoneNumber.length }} / 12</span>
             </div>
-            <span v-show="errors.has('phone')" class="error-message-input">
-              {{ errors.first('phone') }}</span
-            >
+            <span v-show="errors.has('phone')" class="error-message-input">{{ errors.first('phone') }}</span>
           </div>
         </div>
+
         <div class="item settings__email">
-          <label class="settings--text-right" for="email">Email</label>
+          <label class="settings--text-right">Email</label>
           <div class="input-wrap">
             <div class="settings__email-label">{{ email }}</div>
           </div>
           <div class="settings__change-email">
-            <span
-              @click="toggleChangeEmailModal(true)"
-              class="link-quaternary sm-link"
-              >Change Email</span
-            >
+            <span @click="toggleChangeEmailModal(true)" class="link-quaternary sm-link">Change Email</span>
           </div>
         </div>
+
         <div class="item">
           <label for="submit-changes"></label>
-          <button
-            @click="updateUserHandler"
-            :disabled="notValidForm || preloader || !isChanged"
-            class="button-prime"
-            id="submit-changes"
-          >
+          <button @click="updateUserHandler"
+                  :disabled="notValidForm || preloader || nothingChanged"
+                  class="button-prime"
+                  id="submit-changes">
             Update Information
           </button>
         </div>
@@ -126,10 +88,7 @@
         </p>
       </div>
     </div>
-    <change-email
-      @successUpdateEmail="fetchDataUser()"
-      v-if="changeEmailModalOpen"
-    ></change-email>
+    <change-email @successUpdateEmail="fetchDataUser()" v-if="changeEmailModalOpen"></change-email>
   </div>
 </template>
 
@@ -146,36 +105,56 @@ Vue.use(VeeValidate)
 
 export default {
   name: 'order-history',
+  mixins: [utils],
+  components: {
+    MaskedInput,
+    changeEmail
+  },
   data () {
     return {
       firstName: '',
       lastName: '',
-      email: 'test@gmail.com',
-      phone: '',
-      isFetching: true,
-      isChanged: false
+      email: '',
+      phone: null,
+      isFetching: true
     }
   },
-  mixins: [utils],
-  methods: {
-    formInputHandler () {
-      if (!this.isFetching) {
-        this.isChanged = true
-      }
+  computed: {
+    notValidForm () {
+      return this.errors.has('phone') || this.errors.has('last-name') || this.errors.has('first-name')
     },
+    currentPage () {
+      return this.$route.name
+    },
+    phoneNumber () {
+      return this.phone ? this.phone.replace(/[^0-9a-zA-Z+]/g, '') : ''
+    },
+    nothingChanged () {
+      return this.firstName === this.userInfo.first_name &&
+        this.lastName === this.userInfo.last_name &&
+        this.email === this.userInfo.email &&
+        !this.userInfo.phone && this.phone && this.userInfo.phone
+    },
+    ...mapGetters(['isAuth', 'userInfo', 'preloader', 'changeEmailModalOpen'])
+  },
+  mounted () {
+    this.checkEmailVerificationModal()
+    this.fetchDataUser()
+    this.phone = this.formatPhoneNumber(this.phone)
+  },
+  methods: {
     checkEmailVerificationModal () {
-      if (this.$route.query.verified) {
-        this.$store.dispatch('toggleEmailConfirmModal', true)
-        this.$store.dispatch('successEmailVerification')
-      }
+      if (!this.$route.query.verified) return
+      this.$store.dispatch('toggleEmailConfirmModal', true)
+      this.$store.dispatch('successEmailVerification')
     },
     formatPhoneNumber (phone) {
-      if (phone) {
-        let firstDigits = phone.slice(2, 5)
-        let secondDigits = phone.slice(5, 8)
-        let thirdDigits = phone.slice(8, 12)
-        return `+1(${firstDigits}) ${secondDigits}-${thirdDigits}`
-      }
+      if (!phone) return
+
+      const digits1 = phone.slice(2, 5)
+      const digits2 = phone.slice(5, 8)
+      const digits3 = phone.slice(8, 12)
+      return `+1(${digits1}) ${digits2}-${digits3}`
     },
     fetchDataUser () {
       this.isFetching = true
@@ -187,67 +166,28 @@ export default {
 
       this.isFetching = false
     },
-    dispatchUpdateUser (field) {
+    dispatchUpdateUser () {
       this.isFetching = true
-      this.isChanged = false
 
-      this.$store
-        .dispatch('updateUser', {
-          firstName: this.firstName,
-          lastName: this.lastName,
-          phone: this.phoneNumber
-        })
-        .then(
-          resp => {
-            toastr.info(
-              'Personal data has been successfully updated!',
-              '',
-              this.setToastr('success', 5000)
-            )
-
-            this.isFetching = false
-          },
-          error => {
-            console.log(error)
-
+      this.$store.dispatch('updateUser', {firstName: this.firstName, lastName: this.lastName, phone: this.phoneNumber})
+        .then(() => {
+          toastr.info('Personal data has been successfully updated!', '', this.setToastr('success', 5000))
+          this.isFetching = false
+        },
+          () => {
             this.isFetching = false
           }
         )
     },
     updateUserHandler () {
-      this.$validator.validateAll().then(result => {
-        if (result) this.dispatchUpdateUser('successName')
-      })
+      this.$validator.validateAll()
+        .then(result => {
+          if (result) this.dispatchUpdateUser('successName')
+        })
     },
     toggleChangeEmailModal (open) {
       this.$store.dispatch('toggleChangeEmailModal', open)
     }
-  },
-  computed: {
-    notValidForm () {
-      return (
-        this.errors.has('phone') ||
-        this.errors.has('last-name') ||
-        this.errors.has('first-name')
-      )
-    },
-    currentPage () {
-      return this.$route.name
-    },
-    phoneNumber () {
-      return this.phone ? this.phone.replace(/[^0-9a-zA-Z+]/g, '') : ''
-    },
-    ...mapGetters(['isAuth', 'userInfo', 'preloader', 'changeEmailModalOpen'])
-  },
-  components: {
-    MaskedInput,
-    changeEmail
-  },
-  created () {},
-  mounted () {
-    this.checkEmailVerificationModal()
-    this.fetchDataUser()
-    this.phone = this.formatPhoneNumber(this.phone)
   }
 }
 </script>
@@ -267,7 +207,6 @@ export default {
       margin-bottom: 32px;
       width: 100%;
     }
-
     p {
       margin-bottom: 0;
     }
