@@ -16,7 +16,7 @@
                        @emitErrorImage="errorImage">
             </app-image>
             <div v-if="product.freight" class="product-card-row__freight-label">
-              <svg-freight v-if="$mq === 'xl' || $mq === 'lg' || $mq === 'md'">
+              <svg-freight v-if="['md', 'lg', 'xl'].includes($mq)">
               </svg-freight>
               <span>Freight</span>
             </div>
