@@ -83,12 +83,12 @@
                             <div class="info-name item">{{ result.name }}</div>
                             <div class="item">
                               <div v-if="result.part_number" class="item mpn">
-                                <span class="label">mpn:</span>
+                                <span class="label">mpn: </span>
                                 <span class="value">{{ result.part_number }}</span>
                               </div>
 
                               <div class="item dealer-value">
-                                <span class="label">Dealer:</span>
+                                <span class="label">Dealer: </span>
                                 <span class="value">{{ result.dealer_name }}</span>
                               </div>
                             </div>

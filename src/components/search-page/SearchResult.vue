@@ -4,7 +4,7 @@
       <div class="search-result__header">
         <div class="search-result__header--info">
           <span class="counts">{{ resultTotalCounter }}</span>
-          <span>results found for </span>
+          <span> results found for </span>
           <span class="search-query">"{{ searchQuery }}"</span>
         </div>
       </div>
@@ -236,50 +236,35 @@
           </ais-index>
         </div>
       </div>
+
       <div class="search-result__navigation">
-        <div
-          v-if="searchNavigation.length"
-          class="search-result__navigation--sticky"
-          v-sticky="{ zIndex: 100, stickyTop: 150 }"
-        >
-          <div class="search-result__navigation--body">
-            <div
-              :class="{
-                'search-result__navigation--arrow--disabled':
-                  searchNavigation[0].active
-              }"
-              @click="changeActiveIndex('up', !searchNavigation[0].active)"
-              class="search-result__navigation--arrow up"
-            >
-              <svg-chevron></svg-chevron>
-            </div>
-            <div
-              class="item"
-              @click="changeActiveNav(nav)"
-              :class="{ 'item--active': nav.active }"
-              v-for="nav in searchNavigation"
-            >
-              <span class="name">{{ nav.name }}</span>
-              <div class="decorator"></div>
-            </div>
-            <div
-              :class="{
-                'search-result__navigation--arrow--disabled':
-                  searchNavigation[searchNavigation.length - 1].active
-              }"
-              @click="
-                changeActiveIndex(
-                  'down',
-                  !searchNavigation[searchNavigation.length - 1].active
-                )
-              "
-              class="search-result__navigation--arrow down"
-            >
-              <svg-chevron></svg-chevron>
-            </div>
+      <div v-if="searchNavigation.length"
+           class="search-result__navigation--sticky"
+           :key="searchQuery"
+           v-sticky="{ zIndex: 100, stickyTop: 150 }">
+        <div class="search-result__navigation--body">
+          <div :class="{ 'search-result__navigation--arrow--disabled': searchNavigation[0].active }"
+               @click="changeActiveIndex('up', !searchNavigation[0].active)"
+               class="search-result__navigation--arrow up">
+            <svg-chevron></svg-chevron>
+          </div>
+
+          <div class="item"
+               @click="changeActiveNav(nav)"
+               :class="{ 'item--active': nav.active }"
+               v-for="nav in searchNavigation">
+            <span class="name">{{ nav.name }}</span>
+            <div class="decorator"></div>
+          </div>
+          <div :class="{ 'search-result__navigation--arrow--disabled':  searchNavigation[searchNavigation.length - 1].active }"
+               @click="changeActiveIndex('down', !searchNavigation[searchNavigation.length - 1].active)"
+               class="search-result__navigation--arrow down">
+            <svg-chevron></svg-chevron>
           </div>
         </div>
       </div>
+    </div>
+
     </div>
   </div>
 </template>
@@ -299,6 +284,16 @@ import { EventBus } from '../../event-bus'
 
 export default {
   name: 'search-result',
+  components: {
+    ResultProduct,
+    categoryCard,
+    ResultDealer,
+    ResultVehicle
+  },
+  mixins: [AlgoliaApi, utils],
+  directives: {
+    sticky: VueSticky
+  },
   data () {
     return {
       searchQuery: this.$route.query.q,
@@ -326,13 +321,106 @@ export default {
       )
     }
   },
-  mixins: [AlgoliaApi, utils],
-  directives: {
-    sticky: VueSticky
+  computed: {
+    resultTotalCounter () {
+      let productCount = this.searchProducts._results.length
+        ? this.productTotal
+        : 0
+      let categoryCount = this.searchCategories._results.length
+        ? this.categoryTotal
+        : 0
+      let dealerCount = this.searchDealers._results.length
+        ? this.dealerTotal
+        : 0
+      let vehicleTotal = this.searchVehicles._results.length
+        ? this.vehicleTotal
+        : 0
+
+      return productCount + categoryCount + dealerCount + vehicleTotal
+    },
+    currentPaginationPage () {
+      return this.searchProducts._helper.state.page
+    },
+    productPaginationInfo () {
+      let page = this.searchProducts._helper.state.page + 1
+
+      if (page === 1) {
+        if (this.productTotal < this.productsLimit) {
+          return `1 - ${this.productTotal}`
+        } else {
+          return `1 - ${this.productsLimit}`
+        }
+      } else {
+        return `${page * this.productsLimit - this.productsLimit} - ${
+          page * this.productsLimit > this.productTotal
+            ? this.productTotal
+            : page * this.productsLimit
+          }`
+      }
+    },
+    vehiclePaginationInfo () {
+      let page = this.searchVehicles._helper.state.page + 1
+
+      if (page === 1) {
+        if (this.vehicleTotal < this.vehicleLimit) {
+          return `1 - ${this.vehicleTotal}`
+        } else {
+          return `1 - ${this.vehicleLimit}`
+        }
+      } else {
+        return `${page * this.vehicleLimit - this.vehicleLimit} - ${
+          page * this.vehicleLimit > this.vehicleTotal
+            ? this.vehicleTotal
+            : page * this.vehicleLimit
+          }`
+      }
+    },
+    searchNavigation () {
+      let arr = []
+
+      if (this.searchProducts._results.length) {
+        arr.push({
+          name: 'products',
+          active: this.$route.query.entity === 'products'
+        })
+      }
+      if (this.searchCategories._results.length) {
+        arr.push({
+          name: 'categories',
+          active: this.$route.query.entity === 'categories'
+        })
+      }
+      if (this.searchDealers._results.length) {
+        arr.push({
+          name: 'dealers',
+          active: this.$route.query.entity === 'dealers'
+        })
+      }
+      if (this.searchVehicles._results.length) {
+        arr.push({
+          name: 'vehicles',
+          active: this.$route.query.entity === 'vehicles'
+        })
+      }
+      return arr
+    },
   },
   watch: {
     currentPaginationPage () {
       this.$scrollTo(`#products`, 1500, { offset: -180 })
+    }
+  },
+  created () {
+    EventBus.$on('changeQueryFromSearchModal', () =>
+      this.scrollFromModalComponent()
+    )
+
+    document.addEventListener('scroll', this.scrollHandler)
+
+    if (this.$route.query.entity) {
+      setTimeout(() => {
+        this.$scrollTo(`#${this.$route.query.entity}`, 1500, { offset: -180 })
+      }, 1000)
     }
   },
   methods: {
@@ -410,115 +498,12 @@ export default {
       }
     }
   },
-  computed: {
-    resultTotalCounter () {
-      let productCount = this.searchProducts._results.length
-        ? this.productTotal
-        : 0
-      let categoryCount = this.searchCategories._results.length
-        ? this.categoryTotal
-        : 0
-      let dealerCount = this.searchDealers._results.length
-        ? this.dealerTotal
-        : 0
-      let vehicleTotal = this.searchVehicles._results.length
-        ? this.vehicleTotal
-        : 0
-
-      return productCount + categoryCount + dealerCount + vehicleTotal
-    },
-    currentPaginationPage () {
-      return this.searchProducts._helper.state.page
-    },
-    productPaginationInfo () {
-      let page = this.searchProducts._helper.state.page + 1
-
-      if (page === 1) {
-        if (this.productTotal < this.productsLimit) {
-          return `1 - ${this.productTotal}`
-        } else {
-          return `1 - ${this.productsLimit}`
-        }
-      } else {
-        return `${page * this.productsLimit - this.productsLimit} - ${
-          page * this.productsLimit > this.productTotal
-            ? this.productTotal
-            : page * this.productsLimit
-        }`
-      }
-    },
-    vehiclePaginationInfo () {
-      let page = this.searchVehicles._helper.state.page + 1
-
-      if (page === 1) {
-        if (this.vehicleTotal < this.vehicleLimit) {
-          return `1 - ${this.vehicleTotal}`
-        } else {
-          return `1 - ${this.vehicleLimit}`
-        }
-      } else {
-        return `${page * this.vehicleLimit - this.vehicleLimit} - ${
-          page * this.vehicleLimit > this.vehicleTotal
-            ? this.vehicleTotal
-            : page * this.vehicleLimit
-        }`
-      }
-    },
-    searchNavigation () {
-      let arr = []
-
-      if (this.searchProducts._results.length) {
-        arr.push({
-          name: 'products',
-          active: this.$route.query.entity === 'products'
-        })
-      }
-      if (this.searchCategories._results.length) {
-        arr.push({
-          name: 'categories',
-          active: this.$route.query.entity === 'categories'
-        })
-      }
-      if (this.searchDealers._results.length) {
-        arr.push({
-          name: 'dealers',
-          active: this.$route.query.entity === 'dealers'
-        })
-      }
-      if (this.searchVehicles._results.length) {
-        arr.push({
-          name: 'vehicles',
-          active: this.$route.query.entity === 'vehicles'
-        })
-      }
-      return arr
-    }
-  },
-  components: {
-    ResultProduct,
-    categoryCard,
-    ResultDealer,
-    ResultVehicle
-  },
   beforeRouteUpdate (to, from, next) {
     if (to.query.q !== from.query.q) {
       this.updateAlgoly()
       this.searchQuery = to.query.q
     }
     next()
-  },
-  created () {
-    EventBus.$on('changeQueryFromSearchModal', () =>
-      this.scrollFromModalComponent()
-    )
-
-    document.addEventListener('scroll', this.scrollHandler)
-
-    if (this.$route.query.entity) {
-      setTimeout(() => {
-        this.$scrollTo(`#${this.$route.query.entity}`, 1500, { offset: -180 })
-      }, 1000)
-    }
   },
   beforeDestroy () {
     EventBus.$off('changeQueryFromSearchModal')
@@ -539,7 +524,7 @@ export default {
   &__navigation {
     position: absolute;
     right: 5%;
-    top: 0;
+    top: -80px;
     height: 100%;
     width: 125px;
 
@@ -580,8 +565,8 @@ export default {
     }
 
     &--body {
-      top: 150px;
       position: relative;
+      top: 150px;
 
       .item {
         display: flex;
