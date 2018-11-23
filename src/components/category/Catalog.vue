@@ -342,8 +342,12 @@ export default {
       this.fetchFilters()
       this.checkSearchByVehicle()
     }
-
-    if (this.scrollPos) window.scrollTo({ top: this.scrollPos })
+  },
+  updated () {
+    if (this.scrollPos) {
+      window.scrollTo({ top: this.scrollPos })
+      this.scrollPos = 0
+    }
   },
   methods: {
     ...mapActions([
