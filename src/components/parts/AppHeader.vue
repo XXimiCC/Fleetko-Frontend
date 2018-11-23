@@ -605,7 +605,7 @@ export default {
       }
       &--controls {
         .hover-wrap {
-          width: 160px;
+          width: 100px;
         }
         .cart-wrap {
           margin-left: 16px;
