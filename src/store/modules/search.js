@@ -69,7 +69,10 @@ const actions = {
     })
   },
   setYearSearch ({commit}, year) {
-    commit(SEARCH_SET_YEAR, year)
+    if (state.searchMatrix[year]) {
+      commit(SEARCH_SET_YEAR, year)
+      return year
+    }
   },
   setBrandSearch ({commit}, brand) {
     commit(SEARCH_SET_BRAND, brand)
