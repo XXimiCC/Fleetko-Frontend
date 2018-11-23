@@ -228,14 +228,18 @@ export default {
     },
     ...mapActions(['setYearSearch', 'setBrandSearch', 'setModelSearch']),
     fetchSearch () {
-      this.$store.dispatch('fetchSearch').then(response => {
-        this.checkRouteQuery()
-      })
+      this.$store.dispatch('fetchSearch').then(() => this.checkRouteQuery())
     },
     checkRouteQuery () {
       this.setYearSearch(this.year)
-      this.setBrandSearch(this.brand)
-      this.setModelSearch(this.model)
+        .then(result => {
+          if (result) {
+            this.setBrandSearch(this.brand)
+            this.setModelSearch(this.model)
+          } else {
+            this.$store.dispatch('clearSearch', { year: true, brand: true, model: true })
+          }
+        })
     },
     fetchData () {
       this.$store
