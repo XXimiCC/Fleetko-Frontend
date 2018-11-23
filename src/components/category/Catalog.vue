@@ -346,7 +346,9 @@ export default {
   updated () {
     if (this.scrollPos) {
       window.scrollTo({ top: this.scrollPos })
-      this.scrollPos = 0
+      setTimeout(() => {
+        this.scrollPos = 0
+      }, 2000)
     }
   },
   methods: {
