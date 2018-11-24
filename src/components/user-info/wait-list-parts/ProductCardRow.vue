@@ -418,25 +418,23 @@ export default {
     align-items: center;
     span {
       &:last-child {
+        display: block;
+        position: relative;
+        top: 1px;
         max-width: 188px;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
         margin-left: 7px;
         color: $main-color;
-        font-family: $sours-sans-p-font;
-        font-weight: 600;
-        font-size: 14px;
-        line-height: 1;
+        font: 400 14px/19px $sours-sans-p-font;
         cursor: pointer;
       }
     }
   }
   &--dealer-label {
     color: $main-dark;
-    font-family: $sours-sans-p-font;
-    font-size: 14px;
-    font-weight: 600;
+    font: 600 14px/19px $sours-sans-p-font;
   }
   .button-block {
     position: relative;
