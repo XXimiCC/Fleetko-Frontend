@@ -179,7 +179,8 @@
                    v-model="edit.city"
                    @input="formInputHandler"
                    type="text" />
-            <span v-show="errors.has('city')" class="error-message-input">{{ errors.first('city') }}</span>
+            <span v-show="errors.has('city')" class="error-message-input">
+              {{ errors.first('city') ? errors.first('city').slice(0, -1) : '' }}</span>
           </div>
         </div>
 
@@ -249,7 +250,7 @@
         </div>
 
         <div class="account-info__edit-address--form-item button-margin">
-          <app-notification v-if="maxAddresses"
+          <app-notification v-if="maxAddresses && !editable"
                             :notification="{
                             text: 'You have exceeded the allowable limit of addresses in the Address Book. Please, delete or edit out-of-date addresses from the Address Book',
                             type: 'warning',
@@ -395,10 +396,9 @@ export default {
   },
   methods: {
     formInputHandler (e) {
-      let newPhone = this.phoneNumber !== this.phoneOldValue
-      let newState = this.selectedState.value !== this.selectedStateOldValue
+      if (!e.target) return
 
-      this.wasChanged = e.target || newPhone || newState
+      this.wasChanged = true
     },
     keyHandler (e) {
       if (e.keyCode === this.EVENT_KEY_SPACE || !_.includes(this.NUMBER_INPUT_AVAILABLE_KEYS, e.keyCode)) {
@@ -876,8 +876,20 @@ export default {
       }
       .vue-select {
         width: 544px;
+        border-radius: 4px;
         & /deep/ .selected-tag {
-          margin: 0 0 0 12px !important;
+          height: 100%;
+          padding: 0;
+          margin: 0 0 0 14px !important;
+        }
+
+        & /deep/ .vs__selected-options {
+          border-radius: 4px;
+        }
+        &.select-valid-error {
+          & /deep/ .dropdown-toggle {
+            background-color: transparent;
+          }
         }
       }
       .select-wrap {

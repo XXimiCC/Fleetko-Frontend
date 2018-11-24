@@ -130,10 +130,15 @@ export default {
       return this.phone ? this.phone.replace(/[^0-9a-zA-Z+]/g, '') : ''
     },
     nothingChanged () {
+      if (this.isFetching) return
+
+      const phone = this.userInfo.phone
+        ? this.phone.replace(/\D/g, '') === this.userInfo.phone.replace(/\D/g, '')
+        : !this.phone
+
       return this.firstName === this.userInfo.first_name &&
         this.lastName === this.userInfo.last_name &&
-        this.email === this.userInfo.email &&
-        !this.userInfo.phone && this.phone && this.userInfo.phone
+        this.email === this.userInfo.email && phone
     },
     ...mapGetters(['isAuth', 'userInfo', 'preloader', 'changeEmailModalOpen'])
   },
