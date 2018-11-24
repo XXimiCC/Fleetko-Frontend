@@ -383,7 +383,8 @@ export default {
         if (notification) this.$set(this.shippingWarehousesObject[key], 'notification', notification)
       })
     },
-    changeShippingAddress (value, key) {
+    schangeShippingAddress (value, key) {
+      // console.log(key)
       if (
         !_.some(this.shippingWarehousesObject[key].addressesSelect, {
           value: this.shippingWarehousesObject[key].defaultAddress.value

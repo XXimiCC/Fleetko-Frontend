@@ -54,11 +54,12 @@
           </div>
 
           <div class="product-card-row--dealer">
-            <span class="product-card-row--dealer-label">Dealer:</span>
-            <router-link :to="{ name: 'dealer', params: { slug: product.dealer_slug } }">
-              <span class="link-quaternary">{{ product.dealer_name }}</span>
+            <div class="label">Dealer:</div>
+            <router-link class="link" :to="{ name: 'dealer', params: { slug: product.dealer_slug } }">
+              {{ product.dealer_name }}
             </router-link>
           </div>
+
           <div class="responsive-price">
             <span class="responsive-price--available" v-if="product.price">${{ toDollarDecimal(product.price) }}</span>
             <span class="responsive-price--blurred" v-else>Unavailable</span>
@@ -412,30 +413,28 @@ export default {
     margin-left: 32px;
     margin-right: 133px;
   }
+
   &--dealer {
-    margin-top: 13px;
     display: flex;
     align-items: center;
-    span {
-      &:last-child {
-        display: block;
-        position: relative;
-        top: 1px;
-        max-width: 188px;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        margin-left: 7px;
-        color: $main-color;
-        font: 400 14px/19px $sours-sans-p-font;
-        cursor: pointer;
+    margin-bottom: 19px;
+    .label {
+      margin-right: 8px;
+      font: 600 14px $sours-sans-p-font;
+      border-bottom: 1px solid transparent;
+      color: $main-dark;
+    }
+    .link {
+      font: 600 14px $sours-sans-p-font;
+      color: $main-color;
+      border-bottom: 1px solid transparent;
+      cursor: pointer;
+      &:hover {
+        border-bottom: 1px dashed $main-color;
       }
     }
   }
-  &--dealer-label {
-    color: $main-dark;
-    font: 600 14px/19px $sours-sans-p-font;
-  }
+
   .button-block {
     position: relative;
     .delete-block {

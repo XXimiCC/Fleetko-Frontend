@@ -34,7 +34,7 @@
         </div>
 
         <div class="good__dealer">
-          <span class="label">Dealer:</span>
+          <div class="label">Dealer:</div>
           <router-link class="link" :to="{ name: 'dealer', params: { slug: good.dealer_slug } }">
             {{ good.dealer_name }}
           </router-link>
@@ -320,14 +320,12 @@ export default {
     display: flex;
     margin-bottom: 19px;
     .label {
-      display: block;
       margin-right: 8px;
       font: 600 14px $sours-sans-p-font;
       color: $main-dark;
     }
     .link {
-      display: block;
-      font: 400 14px $sours-sans-p-font;
+      font: 600 14px $sours-sans-p-font;
       color: $main-color;
       border-bottom: 1px solid transparent;
       cursor: pointer;

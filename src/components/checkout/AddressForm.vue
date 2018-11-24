@@ -470,6 +470,13 @@ export default {
         }
       }
     }
+    .vue-select[data-vv-name] {
+      & /deep/ .vs__selected-options {
+        & .selected-tag {
+          margin: 0 0 0 11px !important;
+        }
+      }
+    }
   }
   .checkbox {
     margin-left: 122px;
