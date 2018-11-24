@@ -107,8 +107,9 @@
                       <div v-show="addressSelectMode(key)">
                         <div class="form-select" :class="{ 'small-margin': house.notification }">
                           <label>Shipping Address</label>
-                          <div class="input-wrap" @click="switchOnSelect(house.warehouseId)">
+                          <div class="input-wrap" @click="switchOnSelect($event, house.warehouseId, house)">
                             <v-select @input="changeShippingAddress(house.defaultAddress, key)"
+                                      :ref="'select' + house.warehouseId"
                                       :class="{ 'not-verified': house.notVerified }"
                                       v-model="house.defaultAddress"
                                       id="select-shipping-address"
@@ -307,7 +308,8 @@ export default {
     this.enableWatcherForCart = true
   },
   methods: {
-    switchOnSelect (key) {
+    switchOnSelect (event, key, house) {
+      if (!event.target.className) this.changeShippingAddress(house.defaultAddress, key)
       this.$set(this.shippingWarehousesObject[key], 'enableSelect', true)
     },
     setAsDefaultAddress (
@@ -383,13 +385,10 @@ export default {
         if (notification) this.$set(this.shippingWarehousesObject[key], 'notification', notification)
       })
     },
-    schangeShippingAddress (value, key) {
-      // console.log(key)
-      if (
-        !_.some(this.shippingWarehousesObject[key].addressesSelect, {
-          value: this.shippingWarehousesObject[key].defaultAddress.value
-        }) &&
-        this.shippingWarehousesObject[key].enableSelect
+    changeShippingAddress (value, key) {
+      if (!_.some(this.shippingWarehousesObject[key].addressesSelect,
+          { value: this.shippingWarehousesObject[key].defaultAddress.value }) &&
+          this.shippingWarehousesObject[key].enableSelect
       ) {
         let mainAddress = this.shippingWarehousesObject[key].addressesSelect.find(address => address.default)
 
@@ -790,6 +789,14 @@ export default {
   margin-top: 16px;
   width: 100%;
   margin-left: 0;
+}
+
+.vue-select {
+  & /deep/ .vs__selected-options {
+    & .selected-tag {
+      margin: 0 0 0 16px !important;
+    }
+  }
 }
 
 .shipping-method {
