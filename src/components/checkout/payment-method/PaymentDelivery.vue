@@ -27,6 +27,32 @@
           <svg-check></svg-check>
         </div>
       </div>
+      <div
+        :class="{
+          active:
+            selectedCarrier && Object.keys(selectedCarrier)[0] === carrierKey
+        }"
+        @click="setCarrierActive(carrierKey)"
+        class="item"
+        v-for="(carrier, carrierKey) in carriers"
+      >
+        <div class="image-wrap">
+          <svg-usps v-if="carrierKey === 'USPS'"></svg-usps>
+          <svg-ups
+            :viewBox="$mq === 'sm' || $mq === 'xs' ? '0 0 60 60' : '-3 0 60 60'"
+            v-if="carrierKey === 'UPS'"
+          ></svg-ups>
+        </div>
+        <h3>{{ carrierKey }}</h3>
+        <div
+          v-if="
+            selectedCarrier && Object.keys(selectedCarrier)[0] === carrierKey
+          "
+          class="active-carrier"
+        >
+          <svg-check></svg-check>
+        </div>
+      </div>
     </div>
     <div
       class="payment-service__select"
@@ -169,15 +195,15 @@ export default {
     transition: all 0.2s;
     .item {
       position: relative;
-      margin-right: 32px;
+      margin-left: 32px;
       width: 160px;
       height: 160px;
       border: 1px solid $grey;
       border-radius: 4px;
       transition: all 0.2s;
       cursor: pointer;
-      &:nth-child(3n) {
-        margin-right: 0;
+      &:first-child {
+        margin-left: 0;
       }
       .image-wrap {
         margin-top: 32px;
@@ -233,6 +259,10 @@ export default {
     transition: all 0.2s;
     #select-carrier {
       position: relative;
+      & /deep/ .dropdown-toggle .vs__selected-options .selected-tag {
+        margin: 0 0 0 16px !important;
+        height: 100%;
+      }
     }
     &--title {
       h3 {

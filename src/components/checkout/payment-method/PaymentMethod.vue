@@ -76,7 +76,7 @@
               <textarea
                 name="payment-comment"
                 placeholder="Your Message (optional)"
-                :class="{ 'error-border': !isCommentValid }"
+                :class="{ 'error-textarea': !isCommentValid }"
                 @input="validateComment"
                 v-model="comment"
                 cols="30"

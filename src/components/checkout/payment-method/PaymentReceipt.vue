@@ -12,26 +12,18 @@
     </div>
 
     <div class="check__footer">
-      <div
-        class="check__footer--subtotal"
-        v-if="order.shipping_method !== 'pickup' && selectedService"
-      >
+      <div v-if="order.shipping_method !== 'pickup' && selectedService" class="check__footer--subtotal">
         <span>Shipping Price</span>
         <span>$ {{ toDollarDecimal(order.shipping_fee) }}</span>
       </div>
+
       <div class="check__footer--subtotal">
-        <span
-          >Tax ({{
-            (order.sales_tax_rate * 100).toLocaleString('en', {
-              minimumFractionDigits: 2
-            })
-          }}%)</span
-        >
+        <span>Tax ({{ (order.sales_tax_rate * 100).toLocaleString('en', { minimumFractionDigits: 2 })}}%)</span>
         <span>$ {{ countSalesTaxAmount() }}</span>
       </div>
-      <div class="check__footer--total">
-        <span>Total</span><span>$ {{ countTotalPrice() }}</span>
-      </div>
+
+      <div class="check__footer--total"><span>Total</span><span>$ {{ countTotalPrice() }}</span></div>
+
       <div class="check__footer--button"><slot name="treeButton"></slot></div>
     </div>
   </div>

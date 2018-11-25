@@ -190,6 +190,13 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.vue-select.select-payment-address {
+  & /deep/ .dropdown-toggle .vs__selected-options .selected-tag {
+    margin: 0 0 0 16px !important;
+    height: 100%;
+  }
+}
+
 .payment-billing {
   margin-bottom: 64px;
   &--title {
