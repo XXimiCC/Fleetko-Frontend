@@ -794,6 +794,7 @@ export default {
 .vue-select {
   & /deep/ .vs__selected-options {
     & .selected-tag {
+      height: 100%;
       margin: 0 0 0 16px !important;
     }
   }
