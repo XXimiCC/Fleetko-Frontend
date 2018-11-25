@@ -5,7 +5,8 @@
       'grey-out':
         order.status === 'failed' ||
         order.status === 'canceled' ||
-        order.status === 'payment_expired'
+        order.status === 'payment_expired' ||
+        order.status === 'abandoned'
     }"
   >
     <order-header
