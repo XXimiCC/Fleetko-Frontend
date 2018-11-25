@@ -11,17 +11,6 @@
         </div>
         <div class="item notification__body--status">
           <div class="icon-wrap">
-<<<<<<< HEAD
-            <svg-success
-              v-if="notification.type == 'success'"
-              height="24"
-              width="24"
-            ></svg-success>
-            <svg-error
-              v-if="notification.type == 'error' || notification.type == 'info'"
-            ></svg-error>
-            <svg-warning v-if="notification.type == 'warning'"></svg-warning>
-=======
             <svg-success v-if="notification.type === 'success'" height="24" width="24"></svg-success>
             <div v-if="notification.type === 'error' || notification.type === 'info'">
               <svg fill="#fff" height="48" viewBox="0 0 24 24" width="48" xmlns="http://www.w3.org/2000/svg">
@@ -30,7 +19,6 @@
               </svg>
             </div>
             <svg-warning v-if="notification.type === 'warning'"></svg-warning>
->>>>>>> 0e287bb... before cherrypick info icon, paste icon
           </div>
         </div>
         <div class="item notification__body--info">
