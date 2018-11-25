@@ -171,23 +171,14 @@ export default {
     },
     updateReview () {
       this.$validator.validateAll().then(result => {
-        this.isValidRating = this.selectedRate.position > 0
-
-        if (result && this.isValidRating) {
-          let review = Object.assign(
-            {},
-            {
-              reviewId: this.reviewId,
-              rating: this.selectedRate.position,
-              headline: this.reviewHeading,
-              text: this.reviewMessage,
-              productId: this.productId
-            }
-          )
-
-          this.productId
-            ? EventBus.$emit('createUserReview', review)
-            : EventBus.$emit('updateUserReview', review)
+        if (result && this.selectedRate.position > 0) {
+          EventBus.$emit(this.productId ? 'createUserReview' : 'updateUserReview', {
+            reviewId: this.reviewId,
+            rating: this.selectedRate.position,
+            headline: this.reviewHeading,
+            text: this.reviewMessage,
+            productId: this.productId
+          })
         }
       })
     }

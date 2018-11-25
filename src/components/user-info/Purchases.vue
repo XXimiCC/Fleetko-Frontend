@@ -81,63 +81,46 @@ export default {
   computed: {
     ...mapGetters(['updateReviewModal'])
   },
-  mounted () {
-    this.fetchPurchases()
-    this.updateReviewEventListener()
-    this.createReviewEventListener()
-  },
   methods: {
     fetchPurchases () {
       this.localLoader = true
 
-      this.$store
-        .dispatch('fetchPurchasedProducts', {
-          id: null,
-          page: this.pagination.currentPage
-        })
-        .then(
-          resp => {
-            this.purchases = resp.data
+      this.$store.dispatch('fetchPurchasedProducts', { id: null, page: this.pagination.currentPage })
+        .then(({ data, meta }) => {
+          this.purchases = data
+          this.localLoader = false
 
-            this.pagination = {
-              ready: true,
-              currentPage: resp.meta.current_page,
-              lastPage: resp.meta.last_page,
-              total: resp.meta.total
-            }
-
-            this.localLoader = false
-          },
-          () => {
-            this.localLoader = false
+          this.pagination = {
+            ready: true,
+            currentPage: meta.current_page,
+            lastPage: meta.last_page,
+            total: meta.total
           }
-        )
+        },
+        () => {
+          this.localLoader = false
+        }
+      )
     },
     loadMorePurchases () {
       this.localLoader = true
 
-      this.$store
-        .dispatch('fetchPurchasedProducts', {
-          id: null,
-          page: ++this.pagination.currentPage
-        })
-        .then(
-          resp => {
-            this.purchases = [...this.purchases, ...resp.data]
+      this.$store.dispatch('fetchPurchasedProducts', { id: null, page: ++this.pagination.currentPage })
+        .then(({ data, meta }) => {
+          this.purchases = [...this.purchases, ...data]
+          this.localLoader = false
 
-            this.pagination = {
-              ready: true,
-              currentPage: resp.meta.current_page,
-              lastPage: resp.meta.last_page,
-              total: resp.meta.total
-            }
-
-            this.localLoader = false
-          },
-          () => {
-            this.localLoader = false
+          this.pagination = {
+            ready: true,
+            currentPage: meta.current_page,
+            lastPage: meta.last_page,
+            total: meta.total
           }
-        )
+        },
+        () => {
+          this.localLoader = false
+        }
+      )
     },
     showConfirmForDelete (review) {
       this.reviewForDelete = review
@@ -150,9 +133,9 @@ export default {
     userDeleteReview (id) {
       this.localLoader = true
 
-      this.$store.dispatch('userDeleteReview', id).then(
-        () => {
-          let reviewForDelete = this.purchases.findIndex(good => good.review && good.review.id === id)
+      this.$store.dispatch('userDeleteReview', id)
+        .then(() => {
+          const reviewForDelete = this.purchases.findIndex(good => good.review && good.review.id === id)
 
           this.purchases[reviewForDelete].review = null
 
@@ -167,13 +150,13 @@ export default {
     updateProductReview (review) {
       this.localLoader = true
 
-      this.$store.dispatch('userUpdateReview', review).then(
-        response => {
-          let reviewForUpdate = this.purchases.findIndex(good => good.review && good.review.id === response.data.id)
+      this.$store.dispatch('userUpdateReview', review)
+        .then(({ data }) => {
+          let reviewForUpdate = this.purchases.findIndex(good => good.review && good.review.id === data.id)
 
-          delete response.data.product
+          delete data.product
 
-          this.purchases[reviewForUpdate].review = response.data
+          this.purchases[reviewForUpdate].review = data
           this.localLoader = false
         },
         () => {
@@ -183,14 +166,13 @@ export default {
 
       this.$store.dispatch('toggleUpdateReviewModal', { open: false })
     },
-    userCreateReview (review) {
+    createReview (review) {
       this.localLoader = true
 
       this.$store.dispatch('userCreateReview', review)
         .then(({ data }) => {
-          let productForCreate = this.purchases.findIndex(good => good.id === data.product_id)
-
-          this.purchases[productForCreate].review = data
+          const productIndex = this.purchases.findIndex(good => good.id === data.product_id)
+          this.purchases[productIndex].review = data
           this.localLoader = false
         },
         () => {
@@ -221,10 +203,15 @@ export default {
       EventBus.$on('updateUserReview', review => this.updateProductReview(review))
     },
     createReviewEventListener (destroy) {
-      if (destroy) EventBus.$off('createUserReview')
+      if (destroy) return EventBus.$off('createUserReview')
 
-      EventBus.$on('createUserReview', review => this.userCreateReview(review))
+      EventBus.$on('createUserReview', review => this.createReview(review))
     }
+  },
+  mounted () {
+    this.fetchPurchases()
+    this.updateReviewEventListener()
+    this.createReviewEventListener()
   },
   beforeDestroy () {
     this.updateReviewEventListener(true)
