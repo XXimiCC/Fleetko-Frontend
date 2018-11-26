@@ -751,7 +751,10 @@ export default {
         },
         error => {
           this.componentLoader = false
-          console.error(error)
+          if (error.status === 422) {
+            this.allowLeaveRoute = false
+            this.$router.replace({ name: 'cartPage' })
+          }
         }
       )
     }

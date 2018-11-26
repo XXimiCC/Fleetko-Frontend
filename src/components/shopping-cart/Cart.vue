@@ -630,6 +630,13 @@ export default {
       return this.$refs.swiperPopular.swiper
     }
   },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      if (from.name === 'shipping-method') {
+        vm.validateCartItem()
+      }
+    })
+  },
   beforeRouteLeave (to, from, next) {
     this.$store.dispatch('deleteSystemNotification')
     next()
