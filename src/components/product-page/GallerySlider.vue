@@ -2,13 +2,18 @@
   <div class="slider">
     <div class="slider__wrapper" :class="{ 'slider__wrapper--single': limitedImageQty.length < 2}">
       <div class="slider__counter">
-        image {{ defineCounter(activeSlide) + 1}} of {{ images.length }}
+        Image {{ activeSlide + 1}} of {{ images.length }}
       </div>
 
       <swiper ref="sliderEl" :options="sliderOpts" @slideChange="slideChanged">
         <swiper-slide class="swiper-slide" v-for="(img, i) in limitedImageQty" :key="i">
-          <div class="slider__slide">
-            <img :src="img.versions.big" alt="">
+          <div class="slider__slide" :data-index="i">
+          <app-image class="image-main"
+                     :imageObject="img"
+                     :imagePath="sliderImageMain(img)"
+                     @emitErrorImage="errorImage"
+                     :data-index="i">
+          </app-image>
           </div>
         </swiper-slide>
       </swiper>
@@ -30,7 +35,7 @@
            @click="goToSlide(i)"
            class="gallery__image"
            :class="{'gallery__image--active': activeSlide === i}">
-        <img :src="img.versions.tiny" alt="">
+        <img :src="$mq === 'sm' ? img.versions.tiny : img.versions.small" alt="">
       </div>
     </div>
   </div>
@@ -38,18 +43,27 @@
 
 <script>
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
+  import AppImage from '../parts/AppImage'
+  import utils from '@/mixins/utils'
+  import imageSource from '@/mixins/imagesSource'
 
   export default {
     name: 'GallerySlider',
-    components: { swiper, swiperSlide },
+    mixins: [utils, imageSource],
+    components: { swiper, swiperSlide, AppImage },
     props: ['images'],
     data () {
       return {
         activeSlide: 0,
         counterValue: 0,
+        startPos: 0,
         sliderOpts: {
           loop: false,
-          initialSlide: 0
+          initialSlide: 0,
+          on: {
+            touchEnd: e => this.touchEndHandler(e),
+            touchStart: e => this.touchStartHandler(e)
+          }
         }
       }
     },
@@ -59,15 +73,25 @@
       },
       limitedImageQty () {
         return this.images.length <= 10 ? this.images : this.images.slice(0, 9)
+      },
+      lastIndex () {
+        return this.limitedImageQty.length - 1
       }
     },
     methods: {
-      defineCounter () {
-        if (this.activeSlide > this.limitedImageQty.length - 1) {
-          return this.activeSlide - this.limitedImageQty.length
-        } else {
-          return this.activeSlide
-        }
+      touchStartHandler (event) {
+        const { target: { dataset: slide }, clientX } = event
+
+        if (slide.index < 1 || slide.index >= this.lastIndex) this.startPos = clientX
+      },
+      touchEndHandler (event) {
+        const { target: { dataset: slide }, clientX } = event
+        const dist = this.startPos - clientX
+        const hold = 85
+
+        if (slide.index < 1 && dist < -hold) this.swipePrev()
+        else if (slide.index >= this.lastIndex && dist > hold) setTimeout(() => this.swipeNext(), 10)
+        else this.sliderEl.update()
       },
       slideChanged () {
         this.activeSlide = this.sliderEl.activeIndex
@@ -77,14 +101,19 @@
         this.sliderEl.slideTo(this.activeSlide)
       },
       swipeNext () {
-        if (++this.activeSlide >= this.limitedImageQty.length) this.activeSlide = 0
-
-        this.sliderEl.slideTo(this.activeSlide)
+        if (this.activeSlide >= this.lastIndex) this.activeSlide = -1
+        this.sliderEl.slideTo(this.activeSlide + 1)
       },
       swipePrev () {
-        if (--this.activeSlide < 0) this.activeSlide = this.limitedImageQty.length - 1
+        if (this.activeSlide < 1) this.activeSlide = this.lastIndex + 1
 
-        this.sliderEl.slideTo(this.activeSlide)
+        this.sliderEl.slideTo(this.activeSlide - 1)
+      },
+      sliderImageMain (images, onError) {
+        return this.serverImageSource(images, 'big', onError, this.SERVER_IMAGE_PRODUCT)
+      },
+      errorImage (e, image) {
+        this.serverImageSource(image, null, e, this.SERVER_IMAGE_PRODUCT)
       }
     }
   }
@@ -158,7 +187,7 @@
         opacity: .2;
         transition: 0.25s;
         &:hover {
-          opacity: .5;
+          opacity: .9;
         }
       }
       svg {
@@ -174,11 +203,11 @@
   }
   .gallery {
     &__wrapper {
+      transform: translateY(-16px);
       width: 198px;
       margin-left: auto;
       font-size: 1.75rem;
       text-align: left;
-      overflow: hidden;
     }
     &__image {
       display: inline-flex;
