@@ -9,82 +9,40 @@
         <div class="row">
           <div class="footer__logo col-xl-2 col-lg-2 col-sm-12">
             <router-link :to="{ name: 'home' }">
-              <img class="logo-img" src="~@/assets/logo.svg" />
+              <img class="logo-img" src="~@/assets/logo.svg"  alt="Fleetko"/>
             </router-link>
           </div>
 
-          <div class="footer__sitemap col-xl-2 col-lg-2 col-sm-12">
-            <div class="footer__sitemap--title" @click="toggleSitemap">
-              <h3>Site map</h3>
-              <div
-                class="toggle-caret"
-                :class="{ 'toggle-caret--close': !openSitemap }"
-              >
+          <div class="footer__sitemap col-xl-3 col-lg-3 col-sm-12">
+            <div class="footer__sitemap--title" @click="toggleSiteMap">
+              <h4>Customer Service</h4>
+              <div class="toggle-caret" :class="{ 'toggle-caret--close': !openSiteMap }">
                 <svg-chevron></svg-chevron>
               </div>
             </div>
 
-            <ul v-if="openSitemap">
+            <ul v-if="openSiteMap">
               <li>
-                <router-link class="link-tertiary" :to="{ name: 'home' }"
-                  >Help Center</router-link
-                >
+                <router-link class="link-tertiary sm-link" :to="{ name: 'home' }">Return Policy</router-link>
               </li>
               <li>
-                <router-link class="link-tertiary" :to="{ name: 'home' }"
-                  >Track My Order</router-link
-                >
+                <router-link class="link-tertiary sm-link" :to="{ name: 'termsOfUse' }">Terms of Service</router-link>
               </li>
               <li>
-                <router-link class="link-tertiary" :to="{ name: 'home' }"
-                  >Return Policy</router-link
-                >
+                <router-link class="link-tertiary sm-link" :to="{ name: 'privacyPolicy' }">Privacy Policy</router-link>
               </li>
               <li>
-                <router-link class="link-tertiary" :to="{ name: 'termsOfUse' }"
-                  >Terms of Service</router-link
-                >
+                <router-link class="link-tertiary sm-link" :to="{ name: 'contactUs' }">Contact Us</router-link>
               </li>
               <li>
-                <router-link
-                  class="link-tertiary"
-                  :to="{ name: 'privacyPolicy' }"
-                  >Privacy Policy</router-link
-                >
-              </li>
-              <li>
-                <router-link class="link-tertiary" :to="{ name: 'contactUs' }"
-                  >Contact Us</router-link
-                >
-              </li>
-              <li>
-                <router-link class="link-tertiary" :to="{ name: 'home' }"
-                  >About Us</router-link
-                >
-              </li>
-              <li>
-                <router-link class="link-tertiary" :to="{ name: 'purchases' }"
-                  >Customer Reviews</router-link
-                >
-              </li>
-              <li>
-                <router-link class="link-tertiary" :to="{ name: 'home' }"
-                  >Coupon Codes</router-link
-                >
-              </li>
-              <li>
-                <router-link
-                  class="link-tertiary"
-                  :to="{ name: 'location', params: { id: 1 } }"
-                  >Locations</router-link
-                >
+                <router-link class="link-tertiary sm-link" :to="{ name: 'location', params: { id: 1 } }">Locations</router-link>
               </li>
             </ul>
           </div>
 
           <div class="footer__sections col-xl-2 col-lg-2 col-sm-12">
             <div class="footer__sections--title" @click="toggleSections">
-              <h3>Sections</h3>
+              <h4>Sections</h4>
               <div
                 class="toggle-caret"
                 :class="{ 'toggle-caret--close': !openSections }"
@@ -93,16 +51,10 @@
               </div>
             </div>
             <ul v-if="openSections">
-              <li
-                v-for="section in getSections"
-                itemscope
-                itemtype="http://www.schema.org/SiteNavigationElement"
-              >
-                <router-link
-                  class="link-tertiary"
-                  itemprop="url"
-                  :to="{ name: 'section', params: { slug: section.slug } }"
-                >
+              <li v-for="(section, index) in getSections" v-if="index < 6" itemscope itemtype="http://www.schema.org/SiteNavigationElement">
+                <router-link class="link-tertiary sm-link"
+                             itemprop="url"
+                             :to="{ name: 'section', params: { slug: section.slug } }">
                   <span itemprop="name">{{ section.name }}</span>
                 </router-link>
               </li>
@@ -110,96 +62,27 @@
           </div>
 
           <div class="footer__socials col-xl-2 col-lg-2 col-sm-12">
-            <div class="footer__socials--title"><h3>Follow Us</h3></div>
+            <div class="footer__socials--title"><h4>Follow Us</h4></div>
             <ul class="footer__socials--icons">
-              <li>
-                <router-link
-                  :to="{ name: 'home' }"
-                  class="footer__socials--google"
-                >
-                  Google Plus
-                </router-link>
-              </li>
-              <li>
-                <router-link
-                  :to="{ name: 'home' }"
-                  class="footer__socials--facebook"
-                >
-                  Facebook
-                </router-link>
-              </li>
-              <li>
-                <router-link
-                  :to="{ name: 'home' }"
-                  class="footer__socials--linkedin"
-                >
-                  Linkedin
-                </router-link>
-              </li>
-              <li>
-                <router-link
-                  :to="{ name: 'home' }"
-                  class="footer__socials--instagram"
-                >
-                  Instagram
-                </router-link>
-              </li>
+              <li><router-link :to="{ name: 'home' }" class="link-tertiary sm-link">Facebook</router-link></li>
+              <li><router-link :to="{ name: 'home' }" class="link-tertiary sm-link">Instagram</router-link></li>
             </ul>
           </div>
 
           <div class="footer__contact col-xl-3 col-lg-3 col-sm-12">
-            <div class="footer__contact--title"><h3>Contact</h3></div>
-            <div class="footer__contact--row">
-              <div class="icon-wrap"><svg-map-pointer></svg-map-pointer></div>
-              <div
-                class="list-wrap"
-                itemprop="address"
-                itemscope
-                itemtype="http://schema.org/PostalAddress"
-              >
-                <ul>
-                  <li itemprop="streetAddress">
-                    701 South Gifford Avenue #109
-                  </li>
-                  <li itemprop="addressLocality">
-                    San Bernardino, California
-                    <span itemprop="postalCode">92408</span>
-                  </li>
-                </ul>
-              </div>
+            <div class="footer__contact--title"><h4>We Gladly Accept</h4></div>
+            <div class="footer__contact--pay">
+              <svg-visa></svg-visa>
+              <svg-master-card></svg-master-card>
+              <svg-pay-pal></svg-pay-pal>
+              <svg-am-exp></svg-am-exp>
             </div>
-            <div class="footer__contact--row">
-              <div class="icon-wrap"><svg-phone></svg-phone></div>
-              <div class="list-wrap">
-                <ul>
-                  <li>
-                    <span class="label">Toll Free:</span>
-                    <span class="value">(828) 477-4083</span>
-                  </li>
-                  <li>
-                    <span class="label">International:</span>
-                    <span itemprop="telephone" class="value"
-                      >1.609.964.1983</span
-                    >
-                  </li>
-                  <li>
-                    <span class="label">Fax:</span>
-                    <span class="value">1.609.964.1983</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div class="footer__contact--row">
-              <div class="icon-wrap">
-                <svg-envelope-fill></svg-envelope-fill>
-              </div>
-              <div class="list-wrap">
-                <ul>
-                  <li itemprop="email">
-                    <span class="label">Email:</span>
-                    <span class="value">sales@fleetzoneinc.com</span>
-                  </li>
-                </ul>
+            <div class="footer__contact--delivery">
+              <div class="footer__contact--title"><h4>Delivery</h4></div>
+              <div class="carriers">
+                <svg-postal-service></svg-postal-service>
+                <svg-fedex width="64px"></svg-fedex>
+                <svg-ups width="38px"></svg-ups>
               </div>
             </div>
           </div>
@@ -208,44 +91,40 @@
     </div>
 
     <div class="footer__bottom">
-      <p>
-        © 2015 - 2017 • www.truckandshop.com • Truck & Shop Trucks Spare Parts
-        and Services
-      </p>
+      <p>© 2015 - 2017 • www.truckandshop.com • Truck & Shop Trucks Spare Parts and Services</p>
     </div>
   </div>
 </template>
 
 <script>
-import $ from 'jquery'
 import { mapGetters } from 'vuex'
 
 export default {
   name: 'app-footer',
   data () {
     return {
-      openSitemap: true,
+      openSiteMap: true,
       openSections: true
-    }
-  },
-  methods: {
-    scrollToTop () {
-      $('html, body').animate({ scrollTop: 0 }, 500)
-    },
-    toggleSitemap () {
-      if (this.$mq !== 'xl' && this.$mq !== 'lg') { this.openSitemap = !this.openSitemap }
-    },
-    toggleSections () {
-      if (this.$mq !== 'xl' && this.$mq !== 'lg') { this.openSections = !this.openSections }
     }
   },
   computed: {
     ...mapGetters(['getSections'])
+  },
+  methods: {
+    scrollToTop () {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    },
+    toggleSiteMap () {
+      if (this.$mq !== 'xl' && this.$mq !== 'lg') { this.openSiteMap = !this.openSiteMap }
+    },
+    toggleSections () {
+      if (this.$mq !== 'xl' && this.$mq !== 'lg') { this.openSections = !this.openSections }
+    }
   }
 }
 </script>
 
-<style lang="scss" scoped="">
+<style lang="scss" scoped>
 .footer-wrap {
   margin-top: 128px;
   padding-top: 64px;
@@ -293,8 +172,8 @@ export default {
   }
   &__sitemap {
     &--title {
-      h3 {
-        margin-bottom: 28px;
+      h4 {
+        margin-bottom: 24px;
         color: $main-dark;
       }
       .toggle-caret {
@@ -315,8 +194,8 @@ export default {
   }
   &__sections {
     &--title {
-      h3 {
-        margin-bottom: 28px;
+      h4 {
+        margin-bottom: 24px;
         color: $main-dark;
       }
       .toggle-caret {
@@ -337,81 +216,44 @@ export default {
   }
   &__contact {
     &--title {
-      h3 {
-        margin-bottom: 28px;
+      h4 {
+        margin-bottom: 24px;
         color: $main-dark;
       }
     }
-    &--row {
+    &--pay {
+      height: 32px;
       display: flex;
-      .icon-wrap {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 2px;
-        width: 32px;
-        height: 32px;
-        background: #d0defb;
-        border-radius: 100%;
-        svg {
-          fill: $main-color;
-          height: 18px;
-        }
-      }
-      .list-wrap {
-        margin-left: 16px;
-        ul {
-          padding-left: 0;
-          list-style: none;
-          margin-bottom: 0;
-          li {
-            line-height: 19px;
-            color: $dark-grey;
-            font-family: $sours-sans-p-font;
-            font-size: 14px;
-            .label {
-              font-weight: 600;
-              color: $main-dark;
-            }
-          }
-          li + li {
-            margin-top: 6px;
-          }
-        }
+      flex-flow: row nowrap;
+      justify-content: space-between;
+      margin-bottom: 36px;
+      svg + svg {
+        margin-left: 12px;
       }
     }
-    .footer__contact--row + .footer__contact--row {
-      margin-top: 32px;
+    &--delivery {
+      .carriers {
+        height: 38px;
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+        margin-top: -4px;
+        svg + svg {
+          margin-left: 12px;
+        }
+      }
     }
   }
   &__socials {
     &--title {
-      h3 {
-        margin-bottom: 28px;
+      h4 {
+        margin-bottom: 24px;
         color: $main-dark;
       }
     }
     &--icons {
       padding-left: 0;
       list-style: none;
-      a {
-        font-size: 12px;
-        font-weight: 500;
-        font-family: $montserrat-font;
-        text-transform: uppercase;
-      }
-    }
-    &--google {
-      color: #f34a38;
-    }
-    &--facebook {
-      color: #3b5998;
-    }
-    &--linkedin {
-      color: #00a0dc;
-    }
-    &--instagram {
-      color: #421ccd;
     }
   }
 }
@@ -446,7 +288,7 @@ export default {
         align-items: center;
         justify-content: space-between;
         cursor: pointer;
-        h3 {
+        h4 {
           margin-bottom: 0;
         }
         .toggle-caret {
@@ -487,7 +329,7 @@ export default {
         align-items: center;
         justify-content: space-between;
         cursor: pointer;
-        h3 {
+        h4 {
           margin-bottom: 0;
         }
         .toggle-caret {
@@ -521,6 +363,9 @@ export default {
     }
     &__contact {
       margin-top: 27px;
+      &--pay, .carriers {
+        justify-content: flex-start;
+      }
     }
     &__socials {
       margin-top: 40px;

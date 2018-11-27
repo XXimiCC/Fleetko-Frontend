@@ -1,18 +1,13 @@
 <template>
   <div class="header">
     <transition name="fade">
-      <header-notification
-        v-if="getSystemNotification.message"
-      ></header-notification>
+      <header-notification v-if="getSystemNotification.message"></header-notification>
     </transition>
     <div class="col-xl-12 border-bottom">
       <div class="container scoped-response scoped-response-support ">
         <div class="header__top">
-          <div class="item"><span>800.505.3274</span></div>
-          <div class="item">
-            <span>Shipping and payment</span> <span>Sell</span>
-            <span>Support</span> <span>Help Center</span>
-          </div>
+          <div class="item telephone"><svg-phone></svg-phone><a href="tel:+13605677873">(360) 567-7873</a></div>
+          <div class="item mail">sales@fleetko.com</div>
         </div>
       </div>
     </div>
@@ -31,9 +26,7 @@
                    @input="$event.target.value = ''"
                    class="input-default"
                    placeholder="Find Products, Categories, Dealers and more..." />
-            <div class="header__main--search--icon">
-              <svg-search></svg-search>
-            </div>
+            <div class="header__main--search--icon"><svg-search></svg-search></div>
           </div>
         </div>
       </div>
@@ -49,7 +42,7 @@
               <img v-if="isAuth"
                    :src="userImageSrc(userInfo, 64)"
                    alt="user-avatar"/>
-              <svg-user v-if="!isAuth"></svg-user>
+              <svg-user-radius v-if="!isAuth"></svg-user-radius>
               <i v-if="isAuth"
                  :class="{ rotate: showInfo }"
                  class="fa fa-angle-down"
@@ -67,7 +60,10 @@
             <button :class="{ 'cart-hover': showBasket }" class="cart-wrap--button">
               <span>$ {{ toDollarDecimal(getTotalPriceCart) }}</span>
               <svg-basket></svg-basket>
-              <div class="cart-wrap--button__counter">{{ getTotalQuantityCart }}</div>
+              <div :class="{ 'grey-counter': !getTotalAmountCart }"
+                   class="cart-wrap--button__counter">
+                {{ getTotalQuantityCart }}
+              </div>
             </button>
             <dropdown-shopping-cart v-if="showBasket"></dropdown-shopping-cart>
           </router-link>
@@ -207,8 +203,7 @@ export default {
   },
   created () {
     this.checkButtonStatus()
-  },
-  mounted () {}
+  }
 }
 </script>
 
@@ -224,17 +219,10 @@ export default {
 
 .header {
   width: 100%;
-  -webkit-transform: translateZ(0);
-  box-shadow: 0px 0px 9.5px 0.5px rgba(102, 102, 102, 0.2);
-  transition: transform 0.5s;
+  box-shadow: 0 0 9.5px 0.5px rgba(102, 102, 102, 0.2);
   background: white;
+  transform: translateZ(0);
   z-index: 600;
-  &.transition {
-    /*transition: transform 0.5s;*/
-  }
-  &.scrollup {
-    /*transform: translateY(-157px)*/
-  }
 }
 
 .support-phone,
@@ -254,17 +242,11 @@ export default {
   }
 }
 
-.search-btn {
-  width: 45%;
-  border-radius: 0px 5px 5px 0px;
-}
-
 .user-name {
   text-transform: none;
 }
 
 .hover-wrap {
-  width: 186px;
   position: relative;
   z-index: 1000;
   display: flex;
@@ -282,15 +264,12 @@ export default {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      margin-right: 15px;
-      font-family: $montserrat-font;
+      margin-right: 24px;
+      font: 500 12px $montserrat-font;
       color: $main-dark;
-      font-size: 12px;
-      font-weight: 500;
     }
     svg {
-      width: 28px;
-      height: 28px;
+      width: 24px;
       fill: $main-dark;
     }
     img {
@@ -361,7 +340,7 @@ export default {
     }
     span {
       max-width: 70px;
-      margin-right: 16px;
+      margin-right: 24px;
       font-family: $montserrat-font;
       color: $main-dark;
       font-size: 12px;
@@ -379,13 +358,15 @@ export default {
       justify-content: center;
       height: 20px;
       width: 20px;
-      background: $main-color;
+      background: $main-gradient;
       border-radius: 2px;
+      border: 1px solid #fff;
       font-family: $sours-sans-p-font;
       font-size: 12px;
       line-height: 1;
       color: white;
-      span {
+      &.grey-counter {
+        background: $dark-grey;
       }
     }
   }
@@ -430,6 +411,23 @@ export default {
     align-items: center;
     justify-content: space-between;
     .item {
+      &.telephone {
+        display: flex;
+        align-items: center;
+        svg {
+          width: 16px;
+          margin-right: 6px;
+          fill: $main-grey;
+        }
+        a {
+          font: 12px $sours-sans-p-font;
+          color: $main-grey;
+        }
+      }
+      &.mail {
+        font: 12px $sours-sans-p-font;
+        color: $main-grey;
+      }
       display: inline-flex;
       span {
         font-family: $sours-sans-p-font;
@@ -481,9 +479,9 @@ export default {
       }
       input {
         padding: 16px;
-        width: 490px;
+        width: 392px;
         height: 40px;
-        border-radius: 4px 0px 0px 4px;
+        border-radius: 4px 0 0 4px;
       }
       button {
         display: flex;
@@ -528,31 +526,11 @@ export default {
       align-items: center;
       justify-content: space-between;
       width: 325px;
-      .fix-hover {
-        position: absolute;
-        width: 100%;
-        height: 15px;
-        opacity: 0;
-        left: 0;
-      }
-
-      .logged {
-        background: white;
-        box-shadow: 0 0 12px rgba(21, 101, 192, 0.15);
-        color: #5e92f3 !important;
-        svg {
-          fill: #5e92f3;
-        }
-        i {
-          margin-left: 15px;
-          font-size: 20px;
-        }
-      }
     }
   }
   &__bottom {
     position: relative;
-    padding: 0 16px;
+    padding: 0 16px 8px 16px;
     display: flex;
     align-items: center;
     margin-top: 32px;
@@ -563,12 +541,10 @@ export default {
       position: relative;
       cursor: pointer;
       z-index: 200;
-      &:hover {
-      }
       span {
-        font-family: $montserrat-font;
+        font-family: $sours-sans-p-font;
         color: $main-dark;
-        font-size: 12px;
+        font-size: 14px;
         text-transform: capitalize;
       }
     }
@@ -577,7 +553,7 @@ export default {
         position: absolute;
         content: '';
         width: 0;
-        bottom: -6px;
+        bottom: -13px;
         left: calc(50% - 4px);
         height: 0;
         border-style: solid;
@@ -604,9 +580,6 @@ export default {
         margin-right: 55px;
       }
       &--controls {
-        .hover-wrap {
-          width: 100px;
-        }
         .cart-wrap {
           margin-left: 16px;
         }
@@ -632,9 +605,6 @@ export default {
         margin-right: 55px;
       }
       &--controls {
-        .hover-wrap {
-          width: 160px;
-        }
         .cart-wrap {
           margin-left: 16px;
         }
