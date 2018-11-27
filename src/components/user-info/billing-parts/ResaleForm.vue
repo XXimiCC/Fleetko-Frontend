@@ -3,28 +3,24 @@
     <new-modal @cancel="$emit('cancel')" :confirmClose="!nothingChanged()">
       <template slot="header">
         <div class="form__icon"><svg-add></svg-add></div>
-        <p class="form__title">
-          {{ permit ? 'Edit Certificate' : 'Add Certificate' }}
-        </p>
+        <p class="form__title">{{ permit ? 'Edit Certificate' : 'Add Certificate' }}</p>
       </template>
 
       <template slot="body">
         <div class="inputs">
           <label>
             <p>State</p>
-            <v-select
-              id="state-select"
-              :class="{ 'input-error': errors.has('state-abbr') }"
-              name="state-abbr"
-              v-validate="'required'"
-              v-model="newPermit.state"
-              label="name"
-              placeholder="AL"
-              :options="statesOptions"
-              :transition="'false'"
-              :searchable="false"
-              max-height="330px"
-            >
+            <v-select id="state-select"
+                      :class="{ 'input-error': errors.has('state-abbr') }"
+                      name="state-abbr"
+                      v-validate="'required'"
+                      v-model="newPermit.state"
+                      label="name"
+                      placeholder="AL"
+                      :options="statesOptions"
+                      :transition="'false'"
+                      :searchable="false"
+                      max-height="330px">
               <template slot="option" slot-scope="option">
                 <span class="state-abbr">{{ option.abbr }}</span>
                 <span class="state-name">{{ option.name }}</span>
@@ -38,40 +34,30 @@
 
           <label>
             <p>Company Name</p>
-            <input
-              class="input-default-new-design"
-              v-model="newPermit.business_name"
-              :class="{ 'input-error': errors.has('permit-company') }"
-              name="permit-company"
-              v-validate="'required|max:80'"
-              type="text"
-              placeholder="Google"
-            />
+            <input class="input-default-new-design"
+                   v-model="newPermit.business_name"
+                   :class="{ 'input-error': errors.has('permit-company') }"
+                   name="permit-company"
+                   v-validate="'required|max:80'"
+                   type="text"
+                   placeholder="Google" />
 
-            <span
-              v-show="errors.has('permit-company')"
-              class="error-message-input"
-            >
+            <span v-show="errors.has('permit-company')" class="error-message-input">
               {{ errors.first('permit-company') }}
             </span>
           </label>
 
           <label>
             <p>Permit Number</p>
-            <input
-              class="input-default-new-design"
-              v-model="newPermit.permit_number"
-              :class="{ 'input-error': errors.has('permit-number') }"
-              name="permit-number"
-              v-validate="'required|max:20'"
-              type="text"
-              placeholder="2441542324435"
-            />
+            <input class="input-default-new-design"
+                   v-model="newPermit.permit_number"
+                   :class="{ 'input-error': errors.has('permit-number') }"
+                   name="permit-number"
+                   v-validate="'required|max:20'"
+                   type="text"
+                   placeholder="2441542324435" />
 
-            <span
-              v-show="errors.has('permit-number')"
-              class="error-message-input"
-            >
+            <span v-show="errors.has('permit-number')" class="error-message-input">
               {{ errors.first('permit-number') }}
             </span>
           </label>
@@ -79,36 +65,29 @@
           <div class="date-picker">
             <label>
               <p>Effective Date</p>
-              <date-picker
-                v-model="newPermit.effective_date"
-                format="DD/MM/YYYY"
-                :class="{ 'input-error': errors.has('effective_date') }"
-                name="effective_date"
-                v-validate="'required'"
-                :not-after="newPermit.expiration_date"
-                placeholder="01/01/2018"
-                lang="en"
-              >
+              <date-picker v-model="newPermit.effective_date"
+                           format="DD/MM/YYYY"
+                           :class="{ 'input-error': errors.has('effective_date') }"
+                           name="effective_date"
+                           v-validate="'required'"
+                           :not-after="newPermit.expiration_date"
+                           placeholder="01/01/2018"
+                           lang="en">
               </date-picker>
 
-              <span
-                v-show="errors.has('effective_date')"
-                class="error-message-input"
-              >
+              <span v-show="errors.has('effective_date')" class="error-message-input">
                 {{ errors.first('effective_date') }}
               </span>
             </label>
 
             <label>
               <p>Expiration Date</p>
-              <date-picker
-                v-model="newPermit.expiration_date"
-                format="DD/MM/YYYY"
-                name="expiration_date"
-                :not-before="newPermit.effective_date"
-                placeholder="01/01/2018"
-                lang="en"
-              >
+              <date-picker v-model="newPermit.expiration_date"
+                           format="DD/MM/YYYY"
+                           name="expiration_date"
+                           :not-before="newPermit.effective_date"
+                           placeholder="01/01/2018"
+                           lang="en">
               </date-picker>
             </label>
           </div>
@@ -116,13 +95,11 @@
           <div class="file-picker" :class="{ 'has-error': documentError }">
             <label>
               <p>Attach File</p>
-              <uploader
-                :opts="uploaderOptions"
-                :currentFile="permit"
-                @success="loadFileHandler"
-                @deleted="deleteFileHandler"
-                @error="errorFileHandler"
-              >
+              <uploader :opts="uploaderOptions"
+                        :currentFile="permit"
+                        @success="loadFileHandler"
+                        @deleted="deleteFileHandler"
+                        @error="errorFileHandler">
               </uploader>
 
               <span v-show="documentError" class="error-message-input">
@@ -132,36 +109,28 @@
           </div>
 
           <div v-if="notification" class="notification">
-            <main-notify
-              :notification="notification"
-              :cancelable="true"
-              @clearNotify="notification = null"
-            >
+            <main-notify :notification="notification"
+                         :cancelable="true"
+                         @clearNotify="notification = null">
             </main-notify>
           </div>
 
-          <button
-            v-if="!isLoading"
-            :disabled="isButtonDisabled"
-            @click="validateForm"
-            class="button-prime"
-          >
+          <button v-if="!isLoading"
+                  :disabled="isButtonDisabled"
+                  @click="validateForm"
+                  class="button-prime">
             {{ permit ? 'Update Certificate' : 'Add Certificate' }}
           </button>
 
           <div v-if="isLoading" class="preloader">
             <span class="processing">processing</span>
-            <span class="ellipsis-anim"
-              ><span></span><span></span><span></span
-            ></span>
+            <span class="ellipsis-anim"><span></span><span></span><span></span></span>
           </div>
 
-          <confirm-dialog
-            v-if="showConfirm"
-            :type="'closeBillingForm'"
-            @confirm="$emit('cancel')"
-            @cancel="showConfirm = false"
-          >
+          <confirm-dialog v-if="showConfirm"
+                          :type="'closeBillingForm'"
+                          @confirm="$emit('cancel')"
+                          @cancel="showConfirm = false">
           </confirm-dialog>
         </div>
       </template>
@@ -171,7 +140,6 @@
 
 <script>
 import NewModal from '../../modals/NewModal'
-
 import vSelect from 'vue-select'
 import usaData from '../../../usaMap'
 import DatePicker from 'vue2-datepicker'
@@ -393,6 +361,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+#state-select {
+  & /deep/ .dropdown-toggle .vs__selected-options .selected-tag {
+    margin: 0 0 0 11px !important;
+    height: 100%;
+  }
+  & /deep/ input {
+    padding: 0 16px;
+  }
+}
+
 .form {
   position: relative;
   z-index: 10000;
