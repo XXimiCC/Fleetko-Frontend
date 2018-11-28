@@ -27,12 +27,15 @@
               </div>
 
               <app-notification
+                :notification="shippingErrorNotification"
+                v-if="shippingError"
+                class="notification-wrap">
+              </app-notification>
+
+              <app-notification
                 :notification="invalidWarehouseNotification"
-                v-if="
-                  invalidWarehouses.includes(key) && !isAnimateWarehouseWarning
-                "
-                class="notification-wrap"
-              >
+                v-if="invalidWarehouses.includes(key) && !isAnimateWarehouseWarning"
+                class="notification-wrap">
               </app-notification>
 
               <div class="cart-page__body--warehouse__labels">
@@ -290,7 +293,6 @@ import AppNotification from '../notifications/MainNotify.vue'
 import ConfirmDialog from '@/components/modals/ConfirmDialog'
 import CartFreightInfo from './CartFreightInfo'
 import Vue from 'vue'
-import $ from 'jquery'
 import VueSticky from 'vue-sticky'
 import _ from 'lodash'
 import utils from '@/mixins/utils'
@@ -301,6 +303,19 @@ import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
 export default {
   name: 'ShoppingCart',
+  components: {
+    ErrorBox,
+    ConfirmDialog,
+    swiper,
+    swiperSlide,
+    AppImage,
+    CartFreightInfo,
+    AppNotification
+  },
+  directives: {
+    sticky: VueSticky
+  },
+  mixins: [utils, imageSource],
   data () {
     return {
       allowInput: true,
@@ -309,6 +324,14 @@ export default {
       errorBag: [],
       warningBag: [],
       invalidWarehouses: [],
+      shippingError: false,
+      shippingErrorNotification: {
+        type: 'warning',
+        cancelable: true,
+        text: [
+          'Shipping error'
+        ].join(' ')
+      },
       invalidWarehouseNotification: {
         type: 'warning',
         cancelable: false,
@@ -332,10 +355,21 @@ export default {
       localLoader: false
     }
   },
-  directives: {
-    sticky: VueSticky
+  computed: {
+    ...mapGetters([
+      'getUserCart',
+      'getTotalPriceCart',
+      'getTotalQuantityCart',
+      'getTotalAmountCart',
+      'isAuth',
+      'loading',
+      'enableSearch',
+      'getSearchOptions'
+    ]),
+    swiperPopular () {
+      return this.$refs.swiperPopular.swiper
+    }
   },
-  mixins: [utils, imageSource],
   watch: {
     getTotalPriceCart () {
       this.clientProducts = _.cloneDeep(this.getUserCart.cart)
@@ -346,16 +380,27 @@ export default {
         if (this.loggedFromCart) {
           this.$store
             .dispatch('mergeServerCart')
-            .then(() => this.validateCartItem(), err => console.log(err))
+            .then(() => this.validateCartItem())
         } else {
-          this.$store.dispatch('getServerCart', true).then(
-            () => {
+          this.$store.dispatch('getServerCart', true)
+            .then(() => {
               this.clientProducts = _.cloneDeep(this.getUserCart.cart)
-            },
-            err => console.log(err)
-          )
+            })
         }
       }
+    }
+  },
+  beforeRouteLeave (to, from, next) {
+    this.$store.dispatch('deleteSystemNotification')
+    next()
+  },
+  mounted () {
+    this.clientProducts = _.cloneDeep(this.getUserCart.cart)
+    this.freightInfoBox()
+
+    if (this.$route.query.merge) {
+      this.validateCartItem()
+      this.shippingError = true
     }
   },
   methods: {
@@ -589,7 +634,7 @@ export default {
               { offset: -300 }
             )
             this.localLoader = false
-          } else this.checkout()
+          } else if (!this.$route.query.merge) this.checkout()
         })
       } else {
         this.$store.dispatch('toggleLoginModal', {
@@ -606,62 +651,18 @@ export default {
       }, 1000)
     },
     checkout () {
-      this.$store.dispatch('mergeServerCart').then(
-        () => {
+      this.$store.dispatch('mergeServerCart')
+        .then(() => {
           this.localLoader = false
           this.$router.push({ name: 'shipping-method' })
-        },
-        err => console.log(err)
+        }
       )
     }
-  },
-  computed: {
-    ...mapGetters([
-      'getUserCart',
-      'getTotalPriceCart',
-      'getTotalQuantityCart',
-      'getTotalAmountCart',
-      'isAuth',
-      'loading',
-      'enableSearch',
-      'getSearchOptions'
-    ]),
-    swiperPopular () {
-      return this.$refs.swiperPopular.swiper
-    }
-  },
-  beforeRouteEnter (to, from, next) {
-    next(vm => {
-      if (from.name === 'shipping-method') {
-        vm.validateCartItem()
-      }
-    })
-  },
-  beforeRouteLeave (to, from, next) {
-    this.$store.dispatch('deleteSystemNotification')
-    next()
-  },
-  mounted () {
-    this.clientProducts = _.cloneDeep(this.getUserCart.cart)
-    this.freightInfoBox()
-  },
-  created () {
-    $(document).on('wheel', 'input[type=number]', function () {
-      $(this).blur()
-    })
-  },
-  components: {
-    ErrorBox,
-    ConfirmDialog,
-    swiper,
-    swiperSlide,
-    AppImage,
-    CartFreightInfo,
-    AppNotification
   }
 }
 </script>
-<style lang="scss" scoped="">
+
+<style lang="scss" scoped>
 .cart-page {
   padding-top: 64px;
   padding-bottom: 100px;

@@ -753,7 +753,7 @@ export default {
           this.componentLoader = false
           if (error.status === 422) {
             this.allowLeaveRoute = false
-            this.$router.replace({ name: 'cartPage' })
+            this.$router.push({ name: 'cartPage', query: { merge: 'conflict' } })
           }
         }
       )
