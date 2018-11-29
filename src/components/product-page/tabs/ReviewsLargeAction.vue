@@ -77,7 +77,7 @@
         <div class="input-wrap">
           <textarea
             name="review-message"
-            :class="{ 'error-border': errors.has('review-message') }"
+            :class="{ 'error-textarea': errors.has('review-message') }"
             v-model="reviewMessage"
             v-validate="'required|max:2000'"
             placeholder="Your message"
@@ -235,7 +235,6 @@ export default {
       bottom: -18px;
       left: 0;
       font-size: 12px;
-      color: #ff6d4a;
       line-height: 1;
     }
     textarea {

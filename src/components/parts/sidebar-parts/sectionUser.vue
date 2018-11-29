@@ -1,8 +1,6 @@
 <template>
   <div class="user" :class="{ 'user--open': openAccount }">
-    <button v-if="!isAuth" class="user__sign" @click="openLoginModal">
-      Sign In
-    </button>
+    <button v-if="!isAuth" class="user__sign" @click="openLoginModal">Sign In</button>
 
     <div v-if="isAuth" @click="openAccount = !openAccount" class="user__header">
       <div class="user__avatar">
@@ -12,11 +10,9 @@
         <div class="user__name">{{ fullName(userInfo) }}</div>
         <div class="user__mail">{{ userInfo.email }}</div>
       </div>
-      <div
-        v-if="!everOpen"
-        class="user__toggle"
-        :class="{ 'user__toggle--open': openAccount }"
-      >
+      <div v-if="!everOpen"
+           class="user__toggle"
+           :class="{ 'user__toggle--open': openAccount }">
         <svg-chevron></svg-chevron>
       </div>
     </div>
@@ -48,7 +44,7 @@
 
       <router-link class="user__link" :to="{ name: 'purchases' }" tag="div">
         <svg-purchased-circle class="user__icon"></svg-purchased-circle>
-        <span>My Reviews</span>
+        <span>Purchased Goods</span>
         <svg-chevron class="user__chevron"></svg-chevron>
       </router-link>
 
@@ -64,11 +60,9 @@
         <svg-chevron class="user__chevron"></svg-chevron>
       </router-link>
 
-      <div
-        v-if="openAccount || everOpen"
-        @click="logout"
-        class="user__link user__out"
-      >
+      <div v-if="openAccount || everOpen"
+           @click="logout"
+           class="user__link user__out">
         <svg-log-out class="user__icon"></svg-log-out>
         <span>Sign out</span>
       </div>

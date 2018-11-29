@@ -2,19 +2,15 @@
   <div class="bestsellers">
     <h2 class="h2-secondary bestsellers__title">Best Sellers</h2>
     <div class="bestsellers--wrap row">
-      <swiper
-        class="col-xl-12 swiper-popular"
-        ref="swiperPopular"
-        :options="options"
-      >
+      <swiper class="col-xl-12 swiper-popular"
+              ref="swiperPopular"
+              :options="options || swiperOption">
         <swiper-slide v-for="(product, i) in bestSellersCollection" :key="i">
-          <product-card
-            link="dealer"
-            class-response="col-xl-12"
-            view="column"
-            :good="product"
-            item-description="werwefwwerfqwefqwdfqwfdqwf"
-          >
+          <product-card link="dealer"
+                        class-response="col-xl-12"
+                        view="column"
+                        :good="product"
+                        item-description="werwefwwerfqwefqwdfqwfdqwf">
           </product-card>
         </swiper-slide>
         <div class="best-sellers-pagination" slot="pagination"></div>
@@ -34,38 +30,51 @@
 <script>
 import ProductCard from '@/components/common-components/ProductCard'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
+
 export default {
   name: 'best-sellers-slider',
-  data () {
-    return {}
+  components: {
+    swiper,
+    swiperSlide,
+    ProductCard
   },
-  watch: {
-    $route (val, oldVal) {
-      /**
-       * Should refresh pagination only if slug params has changed
-       */
-      if (val.params.slug !== oldVal.params.slug) {
-        this.sliderBestSellers.init()
+  props: ['options', 'bestSellersCollection'],
+  data () {
+    return {
+      swiperOption: {
+        slidesPerView: 4,
+        spaceBetween: 16,
+        pagination: {
+          el: '.best-sellers-pagination',
+          clickable: true
+        },
+        slidesPerGroup: 4,
+        loopFillGroupWithBlank: true,
+        breakpoints: {
+          648: {
+            slidesPerView: 2,
+            slidesPerGroup: 2,
+            spaceBetween: 0
+          },
+          900: {
+            slidesPerView: 3,
+            slidesPerGroup: 3
+          }
+        }
       }
     }
   },
-  props: ['options', 'bestSellersCollection'],
+  computed: {
+    sliderBestSellers () {
+      return this.$refs.swiperPopular.swiper
+    }
+  },
   methods: {
     swipeNext () {
       this.sliderBestSellers.slideNext()
     },
     swipePrev () {
       this.sliderBestSellers.slidePrev()
-    }
-  },
-  components: {
-    swiper,
-    swiperSlide,
-    ProductCard
-  },
-  computed: {
-    sliderBestSellers () {
-      return this.$refs.swiperPopular.swiper
     }
   }
 }
@@ -113,14 +122,19 @@ export default {
     position: relative;
     padding-top: 16px;
     padding-bottom: 43px;
-    .best-sellers-pagination {
-      position: absolute;
-      bottom: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
   }
+}
+
+.best-sellers-pagination {
+  bottom: 10px;
+  left: 0;
+  width: 100%;
+  height: 30px;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
 }
 
 @media (max-width: $xl) {

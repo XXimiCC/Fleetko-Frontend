@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="relative-block">
-      <homepage-slider></homepage-slider>
+      <homepage-slider :key="homepageBanners.length" :banners="homepageBanners"></homepage-slider>
       <homepage-search></homepage-search>
     </div>
     <homepage-categories
@@ -21,10 +21,7 @@
     <div class="featured-brands">
       <div class="container">
         <h2 class="featured-brands--title">Featured Brands</h2>
-        <brands-slider
-          :swiperOptions="swiperOptionBrands"
-          class="dealers-slider"
-        ></brands-slider>
+        <brands-slider class="dealers-slider"></brands-slider>
       </div>
     </div>
   </div>
@@ -45,33 +42,26 @@ Vue.use(Meta)
 
 export default {
   name: 'Homepage',
+  mixins: [utils],
+  components: {
+    HomepageSlider,
+    HomepageCategories,
+    HomepageSearch,
+    BrandsSlider,
+    FeaturedProduct
+  },
   data: function () {
     return {
       sections: [],
       featuredProducts: [],
-      swiperOptionBrands: {
-        slidesPerView: 4,
-        spaceBetween: 30,
-        pagination: '.brands-pagination',
-        paginationClickable: true,
-        slidesPerGroup: 4,
-        loopFillGroupWithBlank: true,
-        breakpoints: {
-          640: {
-            slidesPerView: 2,
-            slidesPerColumn: 2,
-            slidesPerColumnFill: 'row'
-          },
-          960: {
-            slidesPerView: 3
-          }
-        }
-      },
+      homepageBanners: [],
       featuredSliderOptions: {
         slidesPerView: 4,
         spaceBetween: 16,
-        pagination: '.featured-products-pagination',
-        paginationClickable: true,
+        pagination: {
+          el: '.featured-pagination',
+          clickable: true
+        },
         slidesPerGroup: 4,
         loopFillGroupWithBlank: true,
         breakpoints: {
@@ -88,39 +78,34 @@ export default {
       }
     }
   },
-  mixins: [utils],
-  metaInfo () {
-    return {
-      title: 'Fleetko'
-    }
-  },
-  methods: {
-    fetchFeaturedProducts () {
-      this.$store
-        .dispatch('fetchFeaturedProducts', {
-          slug: null,
-          type: null
-        })
-        .then(response => {
-          this.featuredProducts = response
-        })
-    }
-  },
   computed: {
     ...mapState({
       loading: state => state.user.loading
     }),
     ...mapGetters(['isAuth', 'getSections'])
   },
-  components: {
-    HomepageSlider,
-    HomepageCategories,
-    HomepageSearch,
-    BrandsSlider,
-    FeaturedProduct
+  metaInfo () {
+    return {
+      title: 'Fleetko'
+    }
   },
   mounted () {
     this.fetchFeaturedProducts()
+    this.fetchHomepageBanners()
+  },
+  methods: {
+    fetchFeaturedProducts () {
+      this.$store.dispatch('fetchFeaturedProducts', { slug: null, type: null })
+        .then(response => {
+          this.featuredProducts = response
+        })
+    },
+    fetchHomepageBanners () {
+      this.$store.dispatch('fetchHomepageBanners')
+        .then(resp => {
+          this.homepageBanners = resp.data
+        })
+    }
   }
 }
 </script>

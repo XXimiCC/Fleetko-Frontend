@@ -105,23 +105,22 @@ export default {
         slidesPerView: 3,
         slidesPerColumn: this.section.categories.length < 2 ? 1 : 2,
         spaceBetween: 8,
-        pagination: '.swiper-pagination',
-        paginationClickable: true,
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true
+        },
         breakpoints: {
-          // when window width is <= 320px
           530: {
             slidesPerView: 2,
             slidesPerColumn: this.section.categories.length < 2 ? 1 : 2,
             spaceBetween: 8,
             slidesPerGroup: 2
           },
-          // when window width is <= 480px
           540: {
             slidesPerView: 2,
             spaceBetween: 8,
             slidesPerGroup: 2
           },
-          // when window width is <= 640px
           640: {
             slidesPerView: 2,
             spaceBetween: 8,

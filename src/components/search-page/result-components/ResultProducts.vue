@@ -54,6 +54,9 @@
       <span class="product--price" v-if="result.price">
         $ {{ toDollarDecimal(result.price) }}
       </span>
+      <span class="product--price product--price--blurred" v-if="!result.price">
+        Unavailable
+      </span>
     </div>
   </div>
 </template>
@@ -207,6 +210,9 @@ export default {
     font-family: $montserrat-font;
     font-size: 20px;
     font-weight: 600;
+    &--blurred {
+      color: $main-grey;
+    }
   }
   &:before {
     position: absolute;

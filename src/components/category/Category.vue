@@ -3,6 +3,9 @@
     <div class="relative-wrap">
       <main-slider
         v-if="category"
+        :liftUpPagination="openSearch"
+        fixedControls="true"
+        :key="$route.path"
         :banners="category.banner_images"
       ></main-slider>
       <div id="search-form-anchor"></div>
@@ -31,13 +34,14 @@
     </catalog>
     <div class="container" v-if="featuredProductsCollection.length">
       <featured-product
+        :key="$route.path"
         :options="featuredSliderOptions"
         :featuredProductsCollection="featuredProductsCollection"
       ></featured-product>
     </div>
     <div class="container">
       <best-sellers-slider
-        :options="swiperOption"
+        :key="$route.path"
         v-if="bestSellersCollection.length"
         :bestSellersCollection="bestSellersCollection"
       ></best-sellers-slider>
@@ -52,7 +56,6 @@ import FeaturedProduct from '../common-components/FeaturedProductsSlider'
 import MainSlider from '@/components/category/MainSlider'
 import CategoryInfo from '@/components/category/CategoryInfo'
 import Catalog from '@/components/category/Catalog'
-import Brand from '@/components/common-components/Brand'
 import utils from '@/mixins/utils'
 import _ from 'lodash'
 import { mapGetters } from 'vuex'
@@ -66,30 +69,13 @@ export default {
       filterSearch: true,
       bestSellersCollection: [],
       featuredProductsCollection: [],
-      swiperOption: {
-        slidesPerView: 4,
-        spaceBetween: 16,
-        pagination: '.best-sellers-pagination',
-        paginationClickable: true,
-        slidesPerGroup: 4,
-        loopFillGroupWithBlank: true,
-        breakpoints: {
-          648: {
-            slidesPerView: 2,
-            slidesPerGroup: 2,
-            spaceBetween: 0
-          },
-          900: {
-            slidesPerView: 3,
-            slidesPerGroup: 3
-          }
-        }
-      },
       featuredSliderOptions: {
         slidesPerView: 4,
         spaceBetween: 16,
-        pagination: '.featured-products-pagination',
-        paginationClickable: true,
+        pagination: {
+          el: '.featured-pagination',
+          clickable: true
+        },
         slidesPerGroup: 4,
         loopFillGroupWithBlank: true,
         breakpoints: {
@@ -107,7 +93,7 @@ export default {
   },
   mixins: [utils],
   watch: {
-    $route (val, oldVal) {
+    '$route' (val, oldVal) {
       if (val.params.slug !== oldVal.params.slug) {
         this.fetchCategory()
         this.fetchBestSellersProducts()
@@ -142,8 +128,7 @@ export default {
       }
     },
     fetchBestSellersProducts () {
-      this.$store
-        .dispatch('fetchBestsellersProducts', {
+      this.$store.dispatch('fetchBestsellersProducts', {
           slug: this.$route.params.slug,
           type: 'categories'
         })
@@ -173,7 +158,6 @@ export default {
   components: {
     MainSlider,
     CategoryInfo,
-    Brand,
     Catalog,
     search,
     BestSellersSlider,

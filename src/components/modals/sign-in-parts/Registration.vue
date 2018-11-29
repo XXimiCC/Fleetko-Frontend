@@ -1,163 +1,112 @@
 <template>
   <div class="modal-body__login">
     <form>
-      <div
-        class="modal-body__login--item"
-        :class="{
-          'validation-margin': errors.has('first-name') && !animateValidation
-        }"
-      >
-        <div class="input-wrap" :class="{ control: true }">
-          <input
-            v-validate="'required|max:20'"
-            :data-vv-validate-on="'blur'"
-            class="input-default"
-            :class="{
-              input: true,
-              'input-error':
-                (errors.has('first-name') || !loginServerValid) &&
-                !animateValidation
-            }"
-            v-model="firstName"
-            name="first-name"
-            placeholder="Please enter a first name"
-            type="text"
-          />
-          <span
-            :class="{ 'animate-validation': animateValidation }"
-            v-show="errors.has('first-name') && !animateValidation"
-            class="help error-message-input is-danger"
-            >{{ errors.first('first-name') }}</span
-          >
-        </div>
-      </div>
-      <div
-        class="modal-body__login--item"
-        :class="{
-          'validation-margin': errors.has('last-name') && !animateValidation
-        }"
-      >
-        <div class="input-wrap" :class="{ control: true }">
-          <input
-            v-validate="'required|max:20'"
-            :data-vv-validate-on="'blur'"
-            class="input-default"
-            :class="{
-              input: true,
-              'input-error':
-                (errors.has('last-name') || !loginServerValid) &&
-                !animateValidation
-            }"
-            v-model="lastName"
-            name="last-name"
-            placeholder="Please enter a last name"
-            type="text"
-          />
-          <span
-            :class="{ 'animate-validation': animateValidation }"
-            v-show="errors.has('last-name') && !animateValidation"
-            class="help error-message-input is-danger"
-            >{{ errors.first('last-name') }}</span
-          >
-        </div>
-      </div>
-      <div
-        class="modal-body__login--item"
-        :class="{
-          'validation-margin':
-            (errors.has('email') || !loginServerValid || !registrationValid) &&
-            !animateValidation
-        }"
-      >
-        <div class="input-wrap" :class="{ control: true }">
-          <input
-            v-validate="'required|email'"
-            :ref="'emailInput'"
-            :data-vv-validate-on="'blur'"
-            class="input-default"
-            @keydown="noSpacesEmail($event)"
-            @blur="validateEmailOnBlur"
-            @input="emailValidationInput($event)"
-            :autocomplete="'off'"
-            :class="{
-              input: true,
-              'input-error':
-                (errors.has('email') ||
-                  !loginServerValid ||
-                  !registrationValid) &&
-                !animateValidation
-            }"
-            placeholder="Please enter an email"
-            name="email"
-            v-model="email"
-            type="text"
-          />
-          <span
-            :class="{ 'animate-validation': animateValidation }"
-            v-show="!registrationValid && !animateValidation"
-            class="help error-message-input is-danger"
-            >The email has already been registered.</span
-          >
-          <span
-            :class="{ 'animate-validation': animateValidation }"
-            v-show="errors.has('email') && !animateValidation"
-            class="help error-message-input is-danger"
-            >{{ errors.first('email') }}</span
-          >
+      <div class="modal-body__login--item"
+           :class="{ 'validation-margin': errors.has('first-name') && !animateValidation }">
+        <div class="input-wrap control">
+          <input v-validate="'required|max:20'"
+                 :data-vv-validate-on="'blur|input'"
+                 class="input-default input"
+                 :class="{ 'input-error': (errors.has('first-name') || !loginServerValid) && !animateValidation }"
+                 v-model="firstName"
+                 name="first-name"
+                 placeholder="Please enter a first name"
+                 type="text" />
+          <span :class="{ 'animate-validation': animateValidation }"
+                v-show="errors.has('first-name') && !animateValidation"
+                class="help error-message-input is-danger">
+            {{ errors.first('first-name') }}
+          </span>
         </div>
       </div>
 
-      <div
-        class="modal-body__login--item"
-        :class="{
-          'validation-margin':
-            (errors.has('password') || !loginServerValid) && !animateValidation
-        }"
-      >
-        <div class="input-wrap" :class="{ control: true }">
-          <input
-            v-validate="'required|min:6'"
-            :ref="'passwordInput'"
-            :data-vv-validate-on="'blur'"
-            class="input-default"
-            :class="{
-              input: true,
-              'input-error':
-                (errors.has('password') || !loginServerValid) &&
-                !animateValidation
-            }"
-            v-model="password"
-            :autocomplete="'off'"
-            name="password"
-            @blur="validatePasswordOnBlur"
-            @input="passwordValidationInput"
-            placeholder="Please enter a password"
-            :type="hiddenPassword ? 'password' : 'text'"
-          />
+      <div class="modal-body__login--item"
+           :class="{ 'validation-margin': errors.has('last-name') && !animateValidation }">
+        <div class="input-wrap control">
+          <input v-validate="'required|max:20'"
+                 :data-vv-validate-on="'blur|input'"
+                 class="input-default input"
+                 :class="{ 'input-error': (errors.has('last-name') || !loginServerValid) && !animateValidation }"
+                 v-model="lastName"
+                 name="last-name"
+                 placeholder="Please enter a last name"
+                 type="text"/>
+          <span :class="{ 'animate-validation': animateValidation }"
+                v-show="errors.has('last-name') && !animateValidation"
+                class="help error-message-input is-danger">
+            {{ errors.first('last-name') }}</span>
+        </div>
+      </div>
+      <div class="modal-body__login--item"
+           :class="{
+             'validation-margin': (errors.has('email') || !loginServerValid || !registrationValid) &&  !animateValidation
+           }">
+        <div class="input-wrap control">
+          <input v-validate="'required|email'"
+                 :ref="'emailInput'"
+                 :data-vv-validate-on="'blur'"
+                 class="input-default input"
+                 @keydown="noSpacesEmail($event)"
+                 @blur="validateEmailOnBlur"
+                 @input="emailValidationInput($event)"
+                 :autocomplete="'off'"
+                 :class="{
+                   'input-error':
+                     (errors.has('email') ||
+                       !loginServerValid ||
+                       !registrationValid) &&
+                     !animateValidation
+                 }"
+                 placeholder="Please enter an email"
+                 name="email"
+                 v-model="email"
+                 type="text" />
+          <span :class="{ 'animate-validation': animateValidation }"
+                v-show="!registrationValid && !animateValidation"
+                class="help error-message-input is-danger">
+            The email has already been registered
+          </span>
+          <span :class="{ 'animate-validation': animateValidation }"
+                v-show="errors.has('email') && !animateValidation"
+                class="help error-message-input is-danger">
+            {{ errors.first('email') }}
+          </span>
+        </div>
+      </div>
+
+      <div class="modal-body__login--item"
+           :class="{ 'validation-margin': (errors.has('password') || !loginServerValid) && !animateValidation }">
+        <div class="input-wrap control">
+          <input v-validate="'required|min:6'"
+                 :ref="'passwordInput'"
+                 :data-vv-validate-on="'blur'"
+                 class="input-default input"
+                 :class="{ 'input-error':(errors.has('password') || !loginServerValid) && !animateValidation }"
+                 v-model="password"
+                 :autocomplete="'off'"
+                 name="password"
+                 @blur="validatePasswordOnBlur"
+                 @input="passwordValidationInput"
+                 placeholder="Please enter a password"
+                 :type="hiddenPassword ? 'password' : 'text'" />
           <div @click="hiddenPassword = !hiddenPassword" class="show-hide">
             <svg-eye-hide v-if="!hiddenPassword"></svg-eye-hide>
             <svg-eye-show v-if="hiddenPassword"></svg-eye-show>
           </div>
-          <span
-            :class="{ 'animate-validation': animateValidation }"
-            v-show="!loginServerValid && !animateValidation"
-            class="help error-message-input is-danger"
-            >Your email or password is not correct</span
-          >
-          <span
-            :class="{ 'animate-validation': animateValidation }"
-            v-show="errors.has('password') && !animateValidation"
-            class="help error-message-input is-danger"
-            >{{ errors.first('password') }}</span
-          >
+          <span :class="{ 'animate-validation': animateValidation }"
+                v-show="!loginServerValid && !animateValidation"
+                class="help error-message-input is-danger">
+            Your email or password is not correct</span>
+          <span :class="{ 'animate-validation': animateValidation }"
+                v-show="errors.has('password') && !animateValidation"
+                class="help error-message-input is-danger">
+            {{ errors.first('password') }}</span>
         </div>
       </div>
       <div class="modal-body__login--item">
-        <button
-          type="submit"
-          @click="login('password', null, null, $event)"
-          class="button-prime"
-        >
+        <button type="submit"
+                @click="login('password', null, null, $event)"
+                class="button-prime">
           Sign Up
         </button>
       </div>
@@ -171,12 +120,13 @@ import Vue from 'vue'
 import VeeValidate from 'vee-validate'
 import recaptcha from '../../common-components/InvisibleGRecaptcha'
 
-Vue.use(VeeValidate, {
-  locale: 'en'
-})
+Vue.use(VeeValidate, { locale: 'en' })
 
 export default {
   name: 'login-form',
+  components: {
+    recaptcha
+  },
   data () {
     return {
       firstName: '',
@@ -189,12 +139,13 @@ export default {
       registrationValid: true
     }
   },
+  mounted () {
+    this.disableAutoComplete()
+  },
   methods: {
     createNewUser (response) {
       if (response) {
-        // eslint-disable-next-line
-        this.$store
-          .dispatch('registration', {
+        this.$store.dispatch('registration', {
             email: this.email,
             password: this.password,
             firstName: this.firstName,
@@ -247,14 +198,12 @@ export default {
     passwordValidationInput () {
       this.loginServerValid = true
     },
-    emailValidationInput ($event) {
+    emailValidationInput () {
       this.loginServerValid = true
       this.registrationValid = true
     },
     noSpacesEmail ($event) {
-      if (this.EVENT_KEY_SPACE === $event.keyCode) {
-        $event.preventDefault()
-      }
+      if (this.EVENT_KEY_SPACE === $event.keyCode) $event.preventDefault()
     },
     enterKeyHandler: function (evt) {
       if (evt.keyCode === 13) {
@@ -270,19 +219,10 @@ export default {
           element.setAttribute('readonly', 'readonly')
           element.style.backgroundColor = 'inherit'
 
-          setTimeout(() => {
-            element.removeAttribute('readonly')
-            // element.style.removeProperty('background-color')
-          }, 700)
+          setTimeout(() => element.removeAttribute('readonly'), 700)
         })
       }
     }
-  },
-  components: {
-    recaptcha
-  },
-  mounted () {
-    this.disableAutoComplete()
   }
 }
 </script>

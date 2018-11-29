@@ -1,5 +1,6 @@
 $select-border-color: #B4BAC7;
 $input-placeholder-color: #B4BAC7;
+$input-error-bg: #FEECEB;
 
 #select-year-home, #select-brand-home, #select-model-home {
   width: 100%;
@@ -214,6 +215,7 @@ $input-placeholder-color: #B4BAC7;
   .open-indicator {
     &:before {
       border-color: $main-red;
+      background: $input-error-bg;
     }
   }
   .dropdown-toggle {
@@ -223,6 +225,23 @@ $input-placeholder-color: #B4BAC7;
 #select-state.select-valid-error.open {
   .dropdown-toggle {
     border-bottom: none!important;
+  }
+}
+
+#select-state.select-valid-error {
+  background: $input-error-bg;
+
+  .open-indicator {
+    &:before {
+      border-color: $main-red;
+      background: $input-error-bg;
+    }
+  }
+  &:hover {
+    box-shadow: 0 5px 6.58px 0.42px rgba(0, 0, 0, 0.05),0 2px 9.8px 0.2px rgba(0, 0, 0, 0.02);
+  }
+  .vs__selected-options {
+    background: $input-error-bg;
   }
 }
 
@@ -414,7 +433,7 @@ $input-placeholder-color: #B4BAC7;
     font-size: 14px;
     color: $main-dark;
     font-family: $sours-sans-p-font;
-    margin: 5px 1px 0 16px;
+    margin-left: 16px;
     pointer-events: none;
     line-height: 24px;
   }

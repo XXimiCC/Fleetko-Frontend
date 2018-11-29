@@ -92,9 +92,6 @@ export default {
     'minPriceSelected',
     'maxPriceSelected'
   ],
-  // created () {
-  //   console.log('ttetre')
-  // },
   data () {
     return {
       showPrice: true,

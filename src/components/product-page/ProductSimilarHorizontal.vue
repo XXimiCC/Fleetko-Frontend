@@ -6,11 +6,10 @@
         <swiper ref="mySwiper" :options="swiperOption">
           <swiper-slide v-for="(product, i) in simmilar" :key="i">
             <div class="swiper-slide-wrap">
-              <product-card
-                :classResponse="'col-xl-12'"
-                :product="product"
-                :counter="false"
-              ></product-card>
+              <product-card :classResponse="'col-xl-12'"
+                            :product="product"
+                            :counter="false">
+              </product-card>
             </div>
           </swiper-slide>
           <div class="swiper-pagination" slot="pagination"></div>
@@ -32,6 +31,7 @@
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 import utils from '@/mixins/utils'
 import ProductCard from '../common-components/SimmillarProductCard'
+
 export default {
   name: 'ProductDetails',
   data () {
@@ -41,8 +41,10 @@ export default {
       swiperOption: {
         slidesPerView: 6,
         spaceBetween: 0,
-        pagination: '.swiper-pagination',
-        paginationClickable: true,
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true
+        },
         slidesPerGroup: 6,
         loopFillGroupWithBlank: true,
         breakpoints: {
@@ -85,7 +87,8 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped="">
+
+<style lang="scss" scoped>
 .product-details {
   .swiper-slide-wrap {
     padding: 2px;

@@ -18,7 +18,7 @@ export const dictionary = {
       },
       'review-message': {
         required: 'Please enter the message',
-        max: 'Please enter the message less than 2000 characters.'
+        max: 'Please enter the message less than 2000 characters'
       },
       email: {
         required: 'Please enter the email',
@@ -57,7 +57,8 @@ export const dictionary = {
         max: 'Please enter the name less than 19 characters'
       },
       'feedback-message': {
-        required: 'Please enter the message'
+        required: 'Please enter the message',
+        max: 'Please enter the message less than 2000 characters'
       },
       'state-abbr': {
         required: 'Please select the state'

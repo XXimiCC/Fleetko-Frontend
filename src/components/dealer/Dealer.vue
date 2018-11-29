@@ -3,6 +3,8 @@
     <div class="relative-wrap">
       <dealer-slider
         v-if="dealer"
+        :key="$route.path"
+        :liftUpPagination="true"
         :banners="dealer.banner_images"
       ></dealer-slider>
       <search
@@ -23,7 +25,7 @@
 
     <div class="container">
       <best-sellers-slider
-        :options="swiperOption"
+        :key="$route.path"
         v-if="bestSellersCollection.length"
         :bestSellersCollection="bestSellersCollection"
       ></best-sellers-slider>
@@ -38,7 +40,6 @@ import DealerSlider from '../category/MainSlider'
 import DealerInfo from './DealerInfo'
 import DealerSections from './DealerSections'
 import DealerReviews from './DealerReviews'
-import BrandsSlider from '../common-components/BrandsSlider'
 import search from '@/components/parts/SearchCommon'
 import utils from '@/mixins/utils'
 
@@ -49,45 +50,7 @@ export default {
       dealer: null,
       dealerSlug: this.$route.params.slug,
       sections: [],
-      bestSellersCollection: [],
-      swiperOptionBrands: {
-        slidesPerView: 6,
-        spaceBetween: 0,
-        pagination: '.brands-pagination',
-        paginationClickable: true,
-        slidesPerGroup: 6,
-        loopFillGroupWithBlank: true,
-        breakpoints: {
-          // when window width is <= 940
-          640: {
-            slidesPerView: 2,
-            slidesPerColumn: 2,
-            slidesPerColumnFill: 'row'
-          },
-          960: {
-            slidesPerView: 4
-          }
-        }
-      },
-      swiperOption: {
-        slidesPerView: 4,
-        spaceBetween: 16,
-        pagination: '.best-sellers-pagination',
-        paginationClickable: true,
-        slidesPerGroup: 4,
-        loopFillGroupWithBlank: true,
-        breakpoints: {
-          648: {
-            slidesPerView: 2,
-            slidesPerGroup: 2,
-            spaceBetween: 0
-          },
-          900: {
-            slidesPerView: 3,
-            slidesPerGroup: 3
-          }
-        }
-      }
+      bestSellersCollection: []
     }
   },
   mixins: [utils],
@@ -141,7 +104,6 @@ export default {
     DealerInfo,
     DealerSections,
     DealerReviews,
-    BrandsSlider,
     search,
     Catalog,
     BestSellersSlider

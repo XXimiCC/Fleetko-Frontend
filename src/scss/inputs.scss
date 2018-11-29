@@ -141,6 +141,18 @@ textarea {
   font-family: $sours-sans-p-font;
   line-height: 1;
   resize: none;
+  &.error-textarea {
+    border-color: $input-error-border;
+    background-color: #FEECEB;
+    color: $input-error-border;
+    &:hover {
+      border-color: $input-error-border;
+      box-shadow: 0 3px 8px 0 rgba(6, 26, 70, 0.12);
+    }
+    &:focus {
+      border-color: $input-error-border;
+    }
+  }
   &::-webkit-input-placeholder {
     color: $input-placeholder-color !important;
   }

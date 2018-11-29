@@ -5,39 +5,27 @@
     <transition name="fade">
       <div v-if="!preloader" class="container">
         <div class="locations__body">
-          <div
-            v-if="listWarehouses && $mq !== 'xs' && $mq !== 'sm'"
-            class="locations__sidebar"
-          >
-            <div
-              v-for="(warehouses, state) in listWarehouses"
-              class="locations__state"
-            >
+          <div v-if="listWarehouses && $mq !== 'xs' && $mq !== 'sm'" class="locations__sidebar">
+            <div v-for="(warehouses, state) in listWarehouses" class="locations__state">
               <div class="locations__state-name">
                 <svg-map-pointer></svg-map-pointer>
                 <span>{{ state }}</span>
               </div>
 
-              <div
-                class="locations__warehouse"
-                :class="{
-                  'locations__warehouse--active':
-                    currentWarehouse && warehouse.id === currentWarehouse.id
-                }"
-                @click="onChangeWarehouse(warehouse.id)"
-                v-for="warehouse in warehouses"
-              >
+              <div v-for="warehouse in warehouses"
+                   class="locations__warehouse"
+                   :class="{ 'locations__warehouse--active': currentWarehouse && warehouse.id === currentWarehouse.id }"
+                   @click="onChangeWarehouse(warehouse.id)">
                 {{ warehouse.city }}
               </div>
             </div>
           </div>
 
-          <div
-            v-for="house in displayedWarehouses"
-            :key="house.id"
-            :id="'warehouse-' + house.id"
-            class="locations__info"
-          >
+          <div v-for="house in displayedWarehouses"
+               :key="house.id"
+               :id="'warehouse-' + house.id"
+               class="locations__info">
+
             <h2 class="locations__warehouse-name">{{ house.city }}</h2>
             <p class="locations__warehouse-address">
               {{ house.address_line_1 }} {{ house.address_line_2 }}
@@ -55,67 +43,45 @@
               <span>{{ house.phone }}</span>
             </div>
             <div class="locations__warehouse-button-map">
-              <button
-                class="button-second left-icon"
-                @click="() => (warehouseModal = true)"
-              >
+              <button class="button-second left-icon" @click="() => warehouseModal = true">
                 <svg-address></svg-address>
                 <span>Look at the map</span>
               </button>
             </div>
-            <div class="locations__warehouse-schedule">
-              <span v-if="!getBusinessHours(house.business_hours)">
-                {{ house.business_hours }}
-              </span>
-              <span v-else>
-                <span class="label">{{
-                  getBusinessHours(house.business_hours).days
-                }}</span>
-                <span class="value">{{
-                  getBusinessHours(house.business_hours).hours
-                }}</span>
-              </span>
-            </div>
+            <!--<div class="locations__warehouse-schedule">-->
+              <!--<span v-if="!getBusinessHours(house.business_hours)">-->
+                <!--{{ house.business_hours }}-->
+              <!--</span>-->
+              <!--<span v-else>-->
+                <!--<span class="label">{{ getBusinessHours(house.business_hours).days }}</span>-->
+                <!--<span class="value">{{ getBusinessHours(house.business_hours).hours }}</span>-->
+              <!--</span>-->
+            <!--</div>-->
             <div class="locations__warehouse-description">
               {{ house.description }}
             </div>
           </div>
 
-          <usa-map
-            v-if="$mq === 'xl'"
-            class="locations__map"
-            @warehouseChange="onChangeWarehouse"
-            :warehouses="listWarehouses"
-            :currentWarehouse="currentWarehouse"
-          >
+          <usa-map v-if="$mq === 'xl'"
+                   class="locations__map"
+                   @warehouseChange="onChangeWarehouse"
+                   :warehouses="listWarehouses"
+                   :currentWarehouse="currentWarehouse">
           </usa-map>
         </div>
 
-        <div
-          v-if="
-            currentWarehouse &&
-              currentWarehouse.images &&
-              $mq !== 'sm' &&
-              $mq !== 'xs'
-          "
-          class="locations__slider"
-        >
-          <main-slider
-            :banners="
-              currentWarehouse.images.length
-                ? currentWarehouse.images
-                : bannersForDev
-            "
-            :fixedControls="true"
-          >
+        <div v-if="currentWarehouse && currentWarehouse.images && $mq !== 'sm' && $mq !== 'xs'"
+             class="locations__slider">
+          <main-slider class="slider"
+                       :key="currentWarehouse.id"
+                       :banners="currentWarehouse.images.length ? currentWarehouse.images : ['']"
+                       :fixedControls="true">
           </main-slider>
         </div>
 
-        <warehouse-map
-          v-if="warehouseModal"
-          :address="currentWarehouse"
-          @closeWarehouseModal="() => (warehouseModal = false)"
-        >
+        <warehouse-map v-if="warehouseModal"
+                       :address="currentWarehouse"
+                       @closeWarehouseModal="() => warehouseModal = false">
         </warehouse-map>
       </div>
     </transition>
@@ -144,27 +110,7 @@ export default {
       listWarehouses: null,
       displayedWarehouses: [],
       displayAll: null,
-      warehouseModal: false,
-      bannersForDev: [
-        {
-          versions: {
-            big:
-              'https://www.joc.com/sites/default/files/field_feature_image/warehouse%2043.jpg',
-            medium:
-              'https://techcrunch.com/wp-content/uploads/2017/12/flowspace-warehouse.jpg?w=730&crop=1',
-            small: 'https://image.flaticon.com/icons/svg/180/180066.svg'
-          }
-        },
-        {
-          versions: {
-            big:
-              'https://techcrunch.com/wp-content/uploads/2017/12/flowspace-warehouse.jpg?w=730&crop=1',
-            medium:
-              'https://www.joc.com/sites/default/files/field_feature_image/warehouse%2043.jpg',
-            small: 'https://image.flaticon.com/icons/svg/180/180066.svg'
-          }
-        }
-      ]
+      warehouseModal: false
     }
   },
   computed: {
@@ -196,16 +142,16 @@ export default {
       })
     },
 
-    getBusinessHours (hours) {
-      const splitHours = hours.split(':')
-
-      return splitHours.length < 2
-        ? false
-        : {
-            days: `${splitHours[0]}: `,
-            hours: splitHours[1]
-          }
-    },
+    // getBusinessHours (hours) {
+    //   const splitHours = hours.split(':')
+    //
+    //   return splitHours.length < 2
+    //     ? false
+    //     : {
+    //         days: `${splitHours[0]}: `,
+    //         hours: splitHours[1]
+    //       }
+    // },
     groupWarehousesByState (warehouses) {
       warehouses = _.groupBy(warehouses, 'state')
       warehouses = _.toPairs(warehouses)
@@ -417,7 +363,7 @@ export default {
     }
   }
 
-  &__warehouse-schedule {
+  /*&__warehouse-schedule {
     margin-bottom: 21px;
     padding-left: 16px;
     color: $main-dark;
@@ -425,11 +371,12 @@ export default {
     .label {
       font: 12px/19px $montserrat-font;
     }
+
     .value {
       font: 500 16px/19px $montserrat-font;
       padding-left: 32px;
     }
-  }
+  }*/
 
   &__warehouse-description {
     max-width: 350px;
@@ -446,6 +393,9 @@ export default {
   &__slider {
     position: relative;
     margin: 32px 0 64px;
+    & /deep/ .main-slider--slide:before {
+      display: none;
+    }
   }
 }
 

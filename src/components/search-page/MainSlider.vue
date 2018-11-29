@@ -1,14 +1,6 @@
 <template>
   <div class="main-slider">
-    <div
-      class="main-slider--wrapper"
-      v-if="getVehicle.banner_image"
-      :style="{
-        'background-image': `url(${componentBannerImage(
-          getVehicle.banner_image
-        )}), url(${getVehicle.banner_image.versions.original})`
-      }"
-    ></div>
+    <div class="main-slider--wrapper" :class="{ 'no-pattern': !getVehicle.banner_image}" :style="getBg()"></div>
   </div>
 </template>
 
@@ -18,31 +10,24 @@ import imageSource from '@/mixins/imagesSource'
 
 export default {
   name: 'vehiclePageSlider',
-  data () {
-    return {}
-  },
   mixins: [imageSource],
   methods: {
     componentBannerImage (images, onError) {
-      let sizeProperty = ''
+      let size = 'big'
 
-      if (this.$mq === 'xl' || this.$mq === 'lg') {
-        sizeProperty = 'big'
-      } else if (this.$mq === 'md') {
-        sizeProperty = 'medium'
-      } else {
-        sizeProperty = 'small'
-      }
+      if (this.$mq === 'md') size = 'medium'
+      if (this.$mq === 'sm') size = 'small'
 
-      return this.serverImageSource(
-        images,
-        sizeProperty,
-        onError,
-        this.SERVER_IMAGE_BANNERS
+      return this.serverImageSource(images, size, onError, this.SERVER_IMAGE_BANNERS
       )
+    },
+    getBg () {
+      const banner = this.getVehicle.banner_image
+
+      return banner
+        ? `background-image: url(${this.componentBannerImage(banner)}), url(${banner.versions.original});` : ''
     }
   },
-  components: {},
   computed: {
     ...mapGetters(['getVehicle'])
   }
@@ -50,18 +35,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~@/scss/mixins";
+
 .main-slider {
   position: relative;
   &--wrapper {
     position: relative;
+    background-color: #f5f5f5;
     background-size: cover;
     background-repeat: no-repeat;
     height: 544px;
     background-position: center;
     overflow: hidden;
+    &:before { @include bgPattern() }
     .swiper-container {
       height: 544px;
     }
+    &.no-pattern {
+      &:before { display: none }}
   }
 }
 

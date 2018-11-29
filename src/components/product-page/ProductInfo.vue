@@ -1,61 +1,40 @@
 <template>
   <div class="product-page">
-    <meta
-      itemprop="image"
-      :content="product.image ? product.image.versions.original : ''"
-    />
+    <meta itemprop="image" :content="product.image ? product.image.versions.original : ''"/>
     <transition name="slide-fade">
-      <product-responsive-bar
-        v-if="
-          ($mq === 'md' || $mq === 'sm' || $mq === 'xs') && showResponsiveBar
-        "
+      <product-responsive-bar v-if="['md', 'sm', 'xs'].includes($mq) && showResponsiveBar"
         @openModalCart="openModalCart"
         :product="product"
         :waitListProgress="waitListProgress"
         @addToWaitList="addToWaitList"
-        :waitListIncludesProduct="waitListIncludesProduct"
-      >
+        :waitListIncludesProduct="waitListIncludesProduct">
       </product-responsive-bar>
     </transition>
     <div class="container">
-      <div
-        v-if="Object.keys(product).length"
-        class="product-page__breadcrumbs breadcrumb-links"
-        itemscope
-        itemtype="http://schema.org/BreadcrumbList"
-      >
-        <router-link
-          itemprop="itemListElement"
-          itemtype="http://schema.org/ListItem"
-          itemscope
-          :to="{ name: 'home' }"
-          tag="a"
-        >
+      <div v-if="Object.keys(product).length"
+           class="product-page__breadcrumbs breadcrumb-links"
+           itemscope
+           itemtype="http://schema.org/BreadcrumbList">
+        <router-link itemprop="itemListElement"
+                     itemtype="http://schema.org/ListItem"
+                     itemscope
+                     :to="{ name: 'home' }">
           <span itemprop="name">Home</span>
           <meta itemprop="position" content="1" />
         </router-link>
         <span class="breadcrumbs-slash">/</span>
-        <router-link
-          itemprop="itemListElement"
-          itemtype="http://schema.org/ListItem"
-          itemscope
-          :to="{
-            name: 'section',
-            params: { slug: product.category.section.slug }
-          }"
-          tag="a"
-        >
+        <router-link itemprop="itemListElement"
+                     itemtype="http://schema.org/ListItem"
+                     itemscope
+                     :to="{ name: 'section', params: { slug: product.category.section.slug } }">
           <span itemprop="name">{{ product.category.section.name }}</span>
           <meta itemprop="position" content="2" />
         </router-link>
         <span class="breadcrumbs-slash">/</span>
-        <router-link
-          itemprop="itemListElement"
-          itemtype="http://schema.org/ListItem"
-          itemscope
-          :to="{ name: 'catalog', params: { slug: product.category.slug } }"
-          tag="a"
-        >
+        <router-link itemprop="itemListElement"
+                     itemtype="http://schema.org/ListItem"
+                     itemscope
+                     :to="{ name: 'catalog', params: { slug: product.category.slug } }">
           <span itemprop="name">{{ product.category.name }}</span>
           <meta itemprop="position" content="3" />
         </router-link>
@@ -70,31 +49,22 @@
           <span v-if="product.part_number" class="product-page__info--rate-mpn">
             mpn: {{ product.part_number }}
           </span>
-          <star
-            :position="++i"
-            :key="i"
-            :readOnly="true"
-            :size="14"
-            :borderWidth="1"
-            :padding="0"
-            :rating="product.rating_average"
-            v-for="(star, i) in 5"
-          >
+          <star v-for="(star, i) in 5"
+                :position="++i"
+                :key="i"
+                :readOnly="true"
+                :size="14"
+                :borderWidth="1"
+                :padding="0"
+                :rating="product.rating_average">
           </star>
-          <span
-            v-if="product.rating_average"
-            class="product-page__info--rate-counter"
-            >{{ roundDecimalRating(product.rating_average) }}</span
-          >
-          <span
-            v-if="!product.rating_average"
-            class="product-page__info--rate-counter product-page__info-unrated"
-            >Unrated</span
-          >
-          <div
-            @click="$emit('openReviewsTab')"
-            class="product-page__info--rate-reviews link-quaternary"
-          >
+          <span v-if="product.rating_average"
+                class="product-page__info--rate-counter">
+            {{ roundDecimalRating(product.rating_average) }}</span>
+          <span v-if="!product.rating_average"
+                class="product-page__info--rate-counter product-page__info-unrated">Unrated</span>
+          <div @click="$emit('openReviewsTab')"
+               class="product-page__info--rate-reviews link-quaternary">
             <span itemprop="reviewCount">{{ product.rating_count }}</span>
             reviews
           </div>
@@ -104,13 +74,12 @@
           </span>
         </div>
         <div class="product-info-wrap row">
-          <div class="col-xl-6 col-md-6 product-page__info--slider">
-            <product-slider
-              :loop="true"
-              v-if="contentInfoReady"
-              :productImages="productImages"
-              :product="product"
-            >
+          <div @click="openGallery" class="col-xl-6 col-md-6 product-page__info--slider">
+            <product-slider v-if="contentInfoReady"
+                            @slideChangeHandler="slideChangeHandler"
+                            :loop="true"
+                            :productImages="productImages"
+                            :product="product">
             </product-slider>
           </div>
           <div class="product-page__info--text col-xl-6 col-md-6">
@@ -123,38 +92,19 @@
                 </span>
                 <div v-else class="price-row--unavailable">
                   <span>Unavailable</span>
-                  <div
-                    @mouseenter="unavailablePrice = true"
-                    @mouseleave="unavailablePrice = false"
-                  >
-                    <tooltip
-                      v-if="unavailablePrice"
-                      class="price-row--unavailable--tooltip"
-                      :notification="{
-                        type: 'info-toolbox',
-                        text:
-                          'The good will soon be shipped to the warehouses. Add the good to the Wait List and we will notify you as soon as the good arrives.'
-                      }"
-                      :allignRight="false"
-                      :top="
-                        $mq === 'xs' || $mq === 'sm' || $mq === 'md' ? 40 : -64
-                      "
-                      :allignBottom="
-                        !($mq === 'xs' || $mq === 'sm' || $mq === 'md')
-                      "
-                      :arrowBottom="
-                        !($mq === 'xs' || $mq === 'sm' || $mq === 'md')
-                      "
-                      :arrowRight="
-                        !($mq === 'xs' || $mq === 'sm' || $mq === 'md')
-                      "
-                      :arrowTop="$mq === 'xs' || $mq === 'sm' || $mq === 'md'"
-                    >
+                  <div @mouseenter="unavailablePrice = true"
+                       @mouseleave="unavailablePrice = false">
+                    <tooltip v-if="unavailablePrice"
+                             class="price-row--unavailable--tooltip"
+                             :allignRight="true"
+                             :allignBottom="true"
+                             :notification="{
+                                type: 'info-toolbox',
+                                text:
+                                  'The good will soon be shipped to the warehouses. Add the good to the Wait List and we will notify you as soon as the good arrives.'
+                             }">
                     </tooltip>
-                    <div
-                      class="svg-wrap"
-                      @click="unavailablePrice = !unavailablePrice"
-                    >
+                    <div class="svg-wrap" @click="unavailablePrice = !unavailablePrice">
                       <svg-help></svg-help>
                     </div>
                   </div>
@@ -169,37 +119,26 @@
               <div class="info-row--label">You save:</div>
               <div class="info-row--body"><span>$10</span></div>
             </div>
-            <div
-              v-if="optionsObject.opt1.length"
-              class="info-row options-row"
-              v-for="(option, optionKey) in optionsObject"
-            >
+            <div v-for="(option, optionKey) in optionsObject"
+                 v-if="optionsObject.opt1.length"
+                 class="info-row options-row">
               <div class="info-row--label">{{ optionTypes[optionKey] }}:</div>
               <div class="info-row--body m-0">
                 <div class="button-wrap" v-for="buttonName in option">
-                  <button
-                    v-if="selectedOptions[optionKey] === buttonName"
-                    :class="checkActive(buttonName, optionKey)"
-                    :disabled="checkDisabled(buttonName)"
-                    class="options-row--button"
-                  >
+                  <button v-if="selectedOptions[optionKey] === buttonName"
+                          :class="checkActive(buttonName, optionKey)"
+                          :disabled="checkDisabled(buttonName)"
+                          class="options-row--button">
                     {{ buttonName }}
                   </button>
-                  <router-link
-                    v-else
-                    tag="a"
-                    :to="{
-                      name: 'product-page',
-                      params: {
-                        slug: createRouteForOption(optionKey, buttonName)
-                      }
-                    }"
-                  >
-                    <button
-                      :class="checkActive(buttonName, optionKey)"
-                      :disabled="checkDisabled(buttonName)"
-                      class="options-row--button"
-                    >
+                  <router-link v-else
+                               :to="{
+                                name: 'product-page',
+                                params: { slug: createRouteForOption(optionKey, buttonName) }
+                              }">
+                    <button :class="checkActive(buttonName, optionKey)"
+                            :disabled="checkDisabled(buttonName)"
+                            class="options-row--button">
                       {{ buttonName }}
                     </button>
                   </router-link>
@@ -209,71 +148,44 @@
             <div class="info-row dealer-row">
               <div class="info-row--label">Dealer:</div>
               <div class="info-row--body">
-                <router-link
-                  :to="{
-                    name: 'dealer',
-                    params: { slug: product.dealer_slug }
-                  }"
-                  tag="a"
-                >
-                  <app-image
-                    :imagePath="componentDealerImage(product.dealer_image)"
-                    @emitErrorImage="errorImage"
-                  >
+                <router-link :to="{ name: 'dealer', params: { slug: product.dealer_slug } }">
+                  <app-image :imagePath="componentDealerImage(product.dealer_image)"
+                             @emitErrorImage="errorImage">
                   </app-image>
                 </router-link>
               </div>
             </div>
             <div class="info-row warehouses-row">
-              <div class="info-row--label">Avalability:</div>
+              <div class="info-row--label info-row--label--availability">Availability:</div>
               <div class="info-row--body">
-                <div
-                  class="warehouses-responsive"
-                  @click="showResponsiveWarehouses = !showResponsiveWarehouses"
-                  v-show="$mq === 'sm' || $mq === 'md' || $mq === 'xs'"
-                >
-                  <span
-                    :class="{
-                      green: product.quantity && product.status === 'active',
-                      grey: !product.quantity || product.status !== 'active'
-                    }"
-                    v-text="
-                      product.quantity && product.status === 'active'
-                        ? 'In Stock'
-                        : 'Out of Stock'
-                    "
-                  >
+                <div class="warehouses-responsive"
+                     @click="showResponsiveWarehouses = !showResponsiveWarehouses"
+                     v-show="$mq === 'sm' || $mq === 'md' || $mq === 'xs'">
+                  <span :class="{
+                          green: product.quantity && product.status === 'active',
+                          grey: !product.quantity || product.status !== 'active'
+                        }"
+                        v-text="product.quantity && product.status === 'active'? 'In Stock' : 'Out of Stock'">
                   </span>
-                  <svg-chevron
-                    v-if="product.quantity && product.status === 'active'"
-                  ></svg-chevron>
-                  <product-responsive-warehouses
-                    v-if="showResponsiveWarehouses && product.quantity"
-                    v-on-clickaway="closeResponsiveWarehouses"
-                    :warehouses="product.warehouses"
-                    :product="product"
-                  >
+                  <svg-chevron v-if="product.quantity && product.status === 'active'"></svg-chevron>
+                  <product-responsive-warehouses v-if="showResponsiveWarehouses && product.quantity"
+                                                 v-on-clickaway="closeResponsiveWarehouses"
+                                                 :warehouses="product.warehouses"
+                                                 :product="product">
                   </product-responsive-warehouses>
                 </div>
-                <div
-                  v-if="$mq === 'lg' || $mq === 'xl'"
-                  class="warehouses-list"
-                  v-for="warehouse in product.warehouses"
-                >
+                <div v-if="$mq === 'lg' || $mq === 'xl'"
+                     class="warehouses-list"
+                     v-for="warehouse in product.warehouses">
                   <div class="warehouses-list--label">
                     {{ warehouse.city }}:
                   </div>
                   <div
                     :class="{
-                      green:
-                        warehouse.product.quantity > 20 &&
-                        product.status === 'active',
-                      grey:
-                        !warehouse.product.quantity ||
-                        product.status !== 'active'
+                      green: warehouse.product.quantity > 20 && product.status === 'active',
+                      grey: !warehouse.product.quantity || product.status !== 'active'
                     }"
-                    class="warehouses-list--body"
-                  >
+                    class="warehouses-list--body">
                     {{ productQuantity(warehouse) }}
                   </div>
                 </div>
@@ -282,17 +194,11 @@
             <div class="info-row fit-row">
               <div class="info-row--label">Fit:</div>
               <div class="info-row--body">
-                <div
-                  v-if="product.unifit"
-                  class="fit-row--unifit"
-                  id="unifit-tooltip"
-                >
+                <div v-if="product.unifit"
+                     class="fit-row--unifit"
+                     id="unifit-tooltip">
                   <span>Unifit</span>
-                  <div
-                    @mouseenter="toggleUnifitInfoHover(true)"
-                    @mouseleave="toggleUnifitInfoHover(false)"
-                  >
-                    <!-- Place for info svg -->
+                  <div @mouseenter="toggleUnifitInfoHover(true)" @mouseleave="toggleUnifitInfoHover(false)">
                     <tooltip
                       v-if="unifitInfo"
                       class="fit-row--unifit--tooltip"
@@ -301,8 +207,7 @@
                         text: 'Product is universal for all vehicles'
                       }"
                       :allignRight="true"
-                      :allignBottom="true"
-                    >
+                      :allignBottom="true">
                     </tooltip>
                     <div @click="unifitInfo = !unifitInfo">
                       <svg-help></svg-help>
@@ -311,9 +216,7 @@
                 </div>
                 <div v-else class="fit-row--vehicle">
                   <span>Vehicle Specific</span>
-                  <span class="link-quaternary" @click="$emit('openFitTab')"
-                    >See Suitable Cars ></span
-                  >
+                  <span class="link-quaternary" @click="$emit('openFitTab')">See Suitable Cars ></span>
                 </div>
               </div>
             </div>
@@ -325,71 +228,60 @@
                     product.price &&
                     (product.status !== 'disabled' &&
                       product.status !== 'archived')
-                "
-              >
-                <button
-                  @click="openModalCart"
-                  class="button-prime warehouses-row--add"
-                >
+                ">
+                <button @click="openModalCart"
+                        class="button-prime warehouses-row--add">
                   <svg-shopping-cart></svg-shopping-cart>
                   <span>Add to cart</span>
                 </button>
               </div>
               <div class="buttons-block" v-else>
-                <p
-                  v-if="
-                    product.status !== 'disabled' &&
-                      product.status !== 'archived'
-                  "
-                  class="product-page__available-text"
-                >
+                <p v-if="product.status !== 'disabled' && product.status !== 'archived'"
+                   class="product-page__available-text">
                   Currently product is not available for order. You can add it
                   to Wait List and we will notify you as soon as the product
                   becomes available for the order. For more information please
                   contact our
-                  <router-link :to="{ name: 'contactUs' }"
-                    >Support centre</router-link
-                  >.
+                  <router-link :to="{ name: 'contactUs' }" target='_blank'>Support centre</router-link>.
                 </p>
-                <p
-                  v-if="product.status === 'disabled'"
-                  class="product-page__available-text"
-                >
+                <p v-if="product.status === 'disabled'"
+                   class="product-page__available-text">
                   The product is temporarily unavailable. For more information
                   please contact our Support centre
                 </p>
-                <p
-                  v-if="product.status === 'archived'"
-                  class="product-page__available-text"
-                >
+                <p v-if="product.status === 'archived'"
+                   class="product-page__available-text">
                   Sorry, but the product is no longer delivered to our
                   warehouses or had been taken out of production. For more
                   information please contact our Support centre
                 </p>
-                <button
-                  v-if="
-                    product.status !== 'archived' &&
-                      product.status !== 'disabled'
-                  "
-                  @click="addToWaitList"
-                  class="button-prime warehouses-row--add"
-                >
+                <button v-if="product.status !== 'archived' && product.status !== 'disabled'"
+                        @click="addToWaitList"
+                        class="button-prime warehouses-row--add">
                   <svg-wishlist v-if="!waitListIncludesProduct"></svg-wishlist>
                   <svg-check-xl v-if="waitListIncludesProduct"></svg-check-xl>
-                  <span v-if="!waitListProgress">{{
-                    waitListIncludesProduct
-                      ? 'In Wait List'
-                      : 'Add to wait list'
-                  }}</span>
-                  <span v-if="waitListProgress" class="ellipsis-anim"
-                    ><span></span><span></span><span></span
-                  ></span>
+                  <span v-if="!waitListProgress">
+                    {{ waitListIncludesProduct ? 'In Wait List' : 'Add to wait list'}}
+                  </span>
+                  <span v-if="waitListProgress" class="ellipsis-anim"><span></span><span></span><span></span></span>
                 </button>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <new-modal v-if="galleryIsVisible" @cancel="closeGallery" class="gallery">
+          <template slot="header">
+            <div class="gallery__header">
+              <div class="gallery__header-name">{{ product.name }}</div>
+            </div>
+          </template>
+          <template slot="body">
+            <div class="gallery__slider">
+              <gallery-slider :images="productImages"></gallery-slider>
+            </div>
+          </template>
+      </new-modal>
       <!-- <div class="row"> -->
       <!-- <div class="product-page__video col-xl-12"> -->
       <!--
@@ -418,9 +310,11 @@ import Star from '../common-components/Star'
 import ProductResponsiveBar from './ProductResponsiveBar'
 import ProductSlider from './ProductSlider'
 import ProductResponsiveWarehouses from './ProductResponsiveWarehouses'
+import NewModal from '@/components/modals/NewModal'
 import utils from '@/mixins/utils'
 import imageSource from '@/mixins/imagesSource'
 import Tooltip from '../notifications/ErrorBox'
+import GallerySlider from './GallerySlider'
 import { mapGetters } from 'vuex'
 import _ from 'lodash'
 import $ from 'jquery'
@@ -428,6 +322,27 @@ import AppImage from '../parts/AppImage'
 
 export default {
   name: 'ProductInfo',
+  mixins: [utils, clickaway, imageSource],
+  components: {
+    Tooltip,
+    ProductSlider,
+    ProductResponsiveWarehouses,
+    ProductResponsiveBar,
+    NewModal,
+    GallerySlider,
+    Star,
+    AppImage
+  },
+  props: [
+    'product',
+    'optionsObject',
+    'rate',
+    'optionTypes',
+    'disabledButtons',
+    'selectedOptions',
+    'contentInfoReady',
+    'productImages'
+  ],
   data () {
     return {
       modalCart: false,
@@ -440,47 +355,57 @@ export default {
       showResponsiveBar: false,
       unavailablePrice: false,
       videos: ['video-1.png', 'video-2.png', 'video-3.png'],
-      limit: 5
+      limit: 5,
+      galleryIsVisible: false,
+      sliderIsMoving: false
     }
   },
-  props: [
-    'product',
-    'optionsObject',
-    'rate',
-    'optionTypes',
-    'disabledButtons',
-    'selectedOptions',
-    'contentInfoReady',
-    'productImages'
-  ],
+  computed: {
+    ...mapGetters(['userWaitList', 'isAuth']),
+    waitListIncludesProduct () {
+      if (this.userWaitList) {
+        return this.userWaitList.some(product => product.id === this.product.id)
+      }
+    }
+  },
   watch: {},
-  mixins: [utils, clickaway, imageSource],
+  mounted () {
+    if (this.product.status === 'active') {
+      window.addEventListener('scroll', this.scrollHandler, { passive: true })
+    }
+
+    window.addEventListener('touchend', this.clickAwayFunction)
+  },
   methods: {
+    slideChangeHandler (switching) {
+      this.sliderIsMoving = switching
+    },
+    openGallery ({ target: { parentElement: { className } } }) {
+      if (!['slider__wrap--panel', 'slider__wrap'].includes(className) || this.sliderIsMoving) return
+
+      this.galleryIsVisible = true
+    },
+    closeGallery () {
+      this.galleryIsVisible = false
+    },
     errorImage (e, image) {
       this.serverImageSource(image, null, e, this.SERVER_IMAGE_PRODUCT)
     },
     componentDealerImage (images, onError) {
-      let sizeProperty = 'tiny'
-
       return this.serverImageSource(
         images,
-        sizeProperty,
+        'tiny',
         onError,
         this.SERVER_IMAGE_PRODUCT
       )
     },
     clickAwayFunction (e) {
-      if (
-        this.product.unifit &&
-        !document.getElementById('unifit-tooltip').contains(e.target)
-      ) {
+      if (this.product.unifit && !document.getElementById('unifit-tooltip').contains(e.target)) {
         this.unifitInfo = false
       }
     },
     toggleUnifitInfoHover (show) {
-      if (this.$mq === 'lg' || this.$mq === 'xl') {
-        this.unifitInfo = show
-      }
+      if (this.$mq === 'lg' || this.$mq === 'xl') this.unifitInfo = show
     },
     closeResponsiveWarehouses () {
       this.showResponsiveWarehouses = false
@@ -492,7 +417,7 @@ export default {
 
           this.$store
             .dispatch('createWaitListedProduct', this.product.id)
-            .then(resposne => {
+            .then(() => {
               this.waitListProgress = false
             })
         }
@@ -540,15 +465,9 @@ export default {
         return 'active'
       }
     },
-    closeModalCart () {
-      this.modalCart = false
-    },
     openModalCart () {
-      this.$store
-        .dispatch('setModalProductId', this.product.slug)
-        .then(response => {
-          this.$store.dispatch('toggleCartModal', true)
-        })
+      this.$store.dispatch('setModalProductId', this.product.slug)
+        .then(() => this.$store.dispatch('toggleCartModal', true))
     },
     productQuantity (warehouse) {
       if (this.product.status !== 'active' || !warehouse.product.quantity) {
@@ -571,51 +490,72 @@ export default {
       this.showResponsiveBar = divPosition && scrollPos > divPosition
     }
   },
-  mounted () {
-    if (this.product.status === 'active') {
-      window.addEventListener('scroll', this.scrollHandler, { passive: true })
-    }
-
-    window.addEventListener('touchend', this.clickAwayFunction)
-  },
   beforeDestroy () {
     if (this.product.status === 'active') {
       window.removeEventListener('scroll', this.scrollHandler)
     }
 
     window.removeEventListener('touchend', this.clickAwayFunction)
-  },
-  computed: {
-    ...mapGetters(['userWaitList', 'isAuth']),
-    waitListIncludesProduct () {
-      if (this.userWaitList) {
-        return this.userWaitList.some(product => product.id === this.product.id)
-      }
-    }
-  },
-  components: {
-    Tooltip,
-    ProductSlider,
-    ProductResponsiveWarehouses,
-    ProductResponsiveBar,
-    Star,
-    AppImage
   }
 }
 </script>
 <style lang="scss" scoped="">
+.gallery {
+
+  & /deep/ .modal__container {
+    max-width: 1120px;
+    max-height: 734px;
+    width: 100%;
+  }
+
+  & /deep/ .modal__body {
+    padding: 32px;
+  }
+
+  & /deep/ .modal__info {
+    position: relative;
+    padding-top: calc(65% - 74px);
+  }
+
+  &__slider {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+  }
+
+  &__header-name {
+    font: 500 20px $montserrat-font;
+  }
+}
+
+@media (max-width: $md) {
+  .gallery {
+    & /deep/ .modal__info {
+      position: relative;
+      padding-top: calc(65%);
+    }
+  }
+}
+
+@media (max-width: $sm) {
+  .gallery {
+    & /deep/ .modal__body {
+      padding: 16px 16px 48px 16px;
+    }
+    & /deep/ .modal__info {
+      padding-top: 100%;
+    }
+    &__header-name {
+      font-size: 12px;
+    }
+  }
+}
+
 .product-page {
-  .slide-fade-enter-active {
-    transition: all 0.3s ease;
-  }
-  .slide-fade-leave-active {
-    transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
-  }
-  .slide-fade-enter, .slide-fade-leave-to
-      /* .slide-fade-leave-active до версии 2.1.8 */
- {
-    transform: translateY(-10px);
-  }
+  .slide-fade-enter-active {transition: all 0.3s ease}
+  .slide-fade-leave-active {transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1)}
+  .slide-fade-enter, .slide-fade-leave-to {transform: translateY(-10px)}
   &__breadcrumbs {
     padding-top: 24px;
     flex: 0 0 100%;
@@ -722,7 +662,7 @@ export default {
       white-space: nowrap;
     }
     &--rate-sku {
-      padding: 0 16px;
+      padding: 0 16px 2px 16px;
       border-left: 1px solid $grey;
       font: 14px $sours-sans-p-font;
       color: $grey;
@@ -745,6 +685,11 @@ export default {
           font-weight: 600;
           color: $main-dark;
           line-height: 1;
+          display: flex;
+          align-items: center;
+          &--availability {
+            align-self: flex-start;
+          }
         }
         &--body {
           width: 100%;
@@ -771,18 +716,17 @@ export default {
             align-items: center;
           }
           span {
-            color: $grey;
+            color: $main-grey;
           }
           svg {
             margin-left: 22px;
             width: 20px;
             height: 20px;
-            fill: $grey;
+            fill: $main-grey;
             cursor: pointer;
           }
           &--tooltip {
-            left: -60px;
-            width: 210px;
+            transform: translate(104%, -64%);
             .arrow {
               &:after {
                 transform: rotate(-45deg);
@@ -949,8 +893,7 @@ export default {
           display: flex;
         }
         .product-page__video--wrap {
-          box-shadow: 0px 10px 14.1px 0.9px rgba(0, 0, 0, 0.14),
-            0px 4px 19.6px 0.4px rgba(0, 0, 0, 0.06);
+          box-shadow: 0 10px 14.1px 0.9px rgba(0, 0, 0, 0.14), 0 4px 19.6px 0.4px rgba(0, 0, 0, 0.06);
         }
       }
     }

@@ -31,10 +31,6 @@
             <label class="label">Name</label>
             <p class="value">{{ order.shipping_rate.name }}</p>
           </div>
-          <div class="item" v-if="order.shipping_rate.days">
-            <label class="label">Days</label>
-            <p class="value">{{ order.shipping_rate.days }}</p>
-          </div>
         </div>
       </div>
     </div>

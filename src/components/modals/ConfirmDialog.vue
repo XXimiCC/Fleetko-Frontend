@@ -11,15 +11,9 @@
             </slot>
           </div>
           <div>
-            <div
-              class="modal-header--title"
-              :class="{ 'svg-shipping': shippingAddress }"
-            >
+            <div class="modal-header--title" :class="{ 'svg-shipping': shippingAddress }">
               <div class="item svg-wrap">
-                <svg-trash
-                  v-if="!shippingAddress"
-                  viewBox="7.5 2 9 19"
-                ></svg-trash>
+                <svg-trash v-if="!shippingAddress" viewBox="7.5 2 9 19"></svg-trash>
                 <svg-edit-location v-if="shippingAddress"></svg-edit-location>
               </div>
               <div class="item text" v-if="addressName">
@@ -28,16 +22,11 @@
               </div>
               <div class="item text" v-if="productForDelete">
                 Are you sure you want to delete the
-                <span class="bold"
-                  >"{{ productForDelete.productBrandName }}
-                  {{ productForDelete.name }}"</span
-                >
+                <span class="bold">"{{ productForDelete.productBrandName }} {{ productForDelete.name }}"</span>
                 from {{ productForDelete.warehouseCity }}?
               </div>
               <div class="item text" v-if="warehouseForDelete">
-                Are you sure you want to delete all items from
-                <span class="bold">{{ warehouseForDelete.city }}</span>
-                warehouse?
+                Are you sure you want to delete all items from <span class="bold">{{ warehouseForDelete.city }}</span>warehouse?
               </div>
               <div class="item text" v-if="clearCartDialog">
                 Are you sure you want to delete all items from the cart?
@@ -55,9 +44,7 @@
               </div>
               <div class="item text" v-if="paymentMethod">
                 Are you sure you want to delete this
-                <span class="bold" v-if="paymentMethod.type">{{
-                  paymentMethod.type === 'credit_card' ? 'card' : 'account'
-                }}</span>
+                <span class="bold" v-if="paymentMethod.type">{{ paymentMethod.type === 'credit_card' ? 'card' : 'account' }}</span>
                 <span class="bold" v-else>certificate</span>?
               </div>
               <div class="item text" v-if="type === 'closeBillingForm'">
@@ -65,17 +52,13 @@
                 continue?
               </div>
             </div>
-            <!-- modal header ends -->
+
             <div class="modal-body">
               <div class="modal-body__buttons">
                 <button class="button-second" @click="closeModal">
                   {{ textCancel() }}
                 </button>
-                <button
-                  :class="{ change: shippingAddress }"
-                  class="button-normal delete"
-                  @click="confirm"
-                >
+                <button class="button-normal delete" @click="confirm">
                   {{ textConfirm() }}
                 </button>
               </div>

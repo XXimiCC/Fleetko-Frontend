@@ -1,11 +1,10 @@
 <template>
   <div class="relative">
-    <loader
-      :modalLoader="true"
-      :background="'white'"
-      v-if="preloader"
-      class="modal__preloader--cube"
-    ></loader>
+    <loader v-if="preloader"
+            :modalLoader="true"
+            :background="'white'"
+            class="modal__preloader--cube">
+    </loader>
 
     <div class="modal-header">
       <slot>
@@ -14,21 +13,19 @@
         </div>
       </slot>
     </div>
+
     <div class="modal-header--title">{{ modalName }}</div>
-    <div class="modal-header--error" v-if="socialError">
+    <div v-if="socialError" class="modal-header--error">
       <span class="help error-message-input is-danger">{{ socialError }}</span>
     </div>
-    <!-- modal header ends -->
+
     <div class="modal-body">
-      <!-- Here Form -->
-      <login-form
-        @socialErrorHide="socialError = null"
-        v-if="!registration"
-      ></login-form>
-      <registration
-        @socialErrorHide="socialError = null"
-        v-if="registration"
-      ></registration>
+      <login-form v-if="!registration"
+                  @socialErrorHide="socialError = null">
+      </login-form>
+      <registration v-if="registration"
+                    @socialErrorHide="socialError = null">
+      </registration>
       <div class="modal-body__separator"><p>or</p></div>
       <div class="modal-body__alternative">
         <div class="modal-body__alternative--item social-wrap">
@@ -44,20 +41,14 @@
           </button>
         </div>
         <div class="user-agreement">
-          <span class="user-agreement__text"
-            >By creating an account, you agree to
-          </span>
-          <router-link :target="'_blank'" :to="{ name: 'termsOfUse' }"
-            ><span class="user-agreement--link link-quaternary sm-link"
-              >Fleetko's Terms of Service</span
-            ></router-link
-          >
-          <span>and</span>
-          <router-link :target="'_blank'" :to="{ name: 'privacyPolicy' }"
-            ><span class="user-agreement--link link-quaternary sm-link"
-              >Privacy Policy</span
-            ></router-link
-          >
+          <span class="user-agreement__text">By creating an account, you agree to <br /></span>
+          <router-link :target="'_blank'" :to="{ name: 'termsOfUse' }">
+            <span class="user-agreement--link link-quaternary sm-link">Fleetko's Terms of Service</span>
+          </router-link>
+          <span> and </span>
+          <router-link :target="'_blank'" :to="{ name: 'privacyPolicy' }">
+            <span class="user-agreement--link link-quaternary sm-link">Privacy Policy</span>
+          </router-link>
         </div>
       </div>
     </div>
@@ -273,8 +264,7 @@ export default {
 .slide-fade-leave-active {
   transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
 }
-.slide-fade-enter, .slide-fade-leave-to
-        /* .slide-fade-leave-active до версии 2.1.8 */ {
+.slide-fade-enter, .slide-fade-leave-to {
   transform: translateX(10px);
   opacity: 0;
 }
@@ -297,7 +287,7 @@ export default {
 
 .modal-container {
   width: 384px;
-  margin: 0px auto;
+  margin: 0 auto;
   background-color: #fff;
   border-radius: 4px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);

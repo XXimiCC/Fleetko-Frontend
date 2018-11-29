@@ -1,14 +1,18 @@
 <template>
   <div class="col-xl-12 slider">
-    <swiper class="col-xl-12" ref="brandsSwiper" :options="swiperOptions">
+    <swiper :options="swiperOptions || optionsDefault"
+            ref="brandsSwiper"
+            class="col-xl-12">
+
       <swiper-slide v-for="(brand, i) in brands" :key="i">
-        <div class="item">
-          <img :src="brandImage(brand.name)" alt="brand-logo" />
-        </div>
+        <div class="item"><img :src="brandImage(brand.name)" alt="brand-logo" /></div>
         <p class="slider__caption">{{ brand.name }}</p>
       </swiper-slide>
+
       <div class="brands-pagination" slot="pagination"></div>
+
     </swiper>
+
     <div class="slider--buttons">
       <button @click="swipePrev()" class="left">
         <svg-arrow-left></svg-arrow-left>
@@ -17,6 +21,7 @@
         <svg-arrow-right></svg-arrow-right>
       </button>
     </div>
+
   </div>
 </template>
 
@@ -24,37 +29,44 @@
 import utils from '@/mixins/utils'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 import $ from 'jquery'
+
 export default {
   name: 'brands-slider',
+  mixins: [utils],
+  components: {
+    swiper,
+    swiperSlide
+  },
+  props: ['swiperOptions'],
   data () {
     return {
       brands: [
-        {
-          name: 'Freightliner'
+        { name: 'Freightliner' },
+        { name: 'Volvo' },
+        { name: 'International' },
+        { name: 'Kenworth' },
+        { name: 'Mack' }
+      ],
+      optionsDefault: {
+        slidesPerView: 4,
+        spaceBetween: 30,
+        pagination: {
+          el: '.brands-pagination',
+          clickable: true
         },
-        {
-          name: 'Volvo'
-        },
-        {
-          name: 'International'
-        },
-        {
-          name: 'Kenworth'
-        },
-        {
-          name: 'Mack'
+        slidesPerGroup: 4,
+        loopFillGroupWithBlank: true,
+        breakpoints: {
+          640: {
+            slidesPerView: 2,
+            slidesPerColumn: 2,
+            slidesPerColumnFill: 'row'
+          },
+          960: {
+            slidesPerView: 3
+          }
         }
-      ]
-    }
-  },
-  props: ['swiperOptions'],
-  mixins: [utils],
-  methods: {
-    swipeNext () {
-      this.brandsSwiper.slideNext()
-    },
-    swipePrev () {
-      this.brandsSwiper.slidePrev()
+      }
     }
   },
   computed: {
@@ -62,27 +74,29 @@ export default {
       return this.$refs.brandsSwiper.swiper
     }
   },
-  components: {
-    swiper,
-    swiperSlide
-  },
   mounted () {
     let swiperSlider = this.brandsSwiper
 
     $(window).resize(function () {
       swiperSlider.update()
     })
+  },
+  methods: {
+    swipeNext () {
+      this.brandsSwiper.slideNext()
+    },
+    swipePrev () {
+      this.brandsSwiper.slidePrev()
+    }
   }
 }
 </script>
 
 <style scoped lang="scss">
 .brands-pagination {
-  position: absolute;
-  bottom: 0px;
   display: flex;
   justify-content: center;
-  align-items: center;
+  width: 100%;
 }
 .swiper-container {
   padding-left: 0;
@@ -97,7 +111,7 @@ export default {
 .item {
   border-radius: 4px;
   height: 128px;
-  box-shadow: 0px 3px 8.55px 0.45px rgba(6, 26, 70, 0.3);
+  box-shadow: 0 3px 8.55px 0.45px rgba(6, 26, 70, 0.3);
   img {
     width: 100%;
     height: 100%;

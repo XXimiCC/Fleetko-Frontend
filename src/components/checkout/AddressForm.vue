@@ -466,7 +466,14 @@ export default {
       }
       &--error {
         span {
-          color: #ff6d4a;
+          color: $input-error-border;
+        }
+      }
+    }
+    .vue-select[data-vv-name] {
+      & /deep/ .vs__selected-options {
+        & .selected-tag {
+          margin: 0 0 0 11px !important;
         }
       }
     }

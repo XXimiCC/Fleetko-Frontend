@@ -16,25 +16,21 @@
         </div>
       </div>
     </div>
-    <div
-      class="container header__main scoped-response padding-header style-mobile"
-      :class="{ 'header__main__sections-open': dropdownShow }"
-    >
+    <div class="container header__main scoped-response padding-header style-mobile"
+         :class="{ 'header__main__sections-open': dropdownShow }">
       <div class="flex-item">
         <div class="header__main--logo">
           <router-link :to="{ name: 'home' }">
-            <img itemprop="logo" class="logo-img" src="~@/assets/logo.svg" />
+            <img itemprop="logo" class="logo-img" src="~@/assets/logo.svg" alt=""/>
           </router-link>
         </div>
         <div class="header__main--search">
           <div class="input-wrap">
-            <input
-              @click="openSearchModal"
-              id="search-input"
-              @input="$event.target.value = ''"
-              class="input-default"
-              placeholder="Find Products, Categories, Dealers and more..."
-            />
+            <input @click="openSearchModal"
+                   id="search-input"
+                   @input="$event.target.value = ''"
+                   class="input-default"
+                   placeholder="Find Products, Categories, Dealers and more..." />
             <div class="header__main--search--icon">
               <svg-search></svg-search>
             </div>
@@ -43,75 +39,51 @@
       </div>
       <div class="flex-item">
         <div class="header__main--controls">
-          <div
-            class="hover-wrap"
-            @mouseenter="showInfo = true"
-            @mouseleave="showInfo = false"
-          >
-            <button
-              :class="{
-                'login-hover': isAuth && showInfo,
-                'guest-hover': !isAuth && showInfo
-              }"
-              @click="loginAction"
-              class="login-button"
-            >
+          <div class="hover-wrap"
+               @mouseenter="showInfo = true"
+               @mouseleave="showInfo = false">
+            <button :class="{ 'login-hover': isAuth && showInfo, 'guest-hover': !isAuth && showInfo }"
+                    @click="loginAction"
+                    class="login-button">
               <span>{{ checkButtonStatus() }}</span>
-              <img
-                v-if="isAuth"
-                :src="userImageSrc(userInfo, 64)"
-                alt="user-avatar"
-              />
+              <img v-if="isAuth"
+                   :src="userImageSrc(userInfo, 64)"
+                   alt="user-avatar"/>
               <svg-user v-if="!isAuth"></svg-user>
-              <i
-                v-if="isAuth"
-                :class="{ rotate: showInfo }"
-                class="fa fa-angle-down"
-                aria-hidden="true"
-              ></i>
+              <i v-if="isAuth"
+                 :class="{ rotate: showInfo }"
+                 class="fa fa-angle-down"
+                 aria-hidden="true">
+              </i>
             </button>
             <div class="info-wrap" v-if="showInfo && isAuth">
               <user-info @logout="logout"></user-info>
             </div>
           </div>
-          <div
-            class="cart-wrap"
-            @mouseenter="showBasket = true"
-            @mouseleave="showBasket = false"
-          >
-            <button
-              :class="{ 'cart-hover': showBasket }"
-              class="cart-wrap--button"
-              @click="goToCart"
-            >
+          <router-link @mouseenter.native="showBasket = true"
+                       @mouseleave.native="showBasket = false"
+                       :to="{ name: 'cartPage' }"
+                       class="cart-wrap">
+            <button :class="{ 'cart-hover': showBasket }" class="cart-wrap--button">
               <span>$ {{ toDollarDecimal(getTotalPriceCart) }}</span>
               <svg-basket></svg-basket>
-              <div class="cart-wrap--button__counter">
-                {{ getTotalQuantityCart }}
-              </div>
+              <div class="cart-wrap--button__counter">{{ getTotalQuantityCart }}</div>
             </button>
             <dropdown-shopping-cart v-if="showBasket"></dropdown-shopping-cart>
-          </div>
+          </router-link>
         </div>
       </div>
       <div class="header__bottom" @mouseleave="hideSectionDropdown">
-        <div
-          @mouseenter="openSectionDropdown(section)"
-          v-for="section in getSections"
-          :class="{
-            'section-hover': dropdownShow && dropdownSection.id === section.id
-          }"
-          class="header__bottom--section"
-        >
+        <div @mouseenter="openSectionDropdown(section)"
+             v-for="section in getSections"
+             :class="{ 'section-hover': dropdownShow && dropdownSection.id === section.id }"
+             class="header__bottom--section">
           <router-link :to="{ path: `/section/${section.slug}` }">
             <span>{{ section.name }}</span>
           </router-link>
         </div>
         <transition name="bounce">
-          <section-dropdown
-            v-if="dropdownShow"
-            :sectionProp="dropdownSection"
-          ></section-dropdown>
+          <section-dropdown v-if="dropdownShow" :sectionProp="dropdownSection"></section-dropdown>
         </transition>
       </div>
     </div>
@@ -184,12 +156,6 @@ export default {
         this.getSections,
         stateSection => stateSection.id === section.id
       )
-    },
-    goToCart () {
-      if (this.getTotalAmountCart > 0) {
-        this.$router.push({ name: 'cartPage' })
-        this.showBasket = false
-      }
     },
     toggleLoginModal (open) {
       this.$store.dispatch('toggleLoginModal', {
@@ -375,8 +341,6 @@ export default {
 }
 
 .cart-wrap {
-  margin-left: 32px;
-  width: 150px;
   display: flex;
   justify-content: flex-end;
   position: relative;
@@ -562,6 +526,8 @@ export default {
     &--controls {
       display: flex;
       align-items: center;
+      justify-content: space-between;
+      width: 325px;
       .fix-hover {
         position: absolute;
         width: 100%;
@@ -639,7 +605,7 @@ export default {
       }
       &--controls {
         .hover-wrap {
-          width: 160px;
+          width: 100px;
         }
         .cart-wrap {
           margin-left: 16px;

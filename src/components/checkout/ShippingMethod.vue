@@ -1,53 +1,44 @@
 <template>
   <div class="shipping-method">
-    <loader
-      :position="'fixed'"
-      v-if="componentLoader"
-      :background="'white'"
-    ></loader>
+    <loader :position="'fixed'"
+            v-if="componentLoader"
+            :background="'white'">
+    </loader>
+
     <checkout-header :navs="navs"></checkout-header>
+
     <div class="container">
       <div class="shipping-method__body">
         <div class="row">
           <div class="shipping-method__body--main col-md-6 col-12 ml-auto">
             <h2 class="h2-secondary title">Choose The Shipping Method</h2>
-            <div
-              class="warehouse"
-              :class="{
-                'warehouse--first-item':
-                  key === Object.keys(shippingWarehousesObject)[0]
-              }"
-              v-for="(house, key) in shippingWarehousesObject"
-            >
+            <div v-for="(house, key) in shippingWarehousesObject"
+                 class="warehouse"
+                 :class="{'warehouse--first-item': key === Object.keys(shippingWarehousesObject)[0]}">
               <div class="warehouse__title">
                 <span>Warehouse: </span><span>{{ house.warehouseCity }}</span>
               </div>
               <div class="warehouse__method">
                 <div class="item radio-default">
-                  <input
-                    @click="changeMethod($event, key)"
-                    v-model="house.shippingMethod"
-                    :value="'pickup'"
-                    type="radio"
-                  />
+                  <input @click="changeMethod($event, key)"
+                         v-model="house.shippingMethod"
+                         :value="'pickup'"
+                         type="radio" />
                   <span class="paragraph-prime radio-label">Pickup</span>
                 </div>
                 <div class="item radio-default">
-                  <input
-                    @click="changeMethod($event, key)"
-                    v-model="house.shippingMethod"
-                    :value="'delivery'"
-                    type="radio"
-                  />
+                  <input @click="changeMethod($event, key)"
+                         v-model="house.shippingMethod"
+                         :value="'delivery'"
+                         type="radio" />
                   <span class="paragraph-prime radio-label">Delivery</span>
                 </div>
               </div>
+
               <div class="warehouse__body">
                 <transition name="fade">
-                  <div
-                    v-if="house.shippingMethod === 'pickup'"
-                    class="warehouse__body--pickup"
-                  >
+                  <div v-if="house.shippingMethod === 'pickup'"
+                       class="warehouse__body--pickup">
                     <h3>Pickup from San Bernardino warehouse</h3>
                     <p class="paragraph-prime">
                       From the store 701 S Gifford Ave # 109, San Bernardino, CA
@@ -61,63 +52,42 @@
                   </div>
                 </transition>
 
-                <div
-                  v-if="house.shippingMethod === 'delivery'"
-                  :id="`warehouse-${key}`"
-                  class="warehouse__body--delivery"
-                >
+                <div v-if="house.shippingMethod === 'delivery'"
+                     :id="`warehouse-${key}`"
+                     class="warehouse__body--delivery">
                   <transition name="fade">
                     <div v-if="!house.editMode && house.defaultAddress">
-                      <div
-                        v-if="addressPreviewMode(key)"
-                        class="address-preview"
-                      >
-                        <div
-                          class="address-preview--info"
-                          v-if="house.notVerified"
-                        >
+                      <div v-if="addressPreviewMode(key)"
+                           class="address-preview">
+                        <div class="address-preview--info"
+                             v-if="house.notVerified">
                           <svg-info height="24" width="24"></svg-info>
-                          <p>
-                            Not verified addresses may not be served by delivery
-                            services
-                          </p>
+                          <p>Not verified addresses may not be served by delivery services</p>
                         </div>
-                        <app-notification
-                          v-if="house.notification || house.error"
-                          @clearNotify="clearNotification(key)"
-                          :notification="house.notification || house.error"
-                          cancelable="true"
-                          class="notification-wrap"
-                        >
+                        <app-notification v-if="house.notification || house.error"
+                                          @clearNotify="clearNotification(key)"
+                                          :notification="house.notification || house.error"
+                                          :cancelable="!house.error"
+                                          class="notification-wrap">
                         </app-notification>
-                        <div
-                          class="address-preview__body"
-                          :class="{
-                            'address-preview--not-verified': !house
-                              .defaultAddress.verified
-                          }"
-                        >
+                        <div class="address-preview__body"
+                             :class="{'address-preview--not-verified': !house.defaultAddress.verified}">
                           <div class="active-address">
                             <svg-check></svg-check>
                           </div>
                           <div class="item">
                             <div class="label">Label</div>
-                            <span class="value">{{
-                              house.defaultAddress.label
-                            }}</span>
+                            <span class="value">{{ house.defaultAddress.label }}</span>
                           </div>
                           <div class="item">
                             <div class="label">Name</div>
-                            <span class="value">{{
-                              house.defaultAddress.name
-                            }}</span>
+                            <span class="value">{{ house.defaultAddress.name }}</span>
                           </div>
                           <div class="item">
                             <div class="label">Address</div>
-                            <span class="value"
-                              >{{ house.defaultAddress.addressLine }},
-                              <span v-if="house.defaultAddress.addressLine2"
-                                >{{ house.defaultAddress.addressLine2 }},
+                            <span class="value">{{ house.defaultAddress.addressLine }},
+                              <span v-if="house.defaultAddress.addressLine2">
+                                {{ house.defaultAddress.addressLine2 }},
                               </span>
                               {{ house.defaultAddress.city }},
                               {{ house.defaultAddress.state }}
@@ -126,58 +96,35 @@
                           </div>
                           <div class="item" v-if="!house.editMode">
                             <div class="label">Phone</div>
-                            <span class="value">{{
-                              formatPhoneNumber(house.defaultAddress.phone)
-                            }}</span>
+                            <span class="value">{{ formatPhoneNumber(house.defaultAddress.phone) }}</span>
                           </div>
                         </div>
-                        <div
-                          class="address-preview__link"
-                          @click="
-                            checkIfTemporary(
-                              house.defaultAddress,
-                              house.warehouseId
-                            )
-                          "
-                        >
-                          <span class="link-primary"
-                            >Use a different shipping address</span
-                          >
+                        <div class="address-preview__link"
+                             @click="checkIfTemporary(house.defaultAddress, house.warehouseId)">
+                          <span class="link-primary">Use a different shipping address</span>
                         </div>
                       </div>
                       <div v-show="addressSelectMode(key)">
-                        <div
-                          class="form-select"
-                          :class="{ 'small-margin': house.notification }"
-                        >
+                        <div class="form-select" :class="{ 'small-margin': house.notification }">
                           <label>Shipping Address</label>
-                          <div
-                            class="input-wrap"
-                            @click="switchOnSelect(house.warehouseId)"
-                          >
-                            <v-select
-                              @input="
-                                changeShippingAddress(house.defaultAddress, key)
-                              "
-                              :class="{ 'not-verified': house.notVerified }"
-                              v-model="house.defaultAddress"
-                              id="select-shipping-address"
-                              class="vue-select"
-                              :options="
-                                selectShippingMethod(house.addressesSelect)
-                              "
-                              :searchable="false"
-                            ></v-select>
+                          <div class="input-wrap" @click="switchOnSelect($event, house.warehouseId, house)">
+                            <v-select @input="changeShippingAddress(house.defaultAddress, key)"
+                                      :ref="'select' + house.warehouseId"
+                                      :class="{ 'not-verified': house.notVerified }"
+                                      v-model="house.defaultAddress"
+                                      id="select-shipping-address"
+                                      class="vue-select"
+                                      :options="selectShippingMethod(house.addressesSelect)"
+                                      :searchable="false">
+                            </v-select>
                           </div>
                         </div>
                         <div class="alternative">
                           <div class="alternative--pad">
                             <p class="alternative--text"><span>OR</span></p>
                           </div>
-                          <button
-                            @click="toggleEditMode(key, true)"
-                            class="button-second left-icon"
-                          >
+                          <button @click="toggleEditMode(key, true)"
+                                  class="button-second left-icon">
                             <svg-add></svg-add>
                             <span>Add new address</span>
                           </button>
@@ -187,58 +134,46 @@
                   </transition>
                   <transition name="fade">
                     <div v-if="addressFormMode(key)">
-                      <address-form
-                        :relativeComponent="'shipping-method'"
-                        @cancelForm="cancelForm"
-                        @makeMainForWarehouse="setAsDefaultAddress"
-                        :addressesSelect="house.addressesSelect"
-                        :warehouseId="house.warehouseId"
-                      ></address-form>
+                      <address-form :relativeComponent="'shipping-method'"
+                                    @cancelForm="cancelForm"
+                                    @makeMainForWarehouse="setAsDefaultAddress"
+                                    :addressesSelect="house.addressesSelect"
+                                    :warehouseId="house.warehouseId">
+                      </address-form>
                     </div>
                   </transition>
                 </div>
               </div>
             </div>
 
-            <confirm-dialog
-              :shippingAddress="shippingAddressConfirm"
-              :type="'shippingAddress'"
-              v-if="showConfirm"
-              @disablePreviewMode="disablePreviewMode"
-              @cancel="hideDialog"
-            >
+            <confirm-dialog :shippingAddress="shippingAddressConfirm"
+                            :type="'shippingAddress'"
+                            v-if="showConfirm"
+                            @disablePreviewMode="disablePreviewMode"
+                            @cancel="hideDialog">
             </confirm-dialog>
           </div>
           <div class="shipping-method__body--check col-md-4 col-12 ml-auto">
             <div class="check" v-sticky="{ zIndex: 100, stickyTop: 32 }">
               <div class="check__header"><h3>Order Summary</h3></div>
               <div class="check__body">
-                <div
-                  class="check__body--warehouse"
-                  v-for="(warehouse, key) in warehousesCheck"
-                >
+                <div class="check__body--warehouse"
+                     v-for="warehouse in warehousesCheck">
                   <div class="title">
                     <span class="title--city">{{ warehouse.city }}</span>
-                    <span class="title--price"
-                      >$ {{ warehouseCountTotalPrice(warehouse) }}</span
-                    >
+                    <span class="title--price">$ {{ warehouseCountTotalPrice(warehouse) }}</span>
                   </div>
-                  <warehouse-products
-                    :warehouse="warehouse"
-                  ></warehouse-products>
+                  <warehouse-products :warehouse="warehouse"></warehouse-products>
                 </div>
               </div>
               <div class="check__footer">
                 <div class="check__footer--total">
-                  <span>Total</span
-                  ><span>$ {{ toDollarDecimal(getTotalPriceCart) }}</span>
+                  <span>Total</span><span>$ {{ toDollarDecimal(getTotalPriceCart) }}</span>
                 </div>
                 <div class="check__footer--button">
-                  <button
-                    @click="createPurchase"
-                    :disabled="disableStep || openForm"
-                    class="button-prime"
-                  >
+                  <button @click="createPurchase"
+                          :disabled="disableStep || openForm"
+                          class="button-prime">
                     Continue
                   </button>
                 </div>
@@ -253,21 +188,30 @@
 
 <script>
 import WarehouseProducts from './WarehouseProducts'
-import AddressForm from './AddressForm.vue'
-import _ from 'lodash'
-import vSelect from 'vue-select'
-import { mapGetters } from 'vuex'
+import AddressForm from './AddressForm'
 import CheckoutHeader from './CheckoutHeader.vue'
 import ConfirmDialog from '../modals/ConfirmDialog'
-import AppNotification from '../notifications/MainNotify.vue'
-import Vue from 'vue'
-import VueSticky from 'vue-sticky'
+import AppNotification from '../notifications/MainNotify'
 import Loader from '@/components/common-components/Loader'
+import { mapGetters } from 'vuex'
+import _ from 'lodash'
+import vSelect from 'vue-select'
+import VueSticky from 'vue-sticky'
+
 
 export default {
   name: 'Checkout',
   directives: {
     sticky: VueSticky
+  },
+  components: {
+    vSelect,
+    CheckoutHeader,
+    AppNotification,
+    AddressForm,
+    ConfirmDialog,
+    WarehouseProducts,
+    Loader
   },
   data () {
     return {
@@ -307,6 +251,15 @@ export default {
       enableWatcherForCart: false
     }
   },
+  computed: {
+    ...mapGetters([
+      'getUserCart',
+      'getCartItems',
+      'getTotalPriceCart',
+      'getTotalQuantityCart',
+      'getTotalAmountCart'
+    ])
+  },
   watch: {
     shippingWarehousesObject: {
       handler: function () {
@@ -335,9 +288,29 @@ export default {
       deep: true
     }
   },
+  created () {
+    window.onbeforeunload = function () {
+      return 'Are you sure?'
+    }
+  },
+  mounted () {
+    this.createShippingArray()
+
+    _.forEach(this.getUserCart.cart, (value, key) => {
+      this.warehousesCheck.push({
+        id: key,
+        open: false,
+        city: value.city,
+        products: value.products
+      })
+    })
+
+    this.enableWatcherForCart = true
+  },
   methods: {
-    switchOnSelect (key) {
-      Vue.set(this.shippingWarehousesObject[key], 'enableSelect', true)
+    switchOnSelect (event, key, house) {
+      if (!event.target.className) this.changeShippingAddress(house.defaultAddress, key)
+      this.$set(this.shippingWarehousesObject[key], 'enableSelect', true)
     },
     setAsDefaultAddress (
       warehouseId,
@@ -365,7 +338,7 @@ export default {
         })
       }
 
-      Vue.set(this.shippingWarehousesObject[warehouseId], 'defaultAddress', {
+      this.$set(this.shippingWarehousesObject[warehouseId], 'defaultAddress', {
         temporary: !assignToUser,
         label: address.label,
         value: address.token,
@@ -379,14 +352,10 @@ export default {
         zip: address.zip
       })
 
-      Vue.set(this.shippingWarehousesObject[warehouseId], 'enableSelect', false)
-      if (notification) {
-Vue.set(
-          this.shippingWarehousesObject[warehouseId],
-          'notification',
-          notification
-        )
-}
+      this.$set(this.shippingWarehousesObject[warehouseId], 'enableSelect', false)
+
+      if (notification) this.$set(this.shippingWarehousesObject[warehouseId], 'notification', notification)
+
       if (addAsDefaultToAll) this.setAddressToAll(address, null)
 
       this.cancelForm(warehouseId)
@@ -396,7 +365,6 @@ Vue.set(
       this.$scrollTo(`#warehouse-${warehouseId}`, 1500, { offset: -400 })
     },
     setAddressToAll (address, notification) {
-      // С помощью every проверить все склады и если у каждого нету Default address
       _.forEach(this.shippingWarehousesObject, (value, key) => {
         if (!value.defaultAddress) {
           value.defaultAddress = {
@@ -414,24 +382,15 @@ Vue.set(
             zip: address.zip
           }
         }
-        if (notification) {
- Vue.set(
-            this.shippingWarehousesObject[key],
-            'notification',
-            notification
-          )
-}
+        if (notification) this.$set(this.shippingWarehousesObject[key], 'notification', notification)
       })
     },
     changeShippingAddress (value, key) {
-      if (
-        !_.some(this.shippingWarehousesObject[key].addressesSelect, {
-          value: this.shippingWarehousesObject[key].defaultAddress.value
-        }) &&
-        this.shippingWarehousesObject[key].enableSelect
+      if (!_.some(this.shippingWarehousesObject[key].addressesSelect,
+          { value: this.shippingWarehousesObject[key].defaultAddress.value }) &&
+          this.shippingWarehousesObject[key].enableSelect
       ) {
-        let mainAddress = this.shippingWarehousesObject[key]
-          .addressesSelect.find(address => address.default)
+        let mainAddress = this.shippingWarehousesObject[key].addressesSelect.find(address => address.default)
 
         this.shippingWarehousesObject[key].defaultAddress = {
           temporary: mainAddress.temporary,
@@ -447,13 +406,10 @@ Vue.set(
           state: mainAddress.state,
           zip: mainAddress.zip
         }
-        Vue.set(this.shippingWarehousesObject[key], 'enableSelect', false)
+        this.$set(this.shippingWarehousesObject[key], 'enableSelect', false)
       } else {
-        if (!value.verified) {
-          Vue.set(this.shippingWarehousesObject[key], 'notVerified', true)
-        } else {
-          Vue.set(this.shippingWarehousesObject[key], 'notVerified', false)
-        }
+        if (!value.verified) this.$set(this.shippingWarehousesObject[key], 'notVerified', true)
+        else this.$set(this.shippingWarehousesObject[key], 'notVerified', false)
 
         if (
           !this.shippingWarehousesObject[key].preview &&
@@ -483,11 +439,8 @@ Vue.set(
     checkAlaskaAndHawaii (value, key) {
       this.disableStep = false
 
-      if (
-        this.shippingWarehousesObject[key].freight &&
-        (value.state === 'AK' || value.state === 'HI')
-      ) {
-        Vue.set(this.shippingWarehousesObject[key], 'error', {
+      if (this.shippingWarehousesObject[key].freight && (value.state === 'AK' || value.state === 'HI')) {
+        this.$set(this.shippingWarehousesObject[key], 'error', {
           text: [
             'We are sorry, but one of the items in the',
             ' order can not be delivered by freight to ',
@@ -499,7 +452,7 @@ Vue.set(
           show: true
         })
       } else {
-        Vue.set(this.shippingWarehousesObject[key], 'error', null)
+        this.$set(this.shippingWarehousesObject[key], 'error', null)
       }
       this.validateAlaskaHawaiiGlobal()
     },
@@ -533,7 +486,7 @@ Vue.set(
         zip: g.zip
       }))
     },
-    fetchAdresses () {
+    fetchAddresses () {
       this.$store.dispatch('fetchAddresses').then(
         response => {
           let mainAddress = response.data.find(address => address.default)
@@ -575,9 +528,6 @@ Vue.set(
               value.addressesSelect = []
             })
           }
-        },
-        error => {
-          console.error(error)
         }
       )
     },
@@ -607,26 +557,26 @@ Vue.set(
           }
         }
 
-        _.forEach(value.products, valu => {
+        _.forEach(value.products, value => {
           if (value.freight) obj.freight = true
         })
 
-        Vue.set(this.shippingWarehousesObject, key, obj)
+        this.$set(this.shippingWarehousesObject, key, obj)
       })
-      this.fetchAdresses()
+      this.fetchAddresses()
       this.beforeComponentEnterHook()
     },
     changeMethod ($event, key) {
       _.forEach(this.shippingWarehousesObject, (value, key) => {
-        Vue.set(this.shippingWarehousesObject[key], 'editMode', false)
+        this.$set(this.shippingWarehousesObject[key], 'editMode', false)
         if (!value.defaultAddress) {
-          Vue.set(
+          this.$set(
             this.shippingWarehousesObject[key],
             'shippingMethod',
             'pickup'
           )
         } else {
-          Vue.set(this.shippingWarehousesObject[key], 'preview', true)
+          this.$set(this.shippingWarehousesObject[key], 'preview', true)
         }
       })
 
@@ -639,22 +589,22 @@ Vue.set(
         $event.target.value !== 'pickup' &&
         !this.shippingWarehousesObject[key].defaultAddress
       ) {
-        Vue.set(this.shippingWarehousesObject[key], 'editMode', true)
+        this.$set(this.shippingWarehousesObject[key], 'editMode', true)
       }
 
       this.validateAlaskaHawaiiGlobal()
     },
     toggleEditMode (key, enable) {
       _.forEach(this.shippingWarehousesObject, (value, key) => {
-        Vue.set(this.shippingWarehousesObject[key], 'editMode', false)
+        this.$set(this.shippingWarehousesObject[key], 'editMode', false)
         if (value.shippingMethod === 'parcel') {
-          Vue.set(this.shippingWarehousesObject[key], 'preview', true)
+          this.$set(this.shippingWarehousesObject[key], 'preview', true)
         }
       })
 
       enable
-        ? Vue.set(this.shippingWarehousesObject[key], 'editMode', true)
-        : Vue.set(this.shippingWarehousesObject[key], 'editMode', false)
+        ? this.$set(this.shippingWarehousesObject[key], 'editMode', true)
+        : this.$set(this.shippingWarehousesObject[key], 'editMode', false)
     },
     checkIfTemporary (address, id) {
       if (address.temporary) {
@@ -669,9 +619,9 @@ Vue.set(
       this.showConfirm = false
     },
     disablePreviewMode (id) {
-      Vue.set(this.shippingWarehousesObject[id], 'preview', false)
+      this.$set(this.shippingWarehousesObject[id], 'preview', false)
       if (!this.shippingWarehousesObject[id].addressesSelect.length) {
-        Vue.set(this.shippingWarehousesObject[id], 'editMode', true)
+        this.$set(this.shippingWarehousesObject[id], 'editMode', true)
       } else {
         if (
           !_.some(this.shippingWarehousesObject[id].addressesSelect, {
@@ -696,16 +646,16 @@ Vue.set(
             state: mainAddress.state,
             zip: mainAddress.zip
           }
-          Vue.set(this.shippingWarehousesObject[id], 'enableSelect', false)
+          this.$set(this.shippingWarehousesObject[id], 'enableSelect', false)
         }
       }
       this.hideDialog()
     },
     enablePreviewMode (id) {
-      Vue.set(this.shippingWarehousesObject[id], 'preview', true)
+      this.$set(this.shippingWarehousesObject[id], 'preview', true)
     },
     clearNotification (key) {
-      Vue.set(this.shippingWarehousesObject[key], 'notification', null)
+      this.$set(this.shippingWarehousesObject[key], 'notification', null)
     },
     cancelForm (warehouseId) {
       this.shippingWarehousesObject[warehouseId].edit = {
@@ -806,72 +756,25 @@ Vue.set(
       )
     }
   },
-  computed: {
-    ...mapGetters([
-      'getUserCart',
-      'getCartItems',
-      'getTotalPriceCart',
-      'getTotalQuantityCart',
-      'getTotalAmountCart'
-    ])
-  },
-  created () {
-    window.onbeforeunload = function (e) {
-      return 'Are you sure?'
+  beforeRouteLeave (to, from, next) {
+    if (!!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform)) {
+      next()
+      return
     }
+
+    if (to.name !== 'orderHistory' && to.name !== 'payment-method' && this.allowLeaveRoute) {
+      if (confirm('All entered data will be lost. Are you sure you want to refresh the page?')) {
+        next()
+      } else next('/checkout/shipping-method')
+    } else next()
   },
   beforeDestroy () {
     window.onbeforeunload = null
-  },
-  mounted () {
-    this.createShippingArray()
-
-    _.forEach(this.getUserCart.cart, (value, key) => {
-      this.warehousesCheck.push({
-        id: key,
-        open: false,
-        city: value.city,
-        products: value.products
-      })
-    })
-
-    this.enableWatcherForCart = true
-  },
-  beforeRouteLeave (to, from, next) {
-    let iOS =
-      !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform)
-
-    if (iOS) {
-      next()
-    } else {
-      if (
-        to.name !== 'orderHistory' &&
-        to.name !== 'payment-method' &&
-        this.allowLeaveRoute
-      ) {
-        if (
-          confirm(
-            'All entered data will be lost. Are you sure you want to refresh the page?'
-          )
-        ) {
-          next()
-        } else next('/checkout/shipping-method')
-      } else next()
-    }
-  },
-  components: {
-    vSelect,
-    CheckoutHeader,
-    AppNotification,
-    AddressForm,
-    ConfirmDialog,
-    WarehouseProducts,
-    Loader
   }
 }
 </script>
 
-<style lang="scss" scoped="">
+<style lang="scss" scoped>
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.2s;
@@ -886,6 +789,15 @@ Vue.set(
   margin-top: 16px;
   width: 100%;
   margin-left: 0;
+}
+
+.vue-select {
+  & /deep/ .vs__selected-options {
+    & .selected-tag {
+      height: 100%;
+      margin: 0 0 0 16px !important;
+    }
+  }
 }
 
 .shipping-method {

@@ -77,7 +77,10 @@ import {
   PRODUCTS_GET_WAREHOUSE_ERROR,
   PRODUCTS_GET_LIST_WAREHOUSES_REQUERST,
   PRODUCTS_GET_LIST_WAREHOUSES_SUCCESS,
-  PRODUCTS_GET_LIST_WAREHOUSES_ERROR
+  PRODUCTS_GET_LIST_WAREHOUSES_ERROR,
+  PRODUCTS_GET_HOMEPAGE_BANNERS_REQUEST,
+  PRODUCTS_GET_HOMEPAGE_BANNERS_SUCCESS,
+  PRODUCTS_GET_HOMEPAGE_BANNERS_ERROR
 } from '../mutations'
 
 Vue.use(Vuex)
@@ -140,6 +143,27 @@ const actions = {
   setDealerView ({commit}, view) {
     commit(PRODUCTS_SET_DEALER_VIEW, view)
   },
+
+  fetchHomepageBanners ({commit}) {
+    commit(PRODUCTS_GET_SECTIONS_REQUEST)
+
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: '/api/homepage_banners',
+        method: 'GET'
+      }).then(
+        (resp) => {
+          commit(PRODUCTS_GET_HOMEPAGE_BANNERS_SUCCESS)
+          resolve(resp)
+        },
+        (err) => {
+          commit(PRODUCTS_GET_HOMEPAGE_BANNERS_ERROR)
+          reject(err)
+        }
+      )
+    })
+  },
+
   fetchSections ({commit}) {
     commit(PRODUCTS_GET_SECTIONS_REQUEST)
 
@@ -651,6 +675,15 @@ const mutations = {
   },
   [PRODUCTS_SET_DEALER_VIEW] (state, payload) {
     state.dealerView = payload
+  },
+  [PRODUCTS_GET_HOMEPAGE_BANNERS_REQUEST] (state) {
+    state.loading = true
+  },
+  [PRODUCTS_GET_HOMEPAGE_BANNERS_SUCCESS] (state) {
+    state.loading = false
+  },
+  [PRODUCTS_GET_HOMEPAGE_BANNERS_ERROR] (state) {
+    state.loading = false
   },
   [PRODUCTS_GET_SECTIONS_REQUEST] (state) {
     state.loading = true

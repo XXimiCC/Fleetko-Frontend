@@ -3,87 +3,57 @@
     <div v-if="!editMode" class="col-xl-12 p-0 account-info__orders">
       <p class="account-info__orders--title">Address Book</p>
       <div class="row">
-        <app-notification
-          v-if="notification"
-          @clearNotify="notification = null"
-          :notification="notification"
-          :cancelable="true"
-          class="notification-wrap col-md-6"
-        ></app-notification>
+        <app-notification v-if="notification"
+                          @clearNotify="notification = null"
+                          :notification="notification"
+                          :cancelable="true"
+                          class="notification-wrap col-md-6">
+        </app-notification>
       </div>
 
       <div class="account-info__orders--description">
         <div class="item"><svg-info height="24" width="24"></svg-info></div>
         <div class="item">
-          <p>
-            To select the current address, click on the card with this address
-          </p>
-          <p v-if="notVerifiedOne">
-            Not verified addresses may not be served by delivery services
-          </p>
+          <p>To select the current address, click on the card with this address</p>
+          <p v-if="notVerifiedOne">Not verified addresses may not be served by delivery services</p>
         </div>
       </div>
 
-      <div v-if="addressbookLoader" class="address__preloader">
-        <loader class="address__preloader--cube"></loader>
-      </div>
+      <div v-if="addressbookLoader" class="address__preloader"><loader class="address__preloader--cube"></loader></div>
 
-      <transition-group
-        v-if="!addressbookLoader"
-        mode="out-in"
-        name="list"
-        tag="div"
-        class="account-info__orders--body row"
-      >
-        <div
-          v-for="(address, i) in addresses"
-          :key="address.id"
-          class="col-xl-6 col-md-6 address-wrap"
-        >
-          <div
-            class="account-info__orders--body--address"
-            @click.prevent="makeActive(address, i)"
-            :class="{
-              'account-info__orders--body--address--address-main':
-                address.default,
-              'account-info__orders--body--address--address-not-verify':
-                address.default && !address.verified
-            }"
-          >
-            <div v-if="address.default" class="active-address">
-              <svg-check></svg-check>
-            </div>
+      <transition-group v-if="!addressbookLoader"
+                        mode="out-in"
+                        name="list"
+                        tag="div"
+                        class="account-info__orders--body row">
+        <div v-for="(address, i) in addresses"
+             :key="address.id"
+             class="col-xl-6 col-md-6 address-wrap">
+          <div class="account-info__orders--body--address"
+               @click.prevent="makeActive(address, i)"
+               :class="{
+                 'account-info__orders--body--address--address-main': address.default,
+                 'account-info__orders--body--address--address-not-verify':  address.default && !address.verified
+               }">
+
+            <div v-if="address.default" class="active-address"><svg-check></svg-check></div>
             <div v-if="!address.verified" class="address-not-verified">
               <div class="relative"><div class="rotate">Not Verified</div></div>
             </div>
-            <div class="line label-line">
-              <span>Label</span><span>{{ address.label }}</span>
-            </div>
-            <div class="line">
-              <span>Full Name</span><span>{{ address.name }}</span>
-            </div>
+            <div class="line label-line"><span>Label</span><span>{{ address.label }}</span></div>
+            <div class="line"><span>Full Name</span><span>{{ address.name }}</span></div>
             <div class="line">
               <span v-text="$mq === 'sm' ? 'Address' : 'Address Line 1'"></span>
               <span>{{ address.address_line_1 }}</span>
             </div>
             <div class="line">
-              <span
-                v-text="$mq === 'sm' ? 'Address 2' : 'Address Line 2'"
-              ></span>
+              <span v-text="$mq === 'sm' ? 'Address 2' : 'Address Line 2'"></span>
               <span>{{ address.address_line_2 }}</span>
             </div>
-            <div class="line">
-              <span>City</span><span>{{ address.city }}</span>
-            </div>
-            <div class="line">
-              <span>State</span><span v-text="StateName(address.state)"></span>
-            </div>
-            <div class="line">
-              <span>ZIP</span><span>{{ address.zip }}</span>
-            </div>
-            <div class="line">
-              <span>Phone</span
-              ><span>{{ formatPhoneNumber(address.phone) }}</span>
+            <div class="line"><span>City</span><span>{{ address.city }}</span></div>
+            <div class="line"><span>State</span><span v-text="StateName(address.state)"></span></div>
+            <div class="line"><span>ZIP</span><span>{{ address.zip }}</span></div>
+            <div class="line"><span>Phone</span><span>{{ formatPhoneNumber(address.phone) }}</span>
             </div>
             <div class="actions">
               <div @click.stop="makeEditable(address, i)" class="item">
@@ -97,11 +67,9 @@
             </div>
           </div>
         </div>
-        <div
-          v-if="addresses.length > 0"
-          :key="-1"
-          class="col-xl-6 col-md-6 address-wrap"
-        >
+        <div v-if="addresses.length > 0"
+             :key="-1"
+             class="col-xl-6 col-md-6 address-wrap">
           <div class="account-info__orders--body--address">
             <div class="add-new" @click="addNew">
               <svg-plus></svg-plus>
@@ -110,249 +78,196 @@
           </div>
         </div>
       </transition-group>
-      <confirm-dialog
-        :addressName="addressName"
-        :type="'deleteAddress'"
-        v-if="showConfirm"
-        @confirm="deleteAddress"
-        @cancel="hideDialog"
-      >
+      <confirm-dialog :addressName="addressName"
+                      :type="'deleteAddress'"
+                      v-if="showConfirm"
+                      @confirm="deleteAddress"
+                      @cancel="hideDialog">
       </confirm-dialog>
     </div>
     <!-- If edit mode is enable -->
-    <div v-else="" class="account-info__orders account-info__edit">
+    <div v-else class="account-info__orders account-info__edit">
       <div class="account-info__edit-address">
         <p class="account-info__orders--title">Address Book</p>
         <div class="account-info__edit-address--form-item">
           <label>Label</label>
           <div class="input-wrap">
-            <input
-              :class="{ 'input-error': errors.has('label') }"
-              v-validate="'required|max:19'"
-              class="input-default"
-              name="label"
-              v-model="edit.label"
-              @input="formInputHandler"
-              placeholder="House, Work, etc."
-              type="text"
-            />
-            <span v-show="errors.has('label')" class="error-message-input">
-              {{ errors.first('label') }}
-            </span>
+            <input :class="{ 'input-error': errors.has('label') }"
+                   v-validate="'required|max:19'"
+                   class="input-default"
+                   name="label"
+                   v-model="edit.label"
+                   @input="formInputHandler"
+                   placeholder="House, Work, etc."
+                   type="text" />
+            <span v-show="errors.has('label')" class="error-message-input">{{ errors.first('label') }}</span>
           </div>
         </div>
+
         <div class="account-info__edit-address--form-item">
           <label>First Name</label>
           <div class="input-wrap">
-            <input
-              :class="{ 'input-error': errors.has('first-name') }"
-              class="input-default"
-              v-validate="'required|max:20'"
-              name="first-name"
-              v-model="edit.firstName"
-              @input="formInputHandler"
-              placeholder="John"
-              type="text"
-            />
-            <span v-show="errors.has('first-name')" class="error-message-input">
-              {{ errors.first('first-name') }}
-            </span>
+            <input :class="{ 'input-error': errors.has('first-name') }"
+                   class="input-default"
+                   v-validate="'required|max:20'"
+                   name="first-name"
+                   v-model="edit.firstName"
+                   @input="formInputHandler"
+                   placeholder="John"
+                   type="text" />
+            <span v-show="errors.has('first-name')" class="error-message-input">{{ errors.first('first-name') }}</span>
           </div>
         </div>
+
         <div class="account-info__edit-address--form-item">
           <label>Last Name</label>
           <div class="input-wrap">
-            <input
-              :class="{ 'input-error': errors.has('last-name') }"
-              class="input-default"
-              v-validate="'required|max:20'"
-              name="last-name"
-              v-model="edit.lastName"
-              @input="formInputHandler"
-              placeholder="Doe"
-              type="text"
-            />
-            <span v-show="errors.has('last-name')" class="error-message-input">
-              {{ errors.first('last-name') }}
-            </span>
+            <input :class="{ 'input-error': errors.has('last-name') }"
+                   class="input-default"
+                   v-validate="'required|max:20'"
+                   name="last-name"
+                   v-model="edit.lastName"
+                   @input="formInputHandler"
+                   placeholder="Doe"
+                   type="text" />
+            <span v-show="errors.has('last-name')" class="error-message-input">{{ errors.first('last-name') }}</span>
           </div>
         </div>
 
         <div class="account-info__edit-address--form-item">
           <label>Address Line 1</label>
           <div class="input-wrap">
-            <input
-              :class="{ 'input-error': errors.has('address') }"
-              class="input-default"
-              v-validate="'required'"
-              name="address"
-              placeholder="Street address"
-              v-model="edit.addressFirst"
-              @input="formInputHandler"
-              type="text"
-            />
+            <input :class="{ 'input-error': errors.has('address') }"
+                   class="input-default"
+                   v-validate="'required|max:100'"
+                   name="address"
+                   placeholder="Street address"
+                   v-model="edit.addressFirst"
+                   @input="formInputHandler"
+                   type="text" />
             <span v-show="errors.has('address')" class="error-message-input">
-              {{ errors.first('address') }}
+              {{ errors.first('address') ? errors.first('address').slice(0, -1) : '' }}
             </span>
           </div>
         </div>
+
         <div class="account-info__edit-address--form-item">
           <label>Address Line 2</label>
           <div class="input-wrap">
-            <input
-              class="input-default"
-              placeholder="Apt, Suite, Unit, Bldg, etc. (optional)"
-              @input="formInputHandler"
-              name="address-2"
-              v-model="edit.addressSecond"
-              type="text"
-            />
+            <input class="input-default"
+                   :class="{ 'input-error': errors.has('address-2') }"
+                   v-validate="'max:100'"
+                   placeholder="Apt, Suite, Unit, Bldg, etc. (optional)"
+                   @input="formInputHandler"
+                   name="address-line"
+                   v-model="edit.addressSecond"
+                   type="text" />
+            <span v-show="errors.has('address-2')" class="error-message-input">
+              {{ errors.first('address-line') ? errors.first('address-line').split('-').join('').slice(0, -1) : ''}}
+            </span>
           </div>
         </div>
 
         <div class="account-info__edit-address--form-item">
           <label>City</label>
           <div class="input-wrap">
-            <input
-              :class="{ 'input-error': errors.has('city') }"
-              class="input-default"
-              v-validate="'required'"
-              name="city"
-              placeholder="Anytown"
-              v-model="edit.city"
-              @input="formInputHandler"
-              type="text"
-            />
+            <input :class="{ 'input-error': errors.has('city') }"
+                   class="input-default"
+                   v-validate="'required|max:50'"
+                   name="city"
+                   placeholder="Anytown"
+                   v-model="edit.city"
+                   @input="formInputHandler"
+                   type="text" />
             <span v-show="errors.has('city')" class="error-message-input">
-              {{ errors.first('city') }}
-            </span>
+              {{ errors.first('city') ? errors.first('city').slice(0, -1) : '' }}</span>
           </div>
         </div>
+
         <div class="account-info__edit-address--form-item">
           <label>State</label>
           <div class="input-wrap">
             <div>
-              <v-select
-                id="select-state"
-                data-vv-value-path="selectedState"
-                data-vv-name="state"
-                @input.self="formInputHandler($event)"
-                v-validate:selectedState="'required||custom_validation'"
-                class="vue-select"
-                :searchable="false"
-                v-model="selectedState"
-                :class="{
-                  'select-valid-error': errors.has('state'),
-                  'select-placeholder': selectedState && !selectedState.value
-                }"
-                :options="selectStates"
-              >
+              <v-select id="select-state"
+                        data-vv-value-path="selectedState"
+                        data-vv-name="state"
+                        @input.self="formInputHandler($event)"
+                        v-validate:selectedState="'required||custom_validation'"
+                        class="vue-select"
+                        :searchable="false"
+                        v-model="selectedState"
+                        :class="{
+                          'select-valid-error': errors.has('state'),
+                          'select-placeholder': selectedState && !selectedState.value
+                        }"
+                        :options="selectStates">
               </v-select>
             </div>
-            <span v-show="errors.has('state')" class="error-message-input">
-              {{ errors.first('state') }}
-            </span>
+            <span v-show="errors.has('state')" class="error-message-input">{{ errors.first('state') }}</span>
           </div>
         </div>
 
         <div class="account-info__edit-address--form-item">
           <label>ZIP Code</label>
           <div class="input-wrap">
-            <input
-              @keydown="keyHandler($event)"
-              :class="{ 'input-error': errors.has('zip') }"
-              class="input-default zip-input"
-              v-validate="'required|min:5|max:5'"
-              v-model="edit.zip"
-              @input="formInputHandler"
-              name="zip"
-              placeholder="#####"
-              type="number"
-            />
-            <div
-              class="counter"
-              :class="{
-                'counter--error': edit.zip.length !== 12 && errors.has('zip')
-              }"
-            >
+            <input @keydown="keyHandler($event)"
+                   :class="{ 'input-error': errors.has('zip') }"
+                   class="input-default zip-input"
+                   v-validate="'required|min:5|max:5'"
+                   v-model="edit.zip"
+                   @input="formInputHandler"
+                   name="zip"
+                   placeholder="#####"
+                   type="number"/>
+            <div class="counter" :class="{ 'counter--error': edit.zip.length !== 12 && errors.has('zip') }">
               <span>{{ edit.zip.length }} / 5</span>
             </div>
-            <span v-show="errors.has('zip')" class="error-message-input">{{
-              errors.first('zip')
-            }}</span>
+            <span v-show="errors.has('zip')" class="error-message-input">{{ errors.first('zip') }}</span>
           </div>
         </div>
         <div class="account-info__edit-address--form-item">
           <label>Phone</label>
           <div class="input-wrap">
             <div>
-              <masked-input
-                :class="{ 'input-error': errors.has('phone') }"
-                class="input-default"
-                @input="formInputHandler($event)"
-                v-model="edit.phone"
-                :mask="[
-                  '+',
-                  '1',
-                  '(',
-                  /[1-9]/,
-                  /\d/,
-                  /\d/,
-                  ')',
-                  ' ',
-                  /\d/,
-                  /\d/,
-                  /\d/,
-                  '-',
-                  /\d/,
-                  /\d/,
-                  /\d/,
-                  /\d/
-                ]"
-                placeholder="+1(201) 555-0123"
-                type="tel"
-                v-validate:phoneNumber="'required|min:12'"
-                data-vv-name="phone"
-                data-vv-value-path="phoneNumber"
-              >
+              <masked-input :class="{ 'input-error': errors.has('phone') }"
+                            class="input-default"
+                            @input="formInputHandler($event)"
+                            v-model="edit.phone"
+                            :mask="['+', '1','(',/[1-9]/,/\d/,/\d/,')',' ',/\d/,/\d/,/\d/,'-',/\d/,/\d/,/\d/,/\d/]"
+                            placeholder="+1(201) 555-0123"
+                            type="tel"
+                            v-validate:phoneNumber="'required|min:12'"
+                            data-vv-name="phone"
+                            data-vv-value-path="phoneNumber">
               </masked-input>
             </div>
-            <div
-              class="counter"
-              :class="{
-                'counter--error':
-                  phoneNumber.length !== 12 && errors.has('phone')
-              }"
-            >
+            <div class="counter"
+                 :class="{ 'counter--error': phoneNumber.length !== 12 && errors.has('phone') }">
               <span>{{ phoneNumber.length }} / 12</span>
             </div>
-            <span v-show="errors.has('phone')" class="error-message-input">{{
-              errors.first('phone')
-            }}</span>
+            <span v-show="errors.has('phone')" class="error-message-input">{{ errors.first('phone') }}</span>
           </div>
         </div>
 
         <div class="account-info__edit-address--form-item button-margin">
-          <button
-            @click.stop="validateAddress"
-            :disabled="
-              (!editable && maxAddresses) ||
-                preloader ||
-                (editable && !wasChanged)
-            "
-            v-text="!editable ? 'create address' : 'Update information'"
-            class="button-prime"
-          ></button>
+          <app-notification v-if="maxAddresses && !editable"
+                            :notification="{
+                            text: 'You have exceeded the allowable limit of addresses in the Address Book. Please, delete or edit out-of-date addresses from the Address Book',
+                            type: 'warning',
+                            show: true
+                          }"
+                            class="notification-wrap max-addresses">
+          </app-notification>
+          <button @click.stop="validateAddress"
+                  :disabled="(!editable && maxAddresses) || preloader || (editable && !wasChanged)"
+                  v-text="!editable ? 'create address' : 'Update information'"
+                  class="button-prime">
+          </button>
         </div>
-        <div
-          v-if="addresses.length > 0"
-          class="account-info__edit-address--form-item"
-        >
-          <button
-            @click="editMode = false"
-            :disabled="addresses.length < 1"
-            class="button-second cancel-form"
-          >
+        <div v-if="addresses.length > 0" class="account-info__edit-address--form-item">
+          <button @click="editMode = false"
+                  :disabled="addresses.length < 1"
+                  class="button-second cancel-form">
             Cancel
           </button>
         </div>
@@ -377,7 +292,6 @@
         </p>
       </div>
     </div>
-    <!-- Edit mode ends here -->
   </div>
 </template>
 
@@ -399,12 +313,18 @@ Vue.use(VeeValidate, {
   locale: 'en'
 })
 
-VeeValidate.Validator.extend('custom_validation', value => {
-  return value.value !== 0
-})
+VeeValidate.Validator.extend('custom_validation', value => value.value !== 0)
 
 export default {
   name: 'AddressBokk',
+  mixins: [utils],
+  components: {
+    MaskedInput,
+    vSelect,
+    AppNotification,
+    ConfirmDialog,
+    Loader
+  },
   data () {
     return {
       addressbookLoader: false,
@@ -441,7 +361,24 @@ export default {
       wasChanged: false
     }
   },
-  mixins: [utils],
+  computed: {
+    maxAddresses () {
+      return this.addresses.length >= 10
+    },
+    selectStates () {
+      return this.states.map(g => ({ label: g.name, value: g.abbreviation }))
+    },
+    preloader () {
+      return this.$store.getters.preloader
+    },
+    phoneNumber () {
+      return this.edit.phone.replace(/[^0-9a-zA-Z+]/g, '')
+    },
+    currentPage () {
+      return this.$route.name
+    },
+    ...mapGetters(['isAuth', 'userInfo', 'preloader'])
+  },
   watch: {
     editMode (v) {
       if (!v) {
@@ -454,30 +391,18 @@ export default {
       this.$scrollTo(`#anchor-scrolling`, 1500, { offset: -200 })
     }
   },
-  components: {
-    MaskedInput,
-    vSelect,
-    AppNotification,
-    ConfirmDialog,
-    Loader
+  mounted () {
+    this.getAllAddresses(true)
   },
   methods: {
-    formInputHandler ($event) {
-      let phoneChanged = this.phoneNumber !== this.phoneOldValue
-      let stateChanged = this.selectedState.value !== this.selectedStateOldValue
+    formInputHandler (e) {
+      if (!e.target) return
 
-      if (!$event.target) {
-        if (phoneChanged || stateChanged) this.wasChanged = true
-      } else {
-        this.wasChanged = true
-      }
+      this.wasChanged = true
     },
-    keyHandler ($event) {
-      if (
-        $event.keyCode === this.EVENT_KEY_SPACE ||
-        !_.includes(this.NUMBER_INPUT_AVAILABLE_KEYS, $event.keyCode)
-      ) {
-        $event.preventDefault()
+    keyHandler (e) {
+      if (e.keyCode === this.EVENT_KEY_SPACE || !_.includes(this.NUMBER_INPUT_AVAILABLE_KEYS, e.keyCode)) {
+        e.preventDefault()
       }
     },
     clearForm () {
@@ -497,22 +422,18 @@ export default {
       }
     },
     checkVerified () {
-      this.addresses.forEach(address => {
-        if (!address.verified) this.notVerifiedOne = true
-      })
+      this.notVerifiedOne = this.addresses.some(address => !address.verified)
     },
     getAllAddresses (cancelable) {
       this.addressbookLoader = true
-      this.$store.dispatch('fetchAddresses').then(
-        response => {
+      this.$store.dispatch('fetchAddresses')
+        .then(response => {
           this.editMode = !cancelable || !response.data.length
           this.addresses = response.data
           this.checkVerified()
           this.addressbookLoader = false
-          // eslint-disable-next-line
         },
-        error => {
-          console.error(error)
+        () => {
           this.addressbookLoader = false
         }
       )
@@ -520,9 +441,7 @@ export default {
     },
     validateAddress () {
       this.$validator.validateAll().then(result => {
-        if (result) {
-          this.createNewAddress()
-        }
+        if (result) this.createNewAddress()
       })
     },
     createNewAddress () {
@@ -540,14 +459,10 @@ export default {
         addressID: this.addressID
       }
 
-      this.$store.dispatch('saveAddress', { address: address }).then(
-        response => {
+      this.$store.dispatch('saveAddress', { address: address })
+        .then(response => {
           if (response.meta.messages.address_correction) {
-            toastr.info(
-              response.meta.messages.address_correction[0],
-              '',
-              this.setToastr('warning', 5000)
-            )
+            toastr.info(response.meta.messages.address_correction[0], '', this.setToastr('warning', 5000))
           } else if (response.meta.messages.address_warning) {
             this.notification = {
               text: response.meta.messages.address_warning[0],
@@ -559,35 +474,23 @@ export default {
           }
 
           this.getAllAddresses(true)
-          // eslint-disable-next-line
-        },
-        error => {}
+        }
       )
     },
-    makeActive (address, i) {
+    makeActive (address) {
       if (!address.default && !this.preloader) {
-        this.$store
-          .dispatch('setAddressMain', {
-            id: address.id
-          })
-          .then(
-            response => {
+        this.$store.dispatch('setAddressMain', { id: address.id })
+          .then(() => {
               this.addresses.forEach(localAddresses => {
                 localAddresses.default = false
 
-                if (localAddresses.id === address.id) {
-                  address.default = true
-                }
+                if (localAddresses.id === address.id) address.default = true
               })
-              // eslint-disable-next-line
-            },
-            error => {
-              console.error(error)
             }
           )
       }
     },
-    makeEditable (address, i) {
+    makeEditable (address) {
       this.edit = {
         firstName: address.name.substr(0, address.name.indexOf(' ')),
         lastName: address.name.substr(address.name.indexOf(' ') + 1),
@@ -598,6 +501,7 @@ export default {
         phone: address.phone,
         label: address.label
       }
+
       this.editMode = true
       this.selectedState = this.stateCode(address.state)
       this.phoneOldValue = address.phone
@@ -605,7 +509,7 @@ export default {
       this.addressID = address.id
       this.editable = true
     },
-    showDialog (address, i) {
+    showDialog (address) {
       this.showConfirm = true
       this.addressID = address.id
       this.addressName = address.label
@@ -618,50 +522,24 @@ export default {
     },
     deleteAddress () {
       if (!this.preloader) {
-        this.$store
-          .dispatch('deleteAddress', {
-            id: this.addressID
-          })
-          .then(
-            response => {
-              this.addressID = null
-              this.addressName = ''
-              this.showConfirm = false
-              this.clearForm()
-              this.getAllAddresses(true)
-              // eslint-disable-next-line
-            },
-            error => {
-              console.error(error)
+        this.$store.dispatch('deleteAddress', { id: this.addressID })
+          .then(() => {
+            this.addressID = null
+            this.addressName = ''
+            this.showConfirm = false
+            this.clearForm()
+            this.getAllAddresses(true)
             }
           )
       }
     },
-    /**
-     * @return {string}
-     */
-    StateName (state) {
-      let nameState = ''
-
-      this.states.forEach(function (k) {
-        if (k.abbreviation === state) {
-          nameState = k.name
-        }
-      })
-      return nameState
+    StateName (abbr) {
+      return this.states.find(state => state.abbreviation === abbr).name
     },
-    stateCode (state) {
-      let obj = {}
+    stateCode (abbr) {
+     const st = this.states.find(state => state.abbreviation === abbr)
 
-      this.states.forEach(function (k) {
-        if (k.abbreviation === state) {
-          obj = {
-            label: k.name,
-            value: k.abbreviation
-          }
-        }
-      })
-      return obj
+     return { label: st.name, value: st.abbreviation }
     },
     addNew () {
       this.clearForm()
@@ -674,32 +552,12 @@ export default {
       let thirdDigits = s.slice(8, 12)
       return `+1 (${firstDigits}) ${secondDigits}-${thirdDigits}`
     }
-  },
-  computed: {
-    maxAddresses () {
-      return this.addresses.length >= 10
-    },
-    selectStates () {
-      return this.states.map(g => ({ label: g.name, value: g.abbreviation }))
-    },
-    preloader () {
-      return this.$store.getters.preloader
-    },
-    phoneNumber () {
-      return this.edit.phone.replace(/[^0-9a-zA-Z+]/g, '')
-    },
-    currentPage () {
-      return this.$route.name
-    },
-    ...mapGetters(['isAuth', 'userInfo', 'preloader'])
-  },
-  mounted () {
-    this.getAllAddresses(true)
   }
 }
 </script>
 
 <style lang="scss" scoped>
+
 .address {
   &__preloader {
     margin: 100px 0;
@@ -711,8 +569,7 @@ export default {
   transition: all 1s;
 }
 
-.list-enter, .list-leave-to /* .list-leave-active до версии 2.1.8 */
- {
+.list-enter, .list-leave-to {
   opacity: 0;
   transform: translateY(30px);
 }
@@ -872,21 +729,23 @@ export default {
             line-height: 1;
           }
         }
-
         .line {
           display: flex;
           span {
-            line-height: 28px;
-            font-family: $sours-sans-p-font;
-            font-size: 16px;
+            display: block;
+            font: 16px/28px $sours-sans-p-font;
             &:first-child {
-              width: 100px;
+              min-width: 100px;
               color: $main-dark;
               font-weight: 600;
             }
             &:last-child {
+              width: 213px;
               margin-left: 63px;
               color: $dark-grey;
+              overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
             }
           }
         }
@@ -942,8 +801,8 @@ export default {
           }
         }
         &:hover {
-          box-shadow: 0px 5px 6.58px 0.42px rgba(0, 0, 0, 0.05),
-            0px 2px 9.8px 0.2px rgba(0, 0, 0, 0.02);
+          box-shadow: 0 5px 6.58px 0.42px rgba(0, 0, 0, 0.05),
+            0 2px 9.8px 0.2px rgba(0, 0, 0, 0.02);
         }
       }
     }
@@ -976,7 +835,6 @@ export default {
       flex-wrap: wrap;
       position: relative;
       margin-bottom: 25px;
-      /*flex: 0 0 384px!important;*/
       .zip-input {
         padding-right: 60px;
       }
@@ -1011,13 +869,28 @@ export default {
           }
           &--error {
             span {
-              color: #ff6d4a;
+              color: $input-error-border;
             }
           }
         }
       }
       .vue-select {
         width: 544px;
+        border-radius: 4px;
+        & /deep/ .selected-tag {
+          height: 100%;
+          padding: 0;
+          margin: 0 0 0 14px !important;
+        }
+
+        & /deep/ .vs__selected-options {
+          border-radius: 4px;
+        }
+        &.select-valid-error {
+          & /deep/ .dropdown-toggle {
+            background-color: transparent;
+          }
+        }
       }
       .select-wrap {
         width: 544px;
@@ -1032,6 +905,9 @@ export default {
       }
     }
     .button-margin {
+      max-width: 480px;
+      display: flex;
+      flex-flow: column nowrap;
       margin-bottom: 16px;
     }
     .button-wrap {
@@ -1049,6 +925,13 @@ export default {
   margin-bottom: 24px;
   width: 100%;
   margin-left: 0;
+  &.max-addresses {
+    align-self: flex-end;
+    max-width: 352px;
+    & /deep/ .notification__body--info {
+      padding: 16px;
+    }
+  }
 }
 
 @media (min-width: $md) and (max-width: $lg) {

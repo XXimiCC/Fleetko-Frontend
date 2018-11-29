@@ -2,20 +2,11 @@
   <div class="form" :class="{ manual: manualMode, stub: !cartIsReady }">
     <new-modal @cancel="closeModal" :isLoading="!renderReady">
       <template v-if="cartIsReady" slot="header">
-        <shopping-header
-          :product="product"
-          :manual="manualMode"
-        ></shopping-header>
+        <shopping-header :product="product" :manual="manualMode"></shopping-header>
       </template>
 
-      <template
-        v-if="renderReady && (cartIsFull || productIsExceeded)"
-        slot="body"
-      >
-        <shopping-stub
-          :cartIsFull="cartIsFull"
-          @closeModal="closeModal"
-        ></shopping-stub>
+      <template v-if="renderReady && (cartIsFull || productIsExceeded)" slot="body">
+        <shopping-stub :cartIsFull="cartIsFull" @closeModal="closeModal"></shopping-stub>
       </template>
 
       <template v-if="cartIsReady" slot="body">
@@ -29,53 +20,43 @@
           <div v-if="!manualMode && !proposalWarehouse" class="inputs">
             <div class="inputs__zip">
               <p class="label">ZIP</p>
-              <input
-                class="input-default-new-design zip-input"
-                v-model="zipValue"
-                @input="zipInputHandler"
-                @blur="validateZip"
-                :class="{ 'input-error': zipIsTooLong || zipNonExist }"
-                type="number"
-                placeholder="51543"
-              />
+              <input class="input-default-new-design zip-input"
+                     v-model="zipValue"
+                     @input="zipInputHandler"
+                     @blur="validateZip"
+                     :class="{ 'input-error': zipIsTooLong || zipNonExist }"
+                     type="number"
+                     placeholder="51543"/>
 
-              <span
-                v-show="zipIsTooLong || zipNonExist"
-                class="error-message-input"
-              >
+              <span v-show="zipIsTooLong || zipNonExist" class="error-message-input">
                 {{ zipNonExist ? zipErrors.nonExist : zipErrors.tooLong }}
               </span>
             </div>
 
             <div class="qty-input">
               <p class="label">Quantity</p>
-              <quantity-input
-                :initialValue="1"
-                :product="product"
-                :userCart="getUserCart"
-                :min="2"
-                @setQuantity="setQuantity"
-              >
+              <quantity-input :initialValue="initialValue"
+                              :product="product"
+                              :userCart="getUserCart"
+                              :min="2"
+                              ref="mainQuantity"
+                              @setQuantity="setQuantity">
               </quantity-input>
             </div>
 
             <button @click="validateZip" class="button-prime">add</button>
           </div>
 
-          <proposal-warehouse
-            v-if="proposalWarehouse && !manualMode"
-            :warehouse="proposalWarehouse"
-            :quantity="proposalWarehouseQty"
-            @editProposal="editProposal"
-            @showLargeForm="showLargeForm"
-          >
+          <proposal-warehouse v-if="proposalWarehouse && !manualMode"
+                              :warehouse="proposalWarehouse"
+                              :quantity="proposalWarehouseQty"
+                              @editProposal="editProposal"
+                              @showLargeForm="showLargeForm">
           </proposal-warehouse>
 
-          <div
-            v-if="!manualMode"
-            @click="showAllWarehouses"
-            class="show-manual"
-          >
+          <div v-if="!manualMode"
+               @click="showAllWarehouses"
+               class="show-manual">
             <div class="show-manual__content">
               <svg-assigment></svg-assigment>
               <span class="show-manual__text">Manual Selection</span>
@@ -84,53 +65,43 @@
 
           <div v-if="manualMode" class="in-stock">
             <div class="label label--in">In Stock</div>
-            <in-stock-house
-              v-for="house in inStockHouses"
-              ref="house"
-              :key="house.id"
-              :house="house"
-              :expectedQuantity="setInitialQuantity(house.id)"
-              :product="product"
-              :userCart="getUserCart"
-              :manual="manualMode"
-              @collapseWarehouses="collapseWarehouses"
-              @setQuantity="setQuantity"
-              @moveMarker="moveMarker"
-            >
+            <in-stock-house v-for="house in inStockHouses"
+                            ref="house"
+                            :key="house.id"
+                            :house="house"
+                            :expectedQuantity="setInitialQuantity(house.id)"
+                            :product="product"
+                            :userCart="getUserCart"
+                            :manual="manualMode"
+                            @collapseWarehouses="collapseWarehouses"
+                            @setQuantity="setQuantity"
+                            @moveMarker="moveMarker">
             </in-stock-house>
           </div>
 
-          <shopping-actions
-            @add="addToCart"
-            @proceed="proceedToCheckout"
-            :price="toDollarDecimal(totalPrice || subTotalPrice)"
-            :manual="manualMode"
-            :notValid="shoppingActionsError"
-            :exceededCart="exceededCart"
-            :cartMaxSize="CART_MAX_SIZE"
-          >
+          <shopping-actions @add="addToCart"
+                            @proceed="proceedToCheckout"
+                            :price="toDollarDecimal(totalPrice || subTotalPrice)"
+                            :manual="manualMode"
+                            :notValid="shoppingActionsError"
+                            :exceededCart="exceededCart"
+                            :cartMaxSize="CART_MAX_SIZE">
           </shopping-actions>
 
-          <div
-            v-if="manualMode && ($mq === 'md' || $mq === 'lg' || $mq === 'xl')"
-            class="out-stock"
-          >
+          <div v-if="manualMode && ['md', 'lg', 'xl'].includes($mq)" class="out-stock">
             <div class="label label--out">Out of Stock</div>
-            <out-stock-house
-              v-for="house in outStockHouses"
-              :key="house.id"
-              :house="house"
-            >
+            <out-stock-house v-for="house in outStockHouses"
+                             :key="house.id"
+                             :house="house">
             </out-stock-house>
           </div>
         </div>
       </template>
 
-      <template v-if="manualMode && ($mq === 'lg' || $mq === 'xl')" slot="map">
-        <shopping-map
-          :inStockHouses="inStockHouses"
-          :markerPosition="markerPosition"
-        ></shopping-map>
+      <template v-if="manualMode && ['lg', 'xl'].includes($mq)" slot="map">
+        <shopping-map :inStockHouses="inStockHouses"
+                      :markerPosition="markerPosition">
+        </shopping-map>
       </template>
     </new-modal>
   </div>
@@ -185,6 +156,7 @@ export default {
         nonExist: 'You entered a nonexistent ZIP code'
       },
       userQuantity: 1,
+      initialValue: 1,
       proposalWarehouse: null,
       proposalWarehouseQty: 0,
       totalPrice: 0,
@@ -252,8 +224,11 @@ export default {
     },
 
     editProposal () {
+      this.product.warehouses.find(e => e.id === this.proposalWarehouse.id)
+        .userQuantity -= this.proposalWarehouseQty
+
       this.proposalWarehouse = null
-      this.userQuantity = 1
+      this.initialValue = this.userQuantity
     },
 
     validateZip ({ type: eventType }) {
@@ -276,10 +251,7 @@ export default {
     fetchZipCode () {
       this.isLoading = true
 
-      Vue.$geocoder.send(
-        {
-          zip_code: this.zipValue
-        },
+      Vue.$geocoder.send({ zip_code: this.zipValue },
         response => {
           const result = response.results[0]
 
@@ -298,11 +270,7 @@ export default {
     },
 
     productQtyInWarehouse (house) {
-      return _.get(
-        this.getUserCart.cart[house.id],
-        `products[${this.product.id}].quantity`,
-        0
-      )
+      return _.get(this.getUserCart.cart[house.id], `products[${this.product.id}].quantity`, 0)
     },
 
     totalQtyInWarehouse (house) {

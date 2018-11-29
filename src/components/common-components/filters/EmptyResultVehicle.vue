@@ -7,9 +7,8 @@
         </div>
         <h2 class="h2-secondary">The List Is Empty</h2>
         <p class="paragraph-tertiary paragraph-lg">
-          There are no products for this category for the selected vehicle.
-          Choose another category, or another car. You can see the goods in
-          other categories for your car.
+          There are no products for this dealer. Choose another dealer. You can see the goods in other dealers for your
+          car.
         </p>
       </div>
       <div class="empty-vehicle__row">
@@ -26,19 +25,6 @@
           <router-link :to="{ name: 'contactUs' }">
             <button class="button-prime">Contact us</button>
           </router-link>
-        </div>
-
-        <div class="empty-vehicle__row-element">
-          <div class="empty-vehicle__row-image"><svg-truck></svg-truck></div>
-          <h3 class="h3-secondary">Look For Another Vehicle</h3>
-          <p class="paragraph-tertiary">
-            View offers in this category for another truck you may need. Make
-            sure you select the correct data.
-          </p>
-
-          <button @click="$emit('changeEmptyVehicle')" class="button-prime">
-            Change Vehicle
-          </button>
         </div>
 
         <div class="empty-vehicle__row-element">
@@ -86,7 +72,7 @@ export default {
   &__row {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
   }
   &__row-element {
     display: flex;

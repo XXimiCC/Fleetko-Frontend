@@ -5,7 +5,8 @@
       'grey-out':
         order.status === 'failed' ||
         order.status === 'canceled' ||
-        order.status === 'payment_expired'
+        order.status === 'payment_expired' ||
+        order.status === 'abandoned'
     }"
   >
     <order-header
@@ -529,6 +530,9 @@ export default {
       }
       &--info {
         padding-top: 16px;
+        &.m-0 {
+          padding-top: 0;
+        }
         .item {
           display: flex;
           justify-content: space-between;

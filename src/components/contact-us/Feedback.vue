@@ -79,9 +79,10 @@
         <div class="input-wrap">
           <textarea
             name="feedback-message"
-            :class="{ 'error-border': errors.has('feedback-message') }"
+            :class="{ 'error-textarea': errors.has('feedback-message') }"
             v-model="message"
-            v-validate="'required'"
+            v-validate="'required|max:2000'"
+            :data-vv-validate-on="'input'"
             placeholder="Your message"
             id=""
             cols="30"
@@ -89,10 +90,7 @@
           ></textarea>
           <span
             v-show="errors.has('feedback-message')"
-            class="error-message-input"
-          >
-            {{ errors.first('feedback-message') }}</span
-          >
+            class="error-message-input"> {{ errors.first('feedback-message')}} </span>
         </div>
       </div>
       <div class="feedback__body--submit">
@@ -210,7 +208,6 @@ export default {
         bottom: -18px;
         left: 0;
         font-size: 12px;
-        color: #ff6d4a;
         line-height: 1;
       }
       textarea {
