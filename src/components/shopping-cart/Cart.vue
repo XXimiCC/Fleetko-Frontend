@@ -328,9 +328,7 @@ export default {
       shippingErrorNotification: {
         type: 'warning',
         cancelable: true,
-        text: [
-          'Shipping error'
-        ].join(' ')
+        text: 'There was a conflict in the shopping cart. Please check goods in the cart and try again'
       },
       invalidWarehouseNotification: {
         type: 'warning',
