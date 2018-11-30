@@ -60,14 +60,42 @@
       <div class="search__empty" v-if="!getVehicleSections.length">
         <div class="item search__empty--text">
           <div class="item search__empty--image">
-            <img src="@/assets/images/empty-back.png" alt="" />
+            <img :src="imageSrc('svg-empty-box.svg')" alt="" />
           </div>
-          <h1 class="h1-secondary">This List Is Empty!</h1>
+          <h2 :class="{'h3-secondary': $mq !== 'md', 'h2-secondary': $mq === 'md'}">This List Is Empty!</h2>
           <p>
-            There are no products for this category for the selected vehicle.
-            Choose another category, or another car. You can see the goods in
-            other categories for your car.
+            There are no products for this vehicle. <br />
+            Choose another vehicle.
           </p>
+        </div>
+        <div class="empty__row">
+          <div class="empty__row-element">
+            <div class="empty__row-image">
+              <svg-envelope-fill></svg-envelope-fill>
+            </div>
+            <h3 class="h3-secondary">Have Any Questions</h3>
+            <p class="paragraph-tertiary">
+              Use our feedback form and we will answer any questions you are
+              interested in.
+            </p>
+
+            <router-link :to="{ name: 'contactUs' }">
+              <button class="button-prime">Contact us</button>
+            </router-link>
+          </div>
+
+          <div class="empty__row-element">
+            <div class="empty__row-image"><svg-home></svg-home></div>
+            <h3 class="h3-secondary">Go Back To The Home Page</h3>
+            <p class="paragraph-tertiary">
+              You will be able to view all sections and categories and re-search
+              for needed vehicle.
+            </p>
+
+            <router-link :to="{ name: 'home' }">
+              <button class="button-prime">Go to the home page</button>
+            </router-link>
+          </div>
         </div>
       </div>
 
@@ -304,6 +332,60 @@ export default {
   position: relative;
 }
 .search {
+  &__empty {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    padding: 64px 0;
+    h2 {
+      margin: 24px 0;
+    }
+    h3 {
+      margin-bottom: 24px;
+    }
+    p {
+      padding: 0 8px;
+      text-align: center;
+      color: $main-grey;
+    }
+    &--text {
+      display: flex;
+      flex-flow: column nowrap;
+      align-items: center;
+      margin-bottom: 64px;
+    }
+    .empty__row {
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: space-around;
+      width: 100%;
+      &-element {
+        max-width: 330px;
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
+
+        button {
+          margin-top: 24px;
+          width: 200px;
+        }
+      }
+      &-image {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 22px;
+        width: 48px;
+        height: 48px;
+        border-radius: 100%;
+        background: #d0defb;
+        svg {
+          width: 24px;
+          fill: $main-color;
+        }
+      }
+    }
+  }
   .swiper-popular {
     position: relative;
     padding-top: 16px;
@@ -451,6 +533,25 @@ export default {
     }
   }
 }
+
+@media (max-width: $sm) {
+  .search__empty {
+    &--text {
+      margin-bottom: 0;
+    }
+    h3 {
+      text-align: center;
+    }
+    .empty__row {
+      flex-flow: column nowrap;
+      align-items: center;
+      &-element {
+        margin-top: 36px;
+      }
+    }
+  }
+}
+
 .search__categories--item + .search__categories--item {
   margin-bottom: 16px;
 }
