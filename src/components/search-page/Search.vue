@@ -57,7 +57,7 @@
       </div>
     </div>
     <div class="container">
-      <div class="search__empty" v-if="!getVehicleSections.length">
+      <div class="search__empty" v-if="!Object.keys(this.getVehicleSections).length">
         <div class="item search__empty--text">
           <div class="item search__empty--image">
             <img :src="imageSrc('svg-empty-box.svg')" alt="" />
@@ -320,8 +320,7 @@ export default {
       vm.fetchSearch()
       vm.fetchBestSellersProducts()
     })
-  },
-  created () {}
+  }
 }
 </script>
 <style lang="scss" scoped>
