@@ -241,9 +241,6 @@ $input-error-bg: #FEECEB;
   &:hover {
     box-shadow: 0 5px 6.58px 0.42px rgba(0, 0, 0, 0.05),0 2px 9.8px 0.2px rgba(0, 0, 0, 0.02);
   }
-  .vs__selected-options {
-    background: $input-error-bg;
-  }
 }
 
 //  Select Style shipping method
