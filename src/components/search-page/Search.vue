@@ -32,6 +32,7 @@
         </div>
       </div>
     </div>
+
     <div class="container">
       <div
         class="search__breadcrumbs breadcrumb-links"
@@ -56,17 +57,17 @@
       </div>
     </div>
     <div class="container">
-      <div class="search__empty" v-if="!getVehicleSections">
+      <div class="search__empty" v-if="!getVehicleSections.length">
         <div class="item search__empty--text">
+          <div class="item search__empty--image">
+            <img src="@/assets/images/empty-back.png" alt="" />
+          </div>
           <h1 class="h1-secondary">This List Is Empty!</h1>
           <p>
             There are no products for this category for the selected vehicle.
             Choose another category, or another car. You can see the goods in
             other categories for your car.
           </p>
-        </div>
-        <div class="item search__empty--image">
-          <img src="@/assets/images/empty-back.png" alt="" />
         </div>
       </div>
 

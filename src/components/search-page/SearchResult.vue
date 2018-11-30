@@ -403,7 +403,7 @@ export default {
         })
       }
       return arr
-    },
+    }
   },
   watch: {
     currentPaginationPage () {
