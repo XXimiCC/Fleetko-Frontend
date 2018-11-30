@@ -13,7 +13,7 @@
             </router-link>
           </div>
 
-          <div class="footer__sitemap col-xl-3 col-lg-3">
+          <div class="footer__sitemap col-xl-3 col-lg-3 col-sm-12">
             <div class="footer__sitemap--title" @click="toggleSiteMap">
               <h4>Customer Service</h4>
               <div class="toggle-caret" :class="{ 'toggle-caret--close': !openSiteMap }">
@@ -40,7 +40,7 @@
             </ul>
           </div>
 
-          <div class="footer__sections col-xl-2 col-lg-2">
+          <div class="footer__sections col-xl-2 col-lg-2 col-sm-12">
             <div class="footer__sections--title" @click="toggleSections">
               <h4>Sections</h4>
               <div
@@ -51,7 +51,7 @@
               </div>
             </div>
             <ul v-if="openSections">
-              <li v-for="(section, index) in getSections" v-if="index < 6" itemscope itemtype="http://www.schema.org/SiteNavigationElement">
+              <li v-for="section in getSections" itemscope itemtype="http://www.schema.org/SiteNavigationElement">
                 <router-link class="link-tertiary sm-link"
                              itemprop="url"
                              :to="{ name: 'section', params: { slug: section.slug } }">
@@ -61,7 +61,7 @@
             </ul>
           </div>
 
-          <div class="footer__socials col-xl-2 col-lg-2">
+          <div class="footer__socials col-xl-2 col-lg-2 col-sm-12">
             <div class="footer__socials--title"><h4>Follow Us</h4></div>
             <ul class="footer__socials--icons">
               <li><router-link :to="{ name: 'home' }" class="link-tertiary sm-link">Facebook</router-link></li>
@@ -69,7 +69,7 @@
             </ul>
           </div>
 
-          <div class="footer__contact col-xl-3 col-lg-3">
+          <div class="footer__contact col-xl-3 col-lg-3 col-sm-12">
             <div class="footer__contact--title"><h4>We Gladly Accept</h4></div>
             <div class="footer__contact--pay">
               <svg-visa></svg-visa>
@@ -131,89 +131,6 @@ export default {
   position: relative;
   box-shadow: 0px -3px 9.5px 0px rgba(102, 102, 102, 0.2);
   background: white;
-}
-
-@media (max-width: $md) {
-  .footer .row{
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: flex-start;
-    .toggle-caret {
-      display: none;
-    }
-    li {
-      min-width: 100%;
-    }
-    .footer {
-      &__logo {
-        display: none;
-      }
-      &__sitemap {
-        min-width: 30%;
-      }
-      &__sections {
-        min-width: 20%;
-      }
-      &__socials {
-        min-width: 20%;
-      }
-      &__contact {
-        min-width: 30%;
-      }
-    }
-  }
-}
-
-@media (max-width: $sm) {
-  .footer .row{
-    display: flex;
-    flex-flow: column nowrap;
-    .toggle-caret {
-      display: block;
-    }
-    li {
-      min-width: 25%;
-      flex: 0 0 25%;
-      padding-right: 8px;
-    }
-    & > div {
-      min-width: 100%;
-    }
-
-    .footer__socials {
-      &--icons {
-        display: flex;
-      }
-    }
-    .footer__contact {
-      position: relative;
-      & > * {
-        width: 47%;
-      }
-      &--delivery {
-        position: absolute;
-        top: 0;
-        right: 0;
-      }
-    }
-  }
-}
-
-@media (max-width: 480px) {
-  .footer .row {
-    li {
-      min-width: 50%;
-      flex: 0 0 50%;
-    }
-    .footer__contact {
-      & > * {
-        width: 100%;
-      }
-      &--delivery {
-        position: relative;
-      }
-    }
-  }
 }
 
 .footer {
@@ -330,16 +247,13 @@ export default {
   &__socials {
     &--title {
       h4 {
-        margin-bottom: 16px;
+        margin-bottom: 24px;
         color: $main-dark;
       }
     }
     &--icons {
       padding-left: 0;
       list-style: none;
-      li {
-        margin-bottom: 4px;
-      }
     }
   }
 }
@@ -367,7 +281,7 @@ export default {
   .footer {
     padding-bottom: 40px;
     &__sitemap {
-      margin-top: 27px;
+      margin-top: 36px;
       &--title {
         margin-bottom: 16px;
         display: flex;
@@ -454,7 +368,7 @@ export default {
       }
     }
     &__socials {
-      margin-top: 27px;
+      margin-top: 40px;
     }
   }
 }
