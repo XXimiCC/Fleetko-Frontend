@@ -260,7 +260,7 @@
                         }"
                         class="modal-search--body__vehicles--result"
                         @click="setVehicleSearchModel(result)">
-                        <span class="link-tertiary">{{ result.year }} {{ result.vehicle_brand_name }}{{ result.name }}</span>
+                        <span class="link-tertiary">{{ result.year }} {{ result.vehicle_brand_name }} {{ result.name }}</span>
                       </router-link>
                     </template>
                   </ais-results>
@@ -473,6 +473,7 @@ export default {
     .image-wrap {
       width: 100px;
       height: 16px;
+      flex-shrink: 0;
       svg {
         width: 100%;
         height: 100%;
@@ -640,6 +641,7 @@ export default {
           background: #f5f8ff;
           .image-wrap {
             background: #f5f8ff;
+            flex-shrink: 0;
           }
         }
         .flex-item {
@@ -651,6 +653,7 @@ export default {
           width: 76px;
           height: 76px;
           border-radius: 4px;
+          flex-shrink: 0;
           img {
             max-width: 100%;
           }
@@ -686,9 +689,10 @@ export default {
           }
         }
         .price {
-          padding-right: 4px;
+          padding: 0 4px 0 32px;
           align-items: center;
           display: flex;
+          flex-shrink: 0;
           justify-content: flex-end;
           font-family: $montserrat-font;
           color: $main-color;
@@ -698,6 +702,9 @@ export default {
             color: $main-grey;
           }
         }
+      }
+      .modal-search--body__product--result {
+        max-width: calc(100% - 32px);
       }
       .modal-search--body__product--result
         + .modal-search--body__product--result {
@@ -842,6 +849,7 @@ export default {
           align-items: center;
           justify-content: center;
           max-width: 100%;
+          flex-shrink: 0;
           img {
             max-width: 100%;
             max-height: 100%;
@@ -970,6 +978,14 @@ export default {
   transform: scale(1.1);
 }
 
+@media (max-width: $sm) {
+  .modal-search--body__product--result {
+    .price {
+      padding: 0 4px 0 0;
+    }
+  }
+}
+
 @media (min-width: $sm) and (max-width: $md) {
   .modal-container {
     width: 100%;
@@ -1053,6 +1069,7 @@ export default {
           flex-wrap: wrap;
           .image-wrap {
             flex: 0 0 76px;
+            flex-shrink: 0;
           }
           .info {
             .item {
