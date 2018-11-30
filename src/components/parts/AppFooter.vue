@@ -51,7 +51,7 @@
               </div>
             </div>
             <ul v-if="openSections">
-              <li v-for="(section, index) in getSections" v-if="index < 6" itemscope itemtype="http://www.schema.org/SiteNavigationElement">
+              <li v-for="section in getSections" itemscope itemtype="http://www.schema.org/SiteNavigationElement">
                 <router-link class="link-tertiary sm-link"
                              itemprop="url"
                              :to="{ name: 'section', params: { slug: section.slug } }">
