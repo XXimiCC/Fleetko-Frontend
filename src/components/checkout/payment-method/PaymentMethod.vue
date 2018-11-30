@@ -313,6 +313,7 @@ export default {
       this.paymentServiceReady = true
     },
     setCarrierService (service) {
+      console.log(service)
       this.selectedService = service
 
       this.updateOrderRates()

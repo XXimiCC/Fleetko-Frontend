@@ -12,7 +12,7 @@
     </div>
 
     <div class="check__footer">
-      <div v-if="order.shipping_method !== 'pickup' && selectedService" class="check__footer--subtotal">
+      <div v-if="order.shipping_method !== 'pickup' && order.shipping_fee" class="check__footer--subtotal">
         <span>Shipping Price</span>
         <span>$ {{ toDollarDecimal(order.shipping_fee) }}</span>
       </div>
