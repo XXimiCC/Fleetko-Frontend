@@ -177,7 +177,7 @@ export default {
       justify-content: center;
       height: 18px;
       width: 18px;
-      background: $main-color;
+      background: $main-gradient;
       border-radius: 2px;
       font-family: $sours-sans-p-font;
       font-size: 12px;

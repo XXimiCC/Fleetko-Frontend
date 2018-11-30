@@ -36,7 +36,7 @@ $input-error-bg: #FEECEB;
       }
       .dropdown-toggle {
         border-color: $main-color;
-        box-shadow: 0px 3px 8px 0px rgba(6, 26, 70, 0.12);
+        box-shadow: 0 3px 8px 0 rgba(6, 26, 70, 0.12);
       }
     }
     &.open {
@@ -65,6 +65,7 @@ $input-error-bg: #FEECEB;
   white-space: nowrap;
   height: 40px!important;
   width: 100%;
+  padding: 0;
   border: 1px solid $select-border-color;
 }
 
@@ -80,7 +81,7 @@ $input-error-bg: #FEECEB;
   right: 15px;
   width: 9px;
   &:before {
-    border-width: 1px 1px 0px 0;
+    border-width: 1px 1px 0 0;
     content: "";
     height: 6px;
     width: 6px;
@@ -190,7 +191,7 @@ $input-error-bg: #FEECEB;
   right: 15px;
   width: 9px;
   &:before {
-    border-width: 1px 1px 0px 0;
+    border-width: 1px 1px 0 0;
     content: "";
     height: 8px;
     width: 8px;
@@ -240,9 +241,6 @@ $input-error-bg: #FEECEB;
   &:hover {
     box-shadow: 0 5px 6.58px 0.42px rgba(0, 0, 0, 0.05),0 2px 9.8px 0.2px rgba(0, 0, 0, 0.02);
   }
-  .vs__selected-options {
-    background: $input-error-bg;
-  }
 }
 
 //  Select Style shipping method
@@ -282,7 +280,7 @@ $input-error-bg: #FEECEB;
     }
     .dropdown-toggle {
       border-color: $main-color;
-      box-shadow: 0px 3px 8px 0px rgba(6, 26, 70, 0.12);
+      box-shadow: 0 3px 8px 0 rgba(6, 26, 70, 0.12);
     }
   }
   &.open {
@@ -321,7 +319,7 @@ $input-error-bg: #FEECEB;
   right: 15px;
   width: 9px;
   &:before {
-    border-width: 1px 1px 0px 0;
+    border-width: 1px 1px 0 0;
     content: "";
     height: 6px;
     width: 6px;
@@ -529,7 +527,7 @@ $input-error-bg: #FEECEB;
   right: 16px;
   width: 9px;
   &:before {
-    border-width: 1px 1px 0px 0;
+    border-width: 1px 1px 0 0;
     content: "";
     height: 6px;
     width: 6px;
@@ -611,7 +609,7 @@ $input-error-bg: #FEECEB;
       right: 15px;
       width: 9px;
       &:before {
-        border-width: 1px 1px 0px 0;
+        border-width: 1px 1px 0 0;
         content: "";
         height: 6px;
         width: 6px;
@@ -662,13 +660,13 @@ $input-error-bg: #FEECEB;
     font-family: $sours-sans-p-font;
     &:hover,
     &:focus{
-      box-shadow: 0px 3px 8px 0px rgba(6, 26, 70, 0.12);
+      box-shadow: 0 3px 8px 0 rgba(6, 26, 70, 0.12);
       border: 1px solid $main-color;
     }
   }
 
   &.open .dropdown-toggle.clearfix {
-    box-shadow: 0px 3px 8px 0px rgba(6, 26, 70, 0.12);
+    box-shadow: 0 3px 8px 0 rgba(6, 26, 70, 0.12);
     border: 1px solid $main-color;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
@@ -688,7 +686,7 @@ $input-error-bg: #FEECEB;
 
   & .dropdown-menu {
     padding: 8px 0;
-    box-shadow: 0px 3px 8px 0px rgba(6, 26, 70, 0.12);
+    box-shadow: 0 3px 8px 0 rgba(6, 26, 70, 0.12);
     border: 1px solid $main-color;
     border-top: none;
     font: 14px/19px $sours-sans-p-font;

@@ -9,7 +9,6 @@
 </template>
 
 <script>
-import $ from 'jquery'
 export default {
   name: 'app-to-top',
   data () {
@@ -18,20 +17,19 @@ export default {
     }
   },
   methods: {
-    scrollEventInit () {
-      $(document).on('scroll', $event => {
-        let scrollPos = window.scrollY
-        let windowHeight = document.body
-
-        this.showButton = scrollPos > windowHeight.scrollHeight / 4
-      })
+    scrollHandler () {
+      this.showButton = window.scrollY > document.body.scrollHeight / 4
     },
     scrollToTop () {
-      $('html, body').animate({ scrollTop: 0 }, 500)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   },
   mounted () {
-    this.scrollEventInit()
+    this.scrollHandler()
+    document.addEventListener('scroll', this.scrollHandler)
+  },
+  beforeDestroy () {
+    document.removeEventListener('scroll', this.scrollHandler)
   }
 }
 </script>

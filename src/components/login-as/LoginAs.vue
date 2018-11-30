@@ -1,5 +1,3 @@
-<template> </template>
-
 <script>
 import Vue from 'vue'
 export default {
@@ -10,23 +8,14 @@ export default {
       Vue.ls.remove('cart')
 
       if (this.$route.query.token) {
-        this.$store
-          .dispatch('login', {
+        this.$store.dispatch('login', {
             email: null,
             password: null,
             grant_type: 'sudosu',
             provider: '',
             token: this.$route.query.token
-          })
-          .then(response => {
-            this.$store.dispatch('getAuthUser').then(resp => {
-              this.$store.dispatch('mergeServerCart').then(
-                resp => {},
-                err => {
-                  console.log(err)
-                }
-              )
-            })
+          }).then(() => {
+            this.$store.dispatch('getAuthUser').then(() => this.$store.dispatch('mergeServerCart'))
 
             this.$router.push({ name: 'home' })
           })
@@ -38,5 +27,3 @@ export default {
   }
 }
 </script>
-
-<style scoped></style>

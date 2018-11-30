@@ -54,7 +54,7 @@ export default {
 .section-dropdown {
   position: absolute;
   left: 0;
-  top: 7px;
+  top: 13px;
   width: 100%;
   z-index: 100;
   &__wrap {

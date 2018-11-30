@@ -233,10 +233,8 @@ export default {
             })
           }
         },
-        error => {
+        () => {
           this.isCreatingPurchase = false
-
-          console.error(error)
 
           this.brainTreeReady = true
 
@@ -266,20 +264,13 @@ export default {
 
           this.groupOrderProducts(response.data)
           this.beforeComponentEnterHook()
-        },
-        error => {
-          console.error(error)
         }
       )
     },
     fetchUserAddresses () {
-      this.$store.dispatch('fetchAddresses').then(
-        response => {
+      this.$store.dispatch('fetchAddresses')
+        .then(response => {
           this.addresses = response.data
-          // eslint-disable-next-line
-        },
-        error => {
-          console.error(error)
         }
       )
     },
@@ -322,6 +313,7 @@ export default {
       this.paymentServiceReady = true
     },
     setCarrierService (service) {
+      console.log(service)
       this.selectedService = service
 
       this.updateOrderRates()
@@ -332,18 +324,14 @@ export default {
           id: this.order.id,
           rateId: this.selectedService.id
         })
-        .then(
-          response => {
-            this.order.price = response.data.price
-            this.order.sales_tax_amount = response.data.sales_tax_amount
-            this.order.sales_tax_rate = response.data.sales_tax_rate
-            this.order.shipping_fee = response.data.shipping_fee
-            this.order.total_cost = response.data.total_cost
-          },
-          error => {
-            console.error(error)
-          }
-        )
+        .then(response => {
+          this.order.price = response.data.price
+          this.order.sales_tax_amount = response.data.sales_tax_amount
+          this.order.sales_tax_rate = response.data.sales_tax_rate
+          this.order.shipping_fee = response.data.shipping_fee
+          this.order.total_cost = response.data.total_cost
+        }
+      )
     },
     setCarrierActive (carrierKey) {
       this.selectedCarrier = {}
@@ -355,13 +343,10 @@ export default {
       this.fetchUserAddresses()
     },
     fetchBraintreeToken () {
-      this.$store.dispatch('fetchBraintreeToken').then(
-        response => {
+      this.$store.dispatch('fetchBraintreeToken')
+        .then(response => {
           this.brainTreeToken = response.data.token
           this.initBraintreeDropin()
-        },
-        error => {
-          console.error(error)
         }
       )
     },

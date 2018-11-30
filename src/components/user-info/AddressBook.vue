@@ -885,6 +885,7 @@ export default {
 
         & /deep/ .vs__selected-options {
           border-radius: 4px;
+          padding: 0 !important;
         }
         &.select-valid-error {
           & /deep/ .dropdown-toggle {

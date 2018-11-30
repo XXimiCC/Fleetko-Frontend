@@ -1,55 +1,19 @@
 <template>
   <div class="payment-service">
     <div class="payment-service--items">
-      <div
-        :class="{
-          active:
-            selectedCarrier && Object.keys(selectedCarrier)[0] === carrierKey
-        }"
-        @click="setCarrierActive(carrierKey)"
-        class="item"
-        v-for="(carrier, carrierKey) in carriers"
-      >
+      <div :class="{ active: selectedCarrier && Object.keys(selectedCarrier)[0] === carrierKey }"
+           @click="setCarrierActive(carrierKey)"
+           class="item"
+           v-for="(carrier, carrierKey) in carriers">
         <div class="image-wrap">
           <svg-usps v-if="carrierKey === 'USPS'"></svg-usps>
-          <svg-ups
-            :viewBox="$mq === 'sm' || $mq === 'xs' ? '0 0 60 60' : '-3 0 60 60'"
-            v-if="carrierKey === 'UPS'"
+          <svg-ups :viewBox="$mq === 'sm' || $mq === 'xs' ? '0 0 60 60' : '-3 0 60 60'"
+                   v-if="carrierKey === 'UPS'"
           ></svg-ups>
         </div>
         <h3>{{ carrierKey }}</h3>
-        <div
-          v-if="
-            selectedCarrier && Object.keys(selectedCarrier)[0] === carrierKey
-          "
-          class="active-carrier"
-        >
-          <svg-check></svg-check>
-        </div>
-      </div>
-      <div
-        :class="{
-          active:
-            selectedCarrier && Object.keys(selectedCarrier)[0] === carrierKey
-        }"
-        @click="setCarrierActive(carrierKey)"
-        class="item"
-        v-for="(carrier, carrierKey) in carriers"
-      >
-        <div class="image-wrap">
-          <svg-usps v-if="carrierKey === 'USPS'"></svg-usps>
-          <svg-ups
-            :viewBox="$mq === 'sm' || $mq === 'xs' ? '0 0 60 60' : '-3 0 60 60'"
-            v-if="carrierKey === 'UPS'"
-          ></svg-ups>
-        </div>
-        <h3>{{ carrierKey }}</h3>
-        <div
-          v-if="
-            selectedCarrier && Object.keys(selectedCarrier)[0] === carrierKey
-          "
-          class="active-carrier"
-        >
+        <div v-if="selectedCarrier && Object.keys(selectedCarrier)[0] === carrierKey"
+             class="active-carrier">
           <svg-check></svg-check>
         </div>
       </div>
@@ -109,9 +73,8 @@ export default {
   },
   mixins: [utils],
   watch: {
-    selectedCarrier (v) {
+    selectedCarrier () {
       this.carrierForSelect = this.mapingServiceCarrier()
-
       this.selectedCarrierService = this.carrierForSelect[0]
     }
   },
@@ -173,7 +136,6 @@ export default {
       )
     }
   },
-  computed: {},
   components: {
     vSelect
   },
@@ -229,7 +191,7 @@ export default {
       }
       &:hover {
         transform: translateY(-4px);
-        box-shadow: 0px 1px 4.75px 0.25px rgba(102, 102, 102, 0.2);
+        box-shadow: 0 1px 4.75px 0.25px rgba(102, 102, 102, 0.2);
       }
       &.active {
         border: 1px solid $main-color;
