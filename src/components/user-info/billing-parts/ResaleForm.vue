@@ -330,12 +330,17 @@ export default {
         )
     },
 
-    formatUTCDate (date) {
-      return new Date(date)
-        .toLocaleDateString()
-        .split('.')
-        .reverse()
-        .join('-')
+    formatUTCDate (dateStr) {
+      console.log(` input: ${dateStr}`)
+      const dateObj = new Date(dateStr)
+      const mm = dateObj.getMonth() + 1
+      const dd = dateObj.getDate()
+      const pad = n => ('0' + n).substr(-2)
+
+      console.log(`output: ${dateObj.getFullYear()}-${pad(mm)}-${pad(dd)}`)
+      console.log('------------------')
+
+      return `${dateObj.getFullYear()}-${pad(mm)}-${pad(dd)}`
     },
 
     createPermitObj () {
