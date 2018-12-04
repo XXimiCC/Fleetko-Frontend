@@ -633,6 +633,7 @@ export default {
             )
             this.localLoader = false
           } else if (!this.$route.query.merge) this.checkout()
+          else if (this.$route.query.merge) this.localLoader = false
         })
       } else {
         this.$store.dispatch('toggleLoginModal', {
