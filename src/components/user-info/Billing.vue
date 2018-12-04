@@ -330,12 +330,10 @@ export default {
     },
 
     formatDate (date) {
-      return date
-        ? date
-            .split('-')
-            .reverse()
-            .join('/')
-        : ''
+      if (!date) return ''
+
+      const d = date.split('-')
+      return [d[1], d[2], d[0]].join('/')
     },
     formatStatus (status) {
       return status

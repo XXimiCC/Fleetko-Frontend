@@ -66,7 +66,7 @@
             <label>
               <p>Effective Date</p>
               <date-picker v-model="newPermit.effective_date"
-                           format="DD/MM/YYYY"
+                           format="MM/DD/YYYY"
                            :class="{ 'input-error': errors.has('effective_date') }"
                            name="effective_date"
                            v-validate="'required'"
@@ -83,7 +83,7 @@
             <label>
               <p>Expiration Date</p>
               <date-picker v-model="newPermit.expiration_date"
-                           format="DD/MM/YYYY"
+                           format="MM/DD/YYYY"
                            name="expiration_date"
                            :not-before="newPermit.effective_date"
                            placeholder="01/01/2018"
